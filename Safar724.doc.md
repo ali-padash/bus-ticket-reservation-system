@@ -1,4 +1,4 @@
-# Safar724 — project overview
+# Rahi (repository folder: Safar724) — project overview
 
 A bus ticket search site, built as a learning project. It copies the look and flow of the
 Iranian site Safar724. You pick an origin city, a destination city and a date, and you get a list
@@ -66,7 +66,7 @@ Checked by actually running the tools:
 | Check | Result |
 | --- | --- |
 | `go vet ./...` (backend) | Clean. |
-| `go test ./...` (backend) | 66 tests pass (2026-10-12). 20 of them need the database running. |
+| `go test ./...` (backend) | 67 tests pass (2026-10-12). 21 of them need the database running. |
 | `npx tsc --noEmit` (frontend) | Clean (was 13 errors). |
 | `npm run lint` (frontend) | Clean (was 29 errors, 16 warnings). |
 | `npm run build` (frontend) | Passes. |
@@ -90,7 +90,9 @@ Checked by actually running the tools:
 Mimicking Safar724 is the purpose of the project, and that is fine. The design, the flow and the
 name can stay. The issue is narrower: some of their actual property is committed to a public repo.
 
-- Safar724's logos, marketing text, phone number and "11,332,785 customers" line are copied in.
+- *Updated 2026-10-13.* The site now has its own name, **Rahi** (راهی), and its own logo; the
+  copied customer-count line, company list and phone number were rewritten. Still borrowed:
+  the illustrations (for example `header.png`) and the font below.
 - The IRANSans font files are a paid font.
 - If the site is ever deployed, it could be mistaken for the real one.
 

@@ -1,13 +1,13 @@
-# Bus Ticket Reservation System
+# Rahi — Bus Ticket Reservation System
 
 [![CI](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml)
 
-A bus ticket website with a Go API behind it: search for trips, pick seats on a drawing of the
-bus, enter the passengers, and get a ticket.
+Rahi (راهی, "on one's way") is a bus ticket website with a Go API behind it: search for trips,
+pick seats on a drawing of the bus, enter the passengers, and get a ticket. It comes in English
+(left-to-right, at `/en/`) and Persian (right-to-left, at `/fa/`).
 
-It is a practice project. The look and the steps follow the Iranian site **Safar724**, so the
-website's text is Persian and right-to-left. It is not affiliated with Safar724, sells nothing,
-and the payment page is a demo. It was first written in 2024 and reworked in 2026; the original
+It is a practice project. The look and the steps are modelled on the Iranian site **Safar724**.
+It is not affiliated with Safar724, sells nothing, and the payment page is a demo. It was first written in 2024 and reworked in 2026; the original
 version is kept under the git tag `v1-original`.
 
 ## What it does
@@ -20,6 +20,8 @@ version is kept under the git tag `v1-original`.
   pay on a demo bank page, and see the issued ticket.
 - **Seats are held for 10 minutes** while the buyer reviews and pays, and released if they do not.
 - **A ticket is opened with its 12-digit code and the buyer's mobile number.**
+- **Two languages.** The language is the first part of the address, so a link keeps it. Layout
+  direction, digits, calendar (Gregorian or Persian) and font follow the language.
 
 ## The part worth reading: two people, one seat
 
@@ -40,7 +42,7 @@ and exactly one gets it; 24 buyers with overlapping seat choices all finish with
 | Part | Technology |
 | --- | --- |
 | API (`backend/`) | Go 1.22, Gin, GORM, PostgreSQL 17, SQL migrations with goose |
-| Website (`devs/`) | React 18, TypeScript, Vite, React Router, hand-written CSS |
+| Website (`devs/`) | React 18, TypeScript, Vite, React Router, i18next, hand-written CSS |
 | Local database | Docker Compose |
 
 The API has three layers, each of which only knows the one below it:
@@ -60,7 +62,8 @@ backend/
 devs/src/
 ├── pages/              one file per page
 ├── components/         the pieces the pages are made of
-├── util/               API calls, types, validation, date helpers
+├── util/               API calls, types, validation, date and language helpers
+├── locales/            every text of the site, one file per language
 └── assets/             CSS, fonts, images
 ```
 
@@ -106,7 +109,7 @@ go vet ./...
 go test ./...
 ```
 
-66 tests. 20 of them use the database and are skipped when it is not running.
+67 tests. 21 of them use the database and are skipped when it is not running.
 
 ```bash
 cd devs
@@ -126,7 +129,7 @@ GitHub Actions runs all of these on every push, against a real PostgreSQL
 - There is no limit on how many holds one visitor can open.
 - The website has no automated tests.
 - It is not deployed.
-- The website is in Persian only.
-- Some images, the font and some of the page text come from the real Safar724 site and are to
-  be replaced. `Safar724.drawio.png` shows the 2024 database design, not the current one.
+- The name and logo are the project's own. Some illustrations and the Persian font still come
+  from the real Safar724 site and are to be replaced.
+- `Safar724.drawio.png` shows the 2024 database design, not the current one.
 - Old commits contain passwords for two hosted databases. Both databases have been deleted.
