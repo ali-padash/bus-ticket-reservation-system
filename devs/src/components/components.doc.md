@@ -1,6 +1,6 @@
 # devs/src/components
 
-51 components in one flat folder. Grouped here by what they are for.
+52 components in one flat folder. Grouped here by what they are for.
 
 ## Navigation and page frame
 
@@ -98,13 +98,13 @@ none of them stores the date.
 
 ## Booking
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
 | Component | Job |
 | --- | --- |
 | `BookingFrame` | Navbar above, footer below, grey page between. Used by both booking pages. |
 | `BookingSteps` | The five-step line; steps up to the current one are blue. |
-| `TripSummary` | The "service information" box. Takes plain values, because a search result fills it on one page and a ticket on the other. |
+| `TripSummary` | The "service information" box. Takes plain values, because a trip fills it on one page and a ticket on the other. |
 | `SeatPicker` | Step 2: the bus, the legend, the chosen seats as removable chips, the 4-seat notice, the "just taken" notice. |
 | `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date (Persian calendar) and gender for each seat, with a message under each wrong field. |
 | `TicketReview` | Step 4: passengers, phone, prices, the refund rules from the API, the countdown, "confirm and pay" and "cancel". |
@@ -112,6 +112,7 @@ none of them stores the date.
 | `TicketIssued` | Step 5, success: the ticket. |
 | `TicketFailed` | Step 5, failure: cancelled or out of time; says the seats were released. |
 | `PhonePrompt` | Asks for the buyer's phone when the ticket address is opened without it. |
+| `DigitInput` | A text box that shows Persian digits whichever keyboard typed them. Used for the mobile number, national code and birth date. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
 
 These components only show things and report clicks. The two pages hold the state and make the
 API calls; see [pages.doc.md](../pages/pages.doc.md).
@@ -191,6 +192,6 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 ### Structure
 
-- A flat folder of 51 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
+- A flat folder of 52 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
   `layout/`, `landing/`) would make it far easier to read.
 - Each component's CSS lives far away in `assets/css/`. Keeping the CSS next to its component is easier.

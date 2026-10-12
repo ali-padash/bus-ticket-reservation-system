@@ -57,16 +57,17 @@ Details worth knowing:
 
 ## `BookingPage.tsx` — route `/booking/<tripId>`
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
 Steps 2 and 3 of buying. The frame is `BookingFrame`; beside the main card sits `TripSummary`.
 The main card shows `BookingSteps` and then either `SeatPicker` or `PassengerForm`.
 
-What is in the address, and why:
+The trip is loaded by its ID with `GET /trips/<id>`, so `/booking/<tripId>` on its own shows
+the trip. "Back to the results" is built from what that call returns: the two city IDs and the
+date. What else is in the address, and why:
 
 | Part | Meaning |
 | --- | --- |
-| `from`, `to`, `date` | The search the buyer came from. The page repeats it to find its trip (the API has no "one trip" route), and uses it for "back to the results". |
 | `seats=18,19` | The chosen seats. A seat click replaces the history entry, so "back" does not replay every click. |
 | `step=passengers` | Present on the form step. Changing step adds a history entry, so "back" returns to the seats. |
 
@@ -75,7 +76,7 @@ number, so going back to the seats and returning does not lose them), the messag
 
 On submit: browser checks, then `POST /trips/<id>/tickets`.
 
-- `201`: the phone and the search are saved for this tab and the page moves to `/tickets/<code>`.
+- `201`: the phone is saved for this tab and the page moves to `/tickets/<code>`.
 - `validation_failed`: a message under each field the server names.
 - `seats_unavailable`: back to the seat step, the lost seats dropped from the choice, the seat
   map loaded again, and a message naming them.
@@ -83,10 +84,13 @@ On submit: browser checks, then `POST /trips/<id>/tickets`.
 
 ## `TicketPage.tsx` — routes `/tickets/<code>` and `/tickets/<code>/payment`
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
 Steps 4 and 5. Every time it opens it calls `POST /tickets/<code>/lookup` with the phone from
-`sessionStorage`, and then shows one of these:
+`sessionStorage`, and then shows one of these. "Back to the results" on the failure page is
+built from the ticket's own trip (`OriginCityID`, `DestinationCityID`, `DepartureDate`), so it
+is right even in a tab that never saw the search. A code written in the address with Persian
+digits is read as the same code.
 
 | Situation | Shown |
 | --- | --- |

@@ -9,7 +9,7 @@ All frontend code.
 | `main.tsx` | Mounts `<App />` into the page. | — |
 | `App.tsx` | Defines the two routes. | — |
 | `pages/` | One component per route. | [pages.doc.md](pages/pages.doc.md) |
-| `components/` | 51 UI components, all in one flat folder. | [components.doc.md](components/components.doc.md) |
+| `components/` | 52 UI components, all in one flat folder. | [components.doc.md](components/components.doc.md) |
 | `util/` | Types, helpers, API calls, and data files. | [util.doc.md](util/util.doc.md) |
 | `assets/` | CSS, fonts, icon fonts, images. | [assets.doc.md](assets/assets.doc.md) |
 | `App.css`, `index.css` | **Empty files.** The real global stylesheet is `assets/css/index.css`. | — |
@@ -23,7 +23,7 @@ All frontend code.
 | --- | --- |
 | `/` | `MainPage` — landing page with the search form |
 | `/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD` | `ServicePage` — search results |
-| `/booking/<tripId>?from=&to=&date=&seats=18,19&step=passengers` | `BookingPage` — choose seats, then type the passengers |
+| `/booking/<tripId>?seats=18,19&step=passengers` | `BookingPage` — choose seats, then type the passengers |
 | `/tickets/<code>` | `TicketPage` — review and countdown, then the ticket or the failure page |
 | `/tickets/<code>/payment` | `TicketPage` — the demo bank page |
 
@@ -116,8 +116,17 @@ sent ("hold, then pay").
   Only a length of time is measured in the browser, so a wrong clock on the buyer's computer
   does no harm. At zero the page asks the server once more.
 - **The bank page is a demo and says so.** No card details are asked for and no money moves.
-- **The booking page repeats the search to find its trip,** because the API has no "one trip"
-  route. That is why `from`, `to` and `date` travel in its address; they are also the way back.
+- **The booking page loads its trip by ID** (`GET /trips/<id>`), so its address needs only the
+  trip ID. The way back to the results is built from the trip (or, on the ticket pages, from
+  the ticket): two city IDs and a date. Nothing has to be remembered by the tab.
+- **Every number the visitor sees is in Persian digits; every number sent to the API or put in
+  an address is in Latin digits.** `toPersianNum` does the first and `toLatinDigits` the
+  second. The number boxes (`DigitInput`) show Persian digits while the visitor types, on
+  either keyboard. These are the only two places that choose a digit style for display:
+  no component converts digits on its own. If the site gets a second language, the choice
+  of digits changes in those two places only. Dates are the exception: the calendar and date
+  texts are formatted by the browser's `fa-IR` locale (5 files), which gives the Persian
+  calendar and its digits together.
 
 ## Who owns which state
 

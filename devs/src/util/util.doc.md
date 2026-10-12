@@ -8,10 +8,10 @@ A mixed bag: types, helper functions, API calls, big data files, and one Python 
 
 | File | Contents | Used? |
 | --- | --- | --- |
-| `Models.ts` | TypeScript types: `City`, `Service`, `ServiceResponse`, `SeatStatus`, `SeatArrayType`, `SeatMap`, `RefundRule`, `Passenger`, `Ticket`, `TicketTrip`, `TicketStatus`. They match the API contract in `backend/internal/httpapi/httpapi.doc.md`. | Yes |
-| `FetchFunction.ts` | The eight API calls and the `ApiError` class, see below. | Yes |
+| `Models.ts` | TypeScript types: `City`, `Service`, `ServiceResponse`, `SeatStatus`, `SeatArrayType`, `Trip`, `SeatMap`, `RefundRule`, `Passenger`, `Ticket`, `TicketTrip`, `TicketStatus`. They match the API contract in `backend/internal/httpapi/httpapi.doc.md`. | Yes |
+| `FetchFunction.ts` | The nine API calls and the `ApiError` class, see below. | Yes |
 | `Validation.ts` | Checks for the passenger form, digit conversion, Persian-to-Gregorian birth date, and the Persian message for each field. | Yes |
-| `TicketStorage.ts` | Keeps a ticket's phone and the search it came from in `sessionStorage`, per tab. | Yes |
+| `TicketStorage.ts` | Keeps a ticket's phone in `sessionStorage`, per tab (`savePhone`, `readPhone`). | Yes |
 | `Function.ts` | Small helpers, see below. | Yes |
 | `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
 | `addCitiesJsonToDatabase.py` | One-off script that loads `cities.json` into Postgres. | By hand only |
@@ -32,6 +32,7 @@ is no longer wanted can be cancelled.
 | --- | --- |
 | `fetchCities` | `GET /cities` |
 | `fetchServices` | `GET /trips?from=&to=&date=` |
+| `fetchTrip` | `GET /trips/{id}` |
 | `fetchSeatMap` | `GET /trips/{id}/seat-map` |
 | `fetchRefundRules` | `GET /trips/{id}/refund-rules` |
 | `reserveSeats` | `POST /trips/{id}/tickets` |
@@ -48,9 +49,14 @@ the English sentence, so the API may reword its sentences freely.
 
 ## Passenger form checks (`Validation.ts`)
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
-- `toLatinDigits`: Persian (۰-۹) and Arabic (٠-٩) digits become 0-9. The API accepts only those.
+- `toLatinDigits`: Persian (۰-۹) and Arabic (٠-٩) digits become 0-9. It is the opposite of
+  `toPersianNum`. The number boxes hold Persian digits, so everything passes through here
+  before it is checked or sent.
+- `isValidName`: 1 to 50 characters; letters of any alphabet (Persian and English both pass),
+  plus space, hyphen, apostrophe and the Persian half-space. Digits and other signs are
+  refused. The same rule as the API's.
 - `isValidPhone`: 11 digits starting with 09.
 - `isValidNationalCode`: 10 digits, and the last is the check digit worked out from the first nine.
 - `persianDateToGregorian`: `1374/01/21` -> `1995-04-10` with `jalaali-js`; null if it is not a
