@@ -1,7 +1,8 @@
 import React from "react";
+import { LineIcon, LineIconName } from "./Icon";
 
 interface Props {
-  iconClass: string;
+  iconClass: LineIconName;
   title: string;
   children: React.ReactNode;
 }
@@ -9,7 +10,9 @@ interface Props {
 const Card = ({ iconClass, title, children }: Props) => {
   return (
     <div className="block">
-      <i className={"icon " + iconClass}></i>
+      <i className={"icon " + iconClass}>
+        <LineIcon name={iconClass} />
+      </i>
       <h3>{title}</h3>
       <p>{children}</p>
     </div>

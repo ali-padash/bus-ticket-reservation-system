@@ -4,6 +4,7 @@ import CustomAutocomplete from "./CustomAutocomplete";
 import CalenderInput from "./CalendarInput";
 import { CitiesStatus, City } from "../util/Models";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   cities: City[];
@@ -100,7 +101,7 @@ const SearchPanel = ({
         </div>
         <div className="row" style={{ color: "#333" }}>
           <div className="in to">
-            <i className="fas fa-map-marker-alt" style={{ color: "#555" }}></i>
+            <Icon name="map-marker-alt" style={{ color: "#555" }} />
             <CustomAutocomplete
               placeholder={t("home.originPlaceholder")}
               cities={cities}
@@ -112,9 +113,9 @@ const SearchPanel = ({
               style={{ color: "#333" }}
             />
           </div>
-          <i className="fas fa-exchange-alt custom-gap" role="button" aria-label={t("search.swap")} onClick={handleExchange}></i>
+          <Icon name="exchange-alt" className="custom-gap" role="button" aria-label={t("search.swap")} onClick={handleExchange} />
           <div className="in from">
-            <i className="fas fa-map-marker-alt" style={{ color: "#555" }}></i>
+            <Icon name="map-marker-alt" style={{ color: "#555" }} />
             <CustomAutocomplete
               placeholder={t("home.destinationPlaceholder")}
               cities={cities}
@@ -139,7 +140,7 @@ const SearchPanel = ({
           <div className="custom-gap" />
           <button className="search" id="search-button" onClick={() => search(origin, destination)}>
             {t("search.submit")}
-            <i className="fas fa-search" />
+            <Icon name="search" />
           </button>
         </div>
       </div>

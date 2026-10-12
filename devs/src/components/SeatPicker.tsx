@@ -4,6 +4,7 @@ import BusSchema from "./BusSchema";
 import Legend from "./Legend";
 import { SeatMap } from "../util/Models";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   seatMap: SeatMap | null;
@@ -69,7 +70,7 @@ const SeatPicker = ({
         {selectedSeats.length === 0 && t("seats.noneChosen")}
         {selectedSeats.map((seatNumber) => (
           <button key={seatNumber} className={s.chip} onClick={() => onToggleSeat(seatNumber)}>
-            <i className="fas fa-times" />
+            <Icon name="times" />
             {t("seats.seatNumber", { number: num(seatNumber) })}
           </button>
         ))}

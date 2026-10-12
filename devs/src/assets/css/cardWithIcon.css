@@ -18,25 +18,12 @@
 }
 
 .card-with-icon .icon {
-    font-family: "CustomIcon";
     font-size: 64px;
     font-style: normal;
     color: #3498db;
     transition: 0.3s;
     border: none;
     width: 60%;
-}
-
-.card-with-icon .icon.paper::before {
-    content: "j";
-}
-
-.card-with-icon .icon.magnifier::before {
-    content: "D";
-}
-
-.card-with-icon .icon.circle-dollar::before {
-    content: "f";
 }
 
 

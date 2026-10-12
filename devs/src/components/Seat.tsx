@@ -37,7 +37,9 @@ const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
         borderRadius: "5px",
         fontWeight: "bold",
         lineHeight: "29px",
-        width: size,
+        // Never wider than its column: a bus with 12 rows of seats is wider than a phone, so
+        // there the seats give up a few pixels and the whole bus stays in view. (updated 2026-10-13)
+        width: `min(${size}, 100%)`,
         height: size,
         fontSize: "11px",
         textAlign: "center",

@@ -3,6 +3,7 @@ import Logo from "./Logo";
 import "../assets/css/lowerNavbar.css";
 import MainChoces from "./MainChoces";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   scrolled: boolean;
@@ -23,12 +24,13 @@ const LowerNavbar = ({ scrolled, bringList, setBringList, menuListRef, iconListR
         transform: scrolled ? "translateY(0px)" : "translateY(40px)",
       }}>
       <div className={"element-cover" + (isFocused ? " show" : "")} />
-      <i
-        className="fas fa-bars"
+      <Icon
+        name="bars"
         role="button"
         aria-label={t(bringList ? "nav.closeMenu" : "nav.openMenu")}
         ref={iconListRef}
-        onClick={() => setBringList(!bringList)}></i>
+        onClick={() => setBringList(!bringList)}
+      />
 
       {/* Where the menu slides to is in the CSS (`.menu` and `.menu.open`), because the
           direction of the slide depends on the writing direction. (updated 2026-10-12) */}

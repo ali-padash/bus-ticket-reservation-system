@@ -2,6 +2,7 @@ import s from "../assets/css/booking.module.css";
 import { parseDate } from "../util/Function";
 import { shortDate, weekdayName } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 // The props are plain values, not a trip object, because two different pages fill this box:
 // the booking page from a trip, and the ticket page from a ticket. The names and the bus type
@@ -40,7 +41,7 @@ const TripSummary = ({
       <h3>{t("summary.title")}</h3>
       <div className={s.summaryRoute}>
         {originName}
-        <i className={`fas ${l.icons.arrow}`} />
+        <Icon name={l.icons.arrow} />
         {destinationName}
       </div>
       <div className={s.summaryTerminals}>

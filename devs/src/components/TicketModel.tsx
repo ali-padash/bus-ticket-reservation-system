@@ -1,11 +1,10 @@
 import s from "../assets/css/ticketModel.module.css";
-import img from "../assets/images/reserve.svg"
-import busDash from "../assets/images/bus_dash.svg"
-import calendar from "../assets/images/calender.svg"
-import volume from "../assets/images/volume.svg"
+import routeBus from "../assets/images/routeBus.svg";
+import { LineIcon } from "./Icon";
 import { useLocale } from "../util/useLocale";
 
-// The pictures here are decoration, so they carry an empty alt text.
+// The picture and the icons here are decoration: the picture carries an empty alt text and
+// the icons are hidden from screen readers. (updated 2026-10-13)
 const TicketModel = () => {
   const { t } = useLocale();
   return (
@@ -16,7 +15,9 @@ const TicketModel = () => {
             <h6>{t("notify.heading")}</h6>
             <p>{t("notify.subheading")}</p>
           </div>
-          <img src={img} alt=""/>
+          <i className={`icon ${s.headIcon}`}>
+            <LineIcon name="ticket" />
+          </i>
           <div className={s.dash}/>
           <div className={s.right}/>
           <div className={s.left}/>
@@ -25,16 +26,20 @@ const TicketModel = () => {
           <h5>{t("notify.textLine1")} <br/> {t("notify.textLine2")}</h5>
           <div className={s.odimg}>
             <span>{t("notify.sampleOrigin")}</span>
-            <img src={busDash} alt=""/>
+            <img src={routeBus} alt=""/>
             <span>{t("notify.sampleDestination")}</span>
           </div>
           <div className={s.inform}>
             <div className={s.accessory}>
-              <img src={calendar} alt=""/>
+              <i className="icon">
+                <LineIcon name="date" />
+              </i>
               <span>{t("notify.sampleDate")}</span>
             </div>
             <div className={s.accessory}>
-              <img src={volume} alt=""/>
+              <i className="icon">
+                <LineIcon name="bus" />
+              </i>
               <span>{t("notify.status")}</span>
             </div>
           </div>

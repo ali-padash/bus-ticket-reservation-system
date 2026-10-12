@@ -3,37 +3,65 @@
     color: white !important;
 }
 
+/* Icons are SVGs drawn by the Icon component, inside an <i>. The <i> keeps the class names
+   the old icon fonts used (`fas`, `icon`), and these rules make an SVG behave like a letter
+   of a font did: as tall as the font-size and in the colour of the text. The line icons are
+   drawn with a thin stroke to match the light look they replace. (added 2026-10-13) */
+.fas {
+    display: inline-block;
+    font-style: normal;
+    line-height: 1;
+}
+
+.fas > svg,
+.icon > svg,
+.icon-location > svg,
+.icon-date > svg {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+}
+
+.fas > svg {
+    vertical-align: -0.125em;
+}
+
+.icon > svg,
+.icon-location > svg,
+.icon-date > svg {
+    display: block;
+    stroke-width: 1.25;
+}
+
+/* Vazirmatn, the font of the Persian pages: a free font (SIL Open Font License) from the
+   @fontsource-variable/vazirmatn package, served by this site. It is one variable file per
+   script, so every weight from normal to black is a real weight and not a thickened copy.
+   The Arabic-script file carries the Persian letters and digits; the Latin one is used for
+   Latin words inside Persian pages ("Volvo VIP"). The range starts at 400 for the same
+   reason as Inter below. (added 2026-10-13) */
 @font-face {
-    font-family: 'CustomIcon';
-    src: url('../icons/line-icons-custom.woff') format('woff');
+    font-family: 'Vazirmatn Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400 900;
+    src: url('@fontsource-variable/vazirmatn/files/vazirmatn-arabic-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
 }
 
 @font-face {
-    font-family: 'IRANSansWeb';
-    src: url('../fonts/IRANSansWeb.woff2') format('woff2');
-    font-weight: normal;
+    font-family: 'Vazirmatn Variable';
     font-style: normal;
-}
-
-@font-face {
-    font-family: 'IRANSansWeb-Medium';
-    src: url('../fonts/IRANSansWeb_Medium.woff2') format('woff2');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'IRANSansWeb-bold';
-    src: url('../fonts/IRANSansWeb_Bold.woff2') format('woff2');
-    font-weight: bolder;
-    font-style: normal;
+    font-display: swap;
+    font-weight: 400 900;
+    src: url('@fontsource-variable/vazirmatn/files/vazirmatn-latin-wght-normal.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* Inter, the font of the English pages, from the @fontsource-variable/inter package, so it is
    served by this site and no outside font host is needed. Only the two Latin files are
    declared, and the browser downloads one only when a page really uses the family, which
    Persian pages never do. The weight range starts at 400 on purpose: this design asks for
-   weight 100 in many places, which the Persian font does not have and shows as normal;
+   weight 100 in many places, which the old Persian font did not have and showed as normal;
    starting at 400 makes Inter do the same instead of turning hairline thin. (added 2026-10-12) */
 @font-face {
     font-family: 'Inter Variable';
@@ -80,16 +108,16 @@ p {
     color: #000;
     /* The text font and the sign of sideways movements. Both follow the writing direction that
        LanguageLayout puts on <html>; see the rule below. (added 2026-10-12) */
-    --font: 'IRANSansWeb', sans-serif;
+    --font: 'Vazirmatn Variable', sans-serif;
     --x: 1;
 }
 
 /* English pages. Inter is only downloaded here, because no Persian page asks for it; Persian
-   letters inside an English page (a passenger's name) still fall back to IRANSans.
+   letters inside an English page (a passenger's name) still fall back to Vazirmatn. (updated 2026-10-13)
    `--x` turns every `translateX(calc(... * var(--x)))` the other way, so a thing that slides in
    from the left in Persian slides in from the right in English. (added 2026-10-12) */
 :root[dir="ltr"] {
-    --font: 'Inter Variable', 'IRANSansWeb', sans-serif;
+    --font: 'Inter Variable', 'Vazirmatn Variable', sans-serif;
     --x: -1;
 }
 

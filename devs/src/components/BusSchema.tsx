@@ -1,6 +1,6 @@
 import s from "../assets/css/busSchema.module.css";
 import Seat from "./Seat";
-import busFront from "../assets/images/BusFront.png";
+import busFront from "../assets/images/busFront.svg";
 import { SeatArrayType, SeatStatus } from "../util/Models";
 
 interface Props {

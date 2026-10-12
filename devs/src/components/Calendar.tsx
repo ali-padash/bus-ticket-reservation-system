@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../assets/css/calendar.css";
 import { monthView, shiftMonth } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   className: string;
@@ -27,8 +28,8 @@ const Calendar = ({ className, selectedDate, onSelectDate }: Props) => {
   return (
     <div className={className}>
       <div>
-        <i
-          className={`fas ${icons.back}`}
+        <Icon
+          name={icons.back}
           role="button"
           aria-label={t("calendar.previousMonth")}
           onClick={() => setSearchDate(shiftMonth(lang, searchDate, -1))}
@@ -38,8 +39,8 @@ const Calendar = ({ className, selectedDate, onSelectDate }: Props) => {
           {lang === "fa" ? year : month}
           {lang === "fa" ? month : year}
         </div>
-        <i
-          className={`fas ${icons.forward}`}
+        <Icon
+          name={icons.forward}
           role="button"
           aria-label={t("calendar.nextMonth")}
           onClick={() => setSearchDate(shiftMonth(lang, searchDate, 1))}

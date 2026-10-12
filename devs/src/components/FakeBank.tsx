@@ -1,6 +1,7 @@
 import s from "../assets/css/booking.module.css";
 import { Ticket } from "../util/Models";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   ticket: Ticket;
@@ -17,7 +18,7 @@ const FakeBank = ({ ticket, busy, actionError, onPay, onCancel }: Props) => {
   const { t, amount } = useLocale();
   return (
     <div className={`${s.card} ${s.centred}`}>
-      <i className={`fas fa-university ${s.bigIcon}`} />
+      <Icon name="university" className={s.bigIcon} />
       <h2>{t("bank.title")}</h2>
       <div className={s.notice}>{t("bank.notice")}</div>
       <p>{t("bank.amount")}</p>

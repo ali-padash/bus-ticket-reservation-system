@@ -70,16 +70,11 @@
 }
 
 .icon-location {
-    font-family: "CustomIcon";
     font-size: 32px;
     padding-inline-end: 10px;
     padding-inline-start: 5px;
     color: #AAA;
     font-style: normal;
-}
-
-.icon-location::before {
-    content: "E";
 }
 
 .triangle-right {

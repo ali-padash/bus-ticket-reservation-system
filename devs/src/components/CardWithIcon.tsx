@@ -1,9 +1,10 @@
 import React from "react";
 import "../assets/css/cardWithIcon.css";
+import { LineIcon, LineIconName } from "./Icon";
 
 interface Props {
   title: string;
-  icon: string;
+  icon: LineIconName;
   children: React.ReactNode;
 }
 
@@ -14,7 +15,9 @@ const CardWithIcon = ({ title, icon, children }: Props) => {
         <h4>{title}</h4>
         <p>{children}</p>
       </div>
-      <i className={`icon ${icon}`}></i>
+      <i className={`icon ${icon}`}>
+        <LineIcon name={icon} />
+      </i>
     </div>
   );
 };

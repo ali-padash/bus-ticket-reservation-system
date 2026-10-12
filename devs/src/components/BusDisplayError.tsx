@@ -3,6 +3,7 @@ import BusSchema from "./BusSchema";
 import Legend from "./Legend";
 import s from "../assets/css/busDetails.module.css";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   tripID: number;
@@ -24,11 +25,11 @@ const BusSchemaError = ({ tripID, retry }: Props) => {
     <div style={{ marginTop: "40px" }}>
       <div className={s.dividerLine} />
       <div className={s.cover + " " + s.errorCover}>
-        <i className="fas fa-times"></i>
+        <Icon name="times" />
         <h1>{t("seatMap.errorTitle")}</h1>
         <button className={s.retryButton} onClick={retry}>
           <span>{t("common.retry")}</span>
-          <i className="fas fa-sync-alt"></i>
+          <Icon name="sync-alt" />
         </button>
       </div>
       <div className={s.busInformation}>

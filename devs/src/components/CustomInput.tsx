@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CustomAutocomplete from "./CustomAutocomplete";
 import s from "../assets/css/homeHeader.module.css";
 import { CitiesStatus, City } from "../util/Models";
+import { LineIcon } from "./Icon";
 
 interface Props {
   covered: boolean;
@@ -85,7 +86,9 @@ const CustomInput = ({
           {alertMassage}
         </p>
       </div>
-      <i className="icon-location"></i>
+      <i className="icon-location">
+        <LineIcon name="location" />
+      </i>
     </div>
   );
 };

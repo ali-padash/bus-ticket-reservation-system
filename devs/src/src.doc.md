@@ -13,7 +13,7 @@ All frontend code.
 | `pages/` | One component per route. | [pages.doc.md](pages/pages.doc.md) |
 | `components/` | 55 UI components, all in one flat folder. | [components.doc.md](components/components.doc.md) |
 | `util/` | Types, helpers, API calls, and data files. | [util.doc.md](util/util.doc.md) |
-| `assets/` | CSS, fonts, icon fonts, images. | [assets.doc.md](assets/assets.doc.md) |
+| `assets/` | CSS and images. Fonts and icons come from npm packages. | [assets.doc.md](assets/assets.doc.md) |
 | `App.css`, `index.css` | **Empty files.** The real global stylesheet is `assets/css/index.css`. | — |
 | `vite-env.d.ts` | Vite type hints. | — |
 
@@ -83,7 +83,7 @@ What differs between the two languages:
 
 | | Persian | English |
 | --- | --- | --- |
-| Direction, font | right to left, IRANSans | left to right, Inter |
+| Direction, font | right to left, Vazirmatn | left to right, Inter |
 | Digits | ۰۱۲۳ | 0123 |
 | Calendar | Persian (Jalali), week from Saturday | Gregorian, week from Monday |
 | A date | چهارشنبه ۲۲ مهر ۱۴۰۵, ۱۴۰۵/۷/۲۲ | Wednesday, 14 October 2026, 14 Oct 2026 |

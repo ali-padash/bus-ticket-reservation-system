@@ -32,3 +32,12 @@
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(5, 1fr);
 }
+
+/* On a phone the seats use nearly the whole width of the bus, and a column may become
+   narrower than a seat's usual 27px. (added 2026-10-13) */
+@media (max-width: 560px) {
+  .busInner .grid {
+    width: 96%;
+    column-gap: 2px;
+  }
+}

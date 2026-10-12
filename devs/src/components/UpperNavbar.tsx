@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import LanguageSwitch from "./LanguageSwitch";
 import { PHONE_AREA, PHONE_NUMBER } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   scrolled: boolean;
@@ -55,7 +56,7 @@ const UpperNavbar = ({ scrolled, style, isFocused, setBringList }: Props) => {
         <LanguageSwitch className="language" />
         <div className="menu-div" role="button" aria-label={t("nav.openMenu")} onClick={() => setBringList(true)}>
           <span>{t("nav.menu")}</span>
-          <i className="fas fa-bars"></i>
+          <Icon name="bars" />
         </div>
       </div>
     </div>

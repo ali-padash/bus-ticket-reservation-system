@@ -250,6 +250,8 @@
 }
 
 .countdown strong {
+  /* Equal-width digits, so the time does not shake sideways as it counts down. (added 2026-10-13) */
+  font-variant-numeric: tabular-nums;
   font-size: 20px;
   direction: ltr;
 }

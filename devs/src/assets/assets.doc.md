@@ -1,7 +1,7 @@
 # devs/src/assets
 
-Static files: styles, fonts, icon fonts and images. This doc covers the four subfolders together,
-since none of them contain logic.
+Static files: styles and images. Fonts and icons are not files here any more; they come from
+npm packages (see "Where everything comes from"). (updated 2026-10-13)
 
 ## `css/` — 31 files
 
@@ -53,8 +53,8 @@ How the old rules were turned over, so that Persian stayed pixel for pixel where
 | `transform: translateX(12px)` | `translateX(calc(12px * var(--x)))` | A transform has no logical form. `--x` is 1 in Persian and -1 in English. |
 | `border-radius: 0 5px 5px 0` | `border-start-start-radius`, `border-end-start-radius` | The rounded corners follow the reading side. |
 
-Two variables on `:root` in `index.css` carry what differs: `--font` (IRANSans, or Inter with
-IRANSans behind it) and `--x`.
+Two variables on `:root` in `index.css` carry what differs: `--font` (Vazirmatn, or Inter with
+Vazirmatn behind it) and `--x`.
 
 Left as they are, on purpose:
 
@@ -96,37 +96,70 @@ parts themselves:
 
 Nothing above 1000px was touched, so the desktop pages look as before.
 
-## `fonts/`
+## Fonts
 
-*Updated 2026-10-12.*
+*Updated 2026-10-13.*
 
-Three weights of **IRANSansWeb**, the font of the Persian pages.
+There is no `fonts/` folder any more. Both fonts come from npm packages and are declared in
+`css/index.css`, so the site serves them itself and needs no outside font host (those are
+often unreachable for this project's visitors).
 
-The English pages use **Inter**. Its files are not in this folder: they come from the
-`@fontsource-variable/inter` package and are declared in `css/index.css`, so the site serves
-them itself and needs no outside font host (those are often unreachable for this project's
-visitors). Only the two Latin files are declared. A browser downloads a font file only when a
-page uses the family, and Persian pages never ask for Inter, so they do not pay for it.
+- **Vazirmatn** is the font of the Persian pages (`@fontsource-variable/vazirmatn`, SIL Open
+  Font License). It replaced IRANSans, a paid font, on 2026-10-13. Two of its files are
+  declared: the Arabic-script one (46 kB) for Persian letters and digits, and the Latin one
+  (35 kB) for Latin words inside Persian pages.
+- **Inter** is the font of the English pages (`@fontsource-variable/inter`, SIL Open Font
+  License). Its two Latin files are declared. Persian letters on an English page (the
+  "فارسی" link, a Persian passenger name) fall back to Vazirmatn.
 
-Inter is declared for weights 400 to 900 only. The design asks for weight 100 in many places;
-IRANSans has no such weight and shows normal text, and this makes Inter do the same instead
-of turning hairline thin.
+A browser downloads a font file only when a page shows a letter from it, so a Persian page
+does not pay for Inter and an English page with no Persian letter does not pay for Vazirmatn.
 
-## `icons/`
+Both are variable fonts: one file holds every weight, so bold text is a real bold. IRANSans
+was declared with its normal weight only, and the browser thickened it for bold.
 
-- `Simple-Line-Icons.woff` — an open-source icon font.
-- `line-icons-custom.woff` — a custom icon font, used through classes like `icon-location`.
+Both are declared for weights 400 to 900 only. The design asks for weight 100 in many places;
+the old Persian font had no such weight and showed normal text, and starting at 400 keeps
+that look instead of turning the text hairline thin.
 
-Font Awesome is not here; it is loaded from a CDN in `index.html`.
+The countdown on the review step uses equal-width digits (`font-variant-numeric:
+tabular-nums`), so the time does not shake sideways as it counts.
+
+## Icons
+
+*Updated 2026-10-13.*
+
+There is no `icons/` folder and no icon font any more. Every icon is an SVG drawn by the
+`Icon` component (see `components.doc.md`), taken from the `react-icons` package, so icons
+travel inside the JavaScript and do not vanish offline.
+
+- 19 solid icons (search, arrows, calendar and so on) are Font Awesome 5 Free. They replaced
+  the Font Awesome stylesheet that `index.html` loaded from a CDN: one request to another
+  host fewer.
+- 14 line icons (the map pin, the calendar, the icons of the home page cards) are Tabler
+  Icons. They replaced `line-icons-custom.woff`, an icon font saved from the Safar724 site.
+- `Simple-Line-Icons.woff` was deleted: no stylesheet used it.
+
+The `<i>` around an icon keeps its old class names (`fas fa-search`, `icon smile`), because
+the stylesheets place and colour icons through them. Four rules at the top of `css/index.css`
+make an SVG inside such an `<i>` as tall as the font-size and give it the text colour.
 
 ## `images/`
 
-| File | Used by |
-| --- | --- |
-| `header.png` | landing page background (from CSS) |
-| `BusFront.png` | `BusSchema` |
-| `CompanyDefaultLogo.png` | `Panel`, when a company logo fails to load |
-| `reserve.svg`, `bus_dash.svg`, `calender.svg`, `volume.svg` | `TicketModel` |
+*Updated 2026-10-13.*
+
+Four drawings, all made for this project as hand-written SVG. They replaced seven files that
+came from the Safar724 site.
+
+| File | Size | Used by | What it is |
+| --- | --- | --- | --- |
+| `header.svg` | 2.6 kB | landing page background (from CSS) | A flat landscape: sky, hills, trees, a road and a blue bus. It replaced a 112 kB PNG. English pages show it mirrored, so the bus stays clear of the search form. |
+| `busFront.svg` | 0.5 kB | `BusSchema` | The front end of the bus in the seat map, seen from above: the curved nose and a steering wheel. |
+| `companyDefault.svg` | 0.4 kB | `Panel` | A grey outline of a bus, shown when a bus company has no logo. |
+| `routeBus.svg` | 0.5 kB | `TicketModel` | A small bus on a dashed line, between the two city names. |
+
+The other three pictures of `TicketModel` (the ticket in its blue header, the calendar and the
+bus beside its sample line) are now icons from the `Icon` component.
 
 ### The logo
 
@@ -139,16 +172,34 @@ a road through it) as one SVG shape, and the name as real text. `css/logo.css` s
 same shape is the tab icon, `public/favicon.svg`; it is written in both places, so a change
 to the mark has to be made twice.
 
+## Where everything comes from
+
+*Written 2026-10-13.*
+
+Every file a visitor's browser receives, and who made it. Nothing here belongs to Safar724
+or to anyone who has not allowed its use.
+
+| What | Where it lives | Source | Licence |
+| --- | --- | --- | --- |
+| Logo mark and tab icon | `components/Logo.tsx`, `public/favicon.svg` | Drawn for this project | Ours |
+| `header.svg`, `busFront.svg`, `companyDefault.svg`, `routeBus.svg` | `assets/images/` | Drawn for this project | Ours |
+| Stylesheets | `assets/css/` | Written for this project; the layout imitates Safar724's site on purpose | Ours |
+| Persian font, Vazirmatn | npm `@fontsource-variable/vazirmatn` | Saber Rastikerdar and contributors | SIL Open Font License 1.1 |
+| English font, Inter | npm `@fontsource-variable/inter` | Rasmus Andersson and contributors | SIL Open Font License 1.1 |
+| Solid icons (19) | npm `react-icons`, set `fa` | Font Awesome 5 Free | Icons: CC BY 4.0 |
+| Line icons (14) and the clock on a trip card | npm `react-icons`, set `tb` | Tabler Icons | MIT |
+| The `react-icons` package itself | npm | react-icons contributors | MIT |
+
+What is still modelled on Safar724 is the look and the flow of the pages, which is the point
+of the project, and some marketing sentences that began as theirs (see `locales.doc.md`).
+
 ## Problems
 
 *Updated 2026-10-13.*
 
-- **Still borrowed from Safar724**, to be replaced in a later step: `header.png` and the other
-  illustrations (`BusFront.png`, `reserve.svg`, `bus_dash.svg`, `calender.svg`, `volume.svg`,
-  `CompanyDefaultLogo.png`), the IRANSans font files (a paid font; a free one such as
-  Vazirmatn would do), and the two icon fonts in `icons/`. Copying the site's look is the
-  point of the project and is fine; these files are the part that is not ours. The name, the
-  logo, the phone number and the company's own claims are no longer used.
+- The two drawings of the mark (in `Logo.tsx` and in `favicon.svg`) are the same path written
+  twice.
+- The pictures are simple on purpose. `header.svg` is far plainer than the picture it replaced.
 - Global plain-CSS class names can clash. Generic names like `.container`, `.row`, `.grid`,
   `.selected` and `.show` are used in several files.
 - Colours are repeated as raw hex values everywhere. There are no CSS variables.

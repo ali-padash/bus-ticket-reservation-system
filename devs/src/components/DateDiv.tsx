@@ -1,5 +1,6 @@
 import "../assets/css/dateDiv.css";
 import LongDate from "./LongDate";
+import { LineIcon } from "./Icon";
 
 interface Props {
   className: string;
@@ -15,7 +16,9 @@ const DateDiv = ({ className, selectedDate, onOpen }: Props) => {
       <div className="date">
         <LongDate date={selectedDate} />
       </div>
-      <i className="icon-date"></i>
+      <i className="icon-date">
+        <LineIcon name="date" />
+      </i>
     </div>
   );
 };

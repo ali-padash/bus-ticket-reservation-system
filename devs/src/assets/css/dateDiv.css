@@ -17,15 +17,10 @@
 }
 
 .icon-date {
-    font-family: "CustomIcon";
     font-size: 32px;
     padding-inline-end: 6px;
     padding-inline-start: 5px;
     color: #AAA;
     font-style: normal;
     cursor: pointer;
-}
-
-.icon-date::before {
-    content: "A";
 }

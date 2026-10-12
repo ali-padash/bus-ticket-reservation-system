@@ -13,6 +13,7 @@ import { convertBirthDate, formatBirthDate, parseBirthDate, toLatinDigits } from
 import { useLocale } from "../util/useLocale";
 import { savePhone } from "../util/TicketStorage";
 import { SavedPassenger, forgetDetails, readSavedDetails, saveDetails } from "../util/SavedPassengers";
+import Icon from "../components/Icon";
 
 const MAX_SEATS = 4;
 
@@ -189,7 +190,7 @@ function BookingPage() {
     return (
       <BookingFrame>
         <div className={`${s.card} ${s.centred} ${s.failed}`}>
-          <i className={`fas fa-exclamation-circle ${s.bigIcon}`} />
+          <Icon name="exclamation-circle" className={s.bigIcon} />
           <h2>{t("errors.codes.trip_not_found")}</h2>
           <div className={s.centredActions}>
             <Link className={`${s.primary} ${s.buttonLink}`} to={path("/")}>

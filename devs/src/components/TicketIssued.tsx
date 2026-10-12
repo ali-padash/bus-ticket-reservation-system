@@ -5,6 +5,7 @@ import { Ticket } from "../util/Models";
 import { parseDate } from "../util/Function";
 import { shortDate, weekdayName } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   ticket: Ticket;
@@ -18,7 +19,7 @@ const TicketIssued = ({ ticket }: Props) => {
   return (
     <div className={`${s.card} ${s.centred} ${s.issued}`}>
       <BookingSteps current={5} />
-      <i className={`fas fa-check-circle ${s.bigIcon}`} />
+      <Icon name="check-circle" className={s.bigIcon} />
       <h2>{t("issued.title")}</h2>
       <p>{t("issued.codeLabel")}</p>
       <div className={s.code}>{num(ticket.Code)}</div>

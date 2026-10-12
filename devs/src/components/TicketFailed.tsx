@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import s from "../assets/css/booking.module.css";
 import BookingSteps from "./BookingSteps";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   // Why no ticket was issued: the buyer cancelled, or the 10 minutes ran out.
@@ -17,7 +18,7 @@ const TicketFailed = ({ reason, resultsLink }: Props) => {
   return (
     <div className={`${s.card} ${s.centred} ${s.failed}`}>
       <BookingSteps current={5} />
-      <i className={`fas fa-exclamation-circle ${s.bigIcon}`} />
+      <Icon name="exclamation-circle" className={s.bigIcon} />
       <h2>{t("failed.title")}</h2>
       <p>{t(reason === "cancelled" ? "errors.codes.ticket_cancelled" : "errors.codes.hold_expired")}</p>
       <p>{t("failed.noCharge")}</p>

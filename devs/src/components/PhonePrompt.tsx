@@ -4,6 +4,7 @@ import DigitInput from "./DigitInput";
 import { toLatinDigits } from "../util/Locale";
 import { isValidPhone } from "../util/Validation";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   // True when a phone was tried and no ticket has this code with that phone.
@@ -28,7 +29,7 @@ const PhonePrompt = ({ notFound, onSubmit }: Props) => {
         setInvalid(!isValidPhone(latinPhone));
         if (isValidPhone(latinPhone)) onSubmit(latinPhone);
       }}>
-      <i className={`fas fa-ticket-alt ${s.bigIcon}`} />
+      <Icon name="ticket-alt" className={s.bigIcon} />
       <h2>{t("phonePrompt.title")}</h2>
       <p>{t("phonePrompt.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${invalid ? s.invalid : ""}`} style={{ margin: "14px auto 0" }}>

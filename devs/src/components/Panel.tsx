@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { SeatMap, Service } from "../util/Models";
 import { TbClockHour9 } from "react-icons/tb";
 import s from "../assets/css/panel.module.css";
-import defaultImg from "../assets/images/CompanyDefaultLogo.png";
+import defaultImg from "../assets/images/companyDefault.svg";
 import BusDetails from "./BusDetails";
 import { fetchSeatMap } from "../util/FetchFunction";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   item: Service;
@@ -78,7 +79,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
           <div className={s.inner}>
             <div className={s.od}>
               {t("trip.place", { city: originName, terminal: name(item.OriginTerminalPersianName, item.OriginTerminalName) })}
-              <i className={`fas ${icons.arrow}`} />
+              <Icon name={icons.arrow} />
               {t("trip.place", { city: destinationName, terminal: name(item.DestinationTerminalPersianName, item.DestinationTerminalName) })}
             </div>
             <div className={s.departureTime}>
@@ -96,7 +97,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
                   {!loadingSeatCount ? (
                     num(seatMap?.AvailableSeatCount ?? item.AvailableSeatCount)
                   ) : (
-                    <i className="fas fa-spinner"></i>
+                    <Icon name="spinner" />
                   )}
                 </span>
               </span>

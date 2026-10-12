@@ -3,6 +3,7 @@ import "../assets/css/calendarInput.css";
 import Calendar from "./Calendar";
 import LongDate from "./LongDate";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   display: boolean;
@@ -33,7 +34,7 @@ const CalendarInput = ({ display, setDisplay, selectedDate, onSelectDate }: Prop
   return (
     <div className="calendar-div" ref={calendarDivRef}>
       <div className="calendar-input" onClick={() => setDisplay(!display)}>
-        <i className="fas fa-calendar" style={{ color: "#555" }} />
+        <Icon name="calendar" style={{ color: "#555" }} />
         <LongDate date={selectedDate} />
       </div>
       <div
@@ -45,7 +46,7 @@ const CalendarInput = ({ display, setDisplay, selectedDate, onSelectDate }: Prop
             ×
           </div>
           <div className="today-info" onClick={() => onSelectDate(today)}>
-            <i className="fas fa-share mirror-in-ltr"/>
+            <Icon name="share" className="mirror-in-ltr" />
             <span>{t("calendar.today")}</span>{" "}
             <LongDate date={today} />
           </div>

@@ -1,6 +1,6 @@
 .home-header {
     background-color: #cbe6f8;
-    background-image: url('../images/header.png');
+    background-image: url('../images/header.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -20,7 +20,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-image: url('../images/header.png');
+    background-image: url('../images/header.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

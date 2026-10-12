@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Icon from "./Icon";
 
 interface Props {
   children?: React.ReactNode;
@@ -32,7 +33,7 @@ const ExpandableCard2 = ({ children, title, direction = "column", offset = undef
     <div className="expandable-card2" ref={cardRef}>
       <div className={`expandable-card2-header${expanded ? " expanded" : ""}`} onClick={toggleExpanded}>
         <p className="unselectable">{title}</p>
-        <i className={`fas fa-chevron-down ${expanded ? "rotate" : ""}`} style={{ transition: "none" }}></i>
+        <Icon name="chevron-down" className={expanded ? "rotate" : ""} style={{ transition: "none" }} />
       </div>
       <div
         className="expandable-card2-content"

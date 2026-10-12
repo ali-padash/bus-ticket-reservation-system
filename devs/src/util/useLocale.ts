@@ -49,8 +49,8 @@ export const useLocale = () => {
       // where the text runs, "back" the other way.
       icons:
         dir === "rtl"
-          ? { back: "fa-chevron-right", forward: "fa-chevron-left", arrow: "fa-arrow-left" }
-          : { back: "fa-chevron-left", forward: "fa-chevron-right", arrow: "fa-arrow-right" },
+          ? { back: "chevron-right" as const, forward: "chevron-left" as const, arrow: "arrow-left" as const }
+          : { back: "chevron-left" as const, forward: "chevron-right" as const, arrow: "arrow-right" as const },
     };
   }, [lang, t]);
 };

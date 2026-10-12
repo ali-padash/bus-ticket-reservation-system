@@ -3,6 +3,7 @@ import "../assets/css/daysTab.css";
 import { addDays, formatDate } from "../util/Function";
 import { dayAndMonth, weekdayName } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   selectedDate: Date;
@@ -45,13 +46,15 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
   return (
     <div className="days-tab unselectable">
       <div className="days-tab-container">
-        <i
-          className={`fas ${icons.back} previous`}
+        <Icon
+          name={icons.back}
+          className="previous"
           role="button"
           aria-label={t("results.previousDay")}
           onClick={() => {
             handleChange(-1);
-          }}></i>
+          }}
+        />
         {daysToShow.map((date) => (
           <div
             key={formatDate(date)}
@@ -65,13 +68,14 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
             </span>
           </div>
         ))}
-        <i
-          className={`fas ${icons.forward}`}
+        <Icon
+          name={icons.forward}
           role="button"
           aria-label={t("results.nextDay")}
           onClick={() => {
             handleChange(1);
-          }}></i>
+          }}
+        />
       </div>
     </div>
   );

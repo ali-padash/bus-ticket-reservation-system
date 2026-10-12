@@ -18,7 +18,6 @@
 }
 
 .card-with-icon-verticall .icon {
-    font-family: "CustomIcon";
     font-size: 60px;
     font-style: normal;
     color: #3498db;
@@ -26,22 +25,6 @@
     margin-bottom: 20px;
     padding-top: 20px;
     /* min-width: 650px; */
-}
-
-.card-with-icon-verticall .icon.discount::before {
-    content: "g";
-}
-
-.card-with-icon-verticall .icon.basket::before {
-    content: "y";
-}
-
-.card-with-icon-verticall .icon.headphone::before {
-    content: "u";
-}
-
-.card-with-icon-verticall .icon.diamond::before {
-    content: "x";
 }
 
 

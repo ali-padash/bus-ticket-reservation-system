@@ -15,8 +15,8 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 | Shared state | None. State lives in the page that owns it and goes down by props; the search lives in the address. |
 | Languages | English (the default) and Persian, with `i18next` + `react-i18next`. The language is the first part of the address: `/en/...`, `/fa/...`. |
 | Calendar maths | `jalaali-js` for the Persian calendar; the browser's own `Date` for the Gregorian one |
-| Fonts | IRANSans for Persian; Inter for English, served by the site itself from the `@fontsource-variable/inter` package |
-| Icons | `react-icons` (one icon), Font Awesome 5 from a CDN, and two icon font files |
+| Fonts | Vazirmatn for Persian and Inter for English, both free and served by the site itself from `@fontsource-variable` packages |
+| Icons | `react-icons` only (Font Awesome 5 Free and Tabler sets), drawn as SVG through the `Icon` component. No CDN and no icon font since 2026-10-13 |
 | Styling | Plain CSS files and CSS Modules, mixed. No CSS framework. |
 
 ## Layout
@@ -74,14 +74,21 @@ the remembered passengers were added.
 | Two languages (2026-10-12) | 331.66 kB | 108.19 kB |
 | Real refund terms on the card, remembered passengers (2026-10-12) | 334.01 kB | 109.05 kB |
 | Own name and logo (2026-10-13) | 333.77 kB | 108.94 kB |
+| Free font, own drawings, icons as SVG (2026-10-13) | 348.97 kB | 113.29 kB |
 
 The two-languages step cost 88 kB (29 kB gzipped): the `i18next` and `react-i18next` libraries, and the
 two text files, about 15 kB each. Both text files travel to every visitor. Loading only the
 one in use would save about 5 kB gzipped and make the language switch wait for a download; it
 was not worth it at this size.
 
-The build also emits two Inter font files (48 kB for Latin, 85 kB for Latin with accents). A
-browser downloads one only when an English page shows a letter from it.
+The last step added 15 kB of script (4 kB gzipped), which is the 34 icons as SVG, and 6 kB of
+stylesheet, which is the four drawings written into it. In exchange the whole build went from
+782 kB in 15 files to 632 kB in 8 files, and the page no longer fetches the Font Awesome
+stylesheet and its font file from a CDN.
+
+The build also emits four font files: Inter (48 kB for Latin, 85 kB for Latin with accents)
+and Vazirmatn (46 kB for Persian, 35 kB for Latin). A browser downloads one only when a page
+shows a letter from it. (updated 2026-10-13)
 
 ## Packages
 
@@ -93,6 +100,8 @@ browser downloads one only when an English page shows a letter from it.
 - Added `@fontsource-variable/inter` (2026-10-12): the Inter font as files inside the project,
   so no outside font host is needed. Only two of its files are used; see
   [assets.doc.md](src/assets/assets.doc.md).
+- Added `@fontsource-variable/vazirmatn` (2026-10-13): the free Persian font, in place of the
+  paid IRANSans files.
 - Removed `jotai`: after the data-flow cleanup nothing used it any more. Every value it held
   is now state in one page, passed down by props. If two far-apart components ever need the
   same value again, `npm i jotai` brings it back.
@@ -106,6 +115,5 @@ browser downloads one only when an English page shows a letter from it.
   address before anything is drawn, so the English title no longer shows for a moment. A
   search engine that does not run JavaScript still sees only the English title. The Persian
   title is written twice: there and in `src/locales/fa.json`.
-- Font Awesome is loaded from a CDN at runtime, so icons vanish offline.
 - No tests and no test runner installed.
 - The `.gitignore` here ends with `**/.env*`.

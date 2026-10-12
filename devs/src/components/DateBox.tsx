@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import "../assets/css/dateBox.css";
 import Calendar from "./Calendar";
 import { useLocale } from "../util/useLocale";
+import Icon from "./Icon";
 
 interface Props {
   display: boolean;
@@ -35,10 +36,10 @@ const DateBox = ({ display, setDisplay, selectedDate, onSelectDate }: Props) => 
         transition: display ? "opacity 0.3s" : "opacity 0.2s",
       }}>
       <i className="cross" role="button" aria-label={t("home.closeCalendar")} onClick={() => setDisplay(false)} />
-      <i className="fas fa-calendar-alt" id="calender" aria-hidden="true">
+      <Icon name="calendar-alt" id="calender" aria-hidden="true">
         <div className="tooltip-message-triangle">▲</div>
         <div className="tooltip-message">{t("home.dateTooltip")}</div>
-      </i>
+      </Icon>
       <h3 style={{ color: "black" }}>{t("home.chooseDate")}</h3>
       <Calendar className="calendar" selectedDate={selectedDate} onSelectDate={onSelectDate} />
     </div>
