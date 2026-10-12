@@ -16,6 +16,11 @@ import (
 // unpaid hold stops counting the moment it expires, not a minute later. (updated 2026-10-12)
 const holdsSeat = `passengers.active AND (tickets.status <> 'reserved' OR tickets.expires_at > now())`
 
+// A trip is upcoming until its departure time, read on the clock of Tehran, where
+// the buses run. The search and the booking share this one test, so a trip the
+// search shows is never one the booking refuses as departed. (written 2026-10-12)
+const upcoming = `(services.departure_date + services.departure_time) > (now() AT TIME ZONE 'Asia/Tehran')`
+
 // A seat is free when it is for sale and no passenger holds it.
 const freeSeatCount = `(
 	SELECT count(*)
@@ -165,13 +170,15 @@ const tripSelect = `
 	JOIN cities AS destination_city ON destination_city.id = destination.city_id`
 
 // TripsBetween returns the trips on one day whose terminals are in the two cities,
-// ordered by departure time.
+// ordered by departure time. Trips that have already left are not listed: they
+// cannot be bought. (updated 2026-10-12)
 func (s *Store) TripsBetween(ctx context.Context, originCityID uint, destinationCityID uint, date time.Time) ([]domain.Trip, error) {
 	var rows []tripRow
 	err := s.db.WithContext(ctx).Raw(tripSelect+`
 		WHERE services.departure_date = ?
 		  AND origin.city_id = ?
 		  AND destination.city_id = ?
+		  AND `+upcoming+`
 		ORDER BY services.departure_time, services.id`,
 		// The day is sent as text so the server's time zone cannot shift it.
 		date.Format("2006-01-02"), originCityID, destinationCityID).Scan(&rows).Error

@@ -29,7 +29,7 @@ nothing above it sees SQL or GORM.
 | Method | What it does |
 | --- | --- |
 | `City(id)` | One city, or `ErrCityNotFound`. |
-| `TripsBetween(originCityID, destinationCityID, date)` | The search. Trips on that day whose origin terminal is in the first city and whose destination terminal is in the second, ordered by departure time. One query with five joins. |
+| `TripsBetween(originCityID, destinationCityID, date)` | The search. Trips on that day whose origin terminal is in the first city and whose destination terminal is in the second, ordered by departure time. One query with five joins. Trips that have already left are not listed; the test (`upcoming`) is the same SQL the booking uses, so the search never shows a trip the booking would refuse as departed (2026-10-12). |
 | `Trip(tripID)` | One trip with its two cities, or `ErrTripNotFound`. Shares its SQL (`tripSelect`) with the search, so the two cannot drift apart. |
 | `Seats(tripID)` | Every seat of a trip with the passenger's gender if it is taken, or `ErrTripNotFound`. |
 | `FreeSeatCount(tripID)` | Free seat count for one trip, or `ErrTripNotFound`. |
@@ -107,7 +107,7 @@ move it to the day before.
 
 ## Tests
 
-20 tests against a real PostgreSQL. They are **skipped** when `DATABASE_URL` is not set or the
+21 tests against a real PostgreSQL. One checks that the search hides a trip that has left. They are **skipped** when `DATABASE_URL` is not set or the
 database cannot be reached.
 
 Each test opens a transaction, inserts its own small trip (two test cities with ids 900001 and

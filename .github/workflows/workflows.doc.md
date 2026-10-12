@@ -19,7 +19,7 @@ These are the same commands a developer runs by hand; CI only makes sure nobody 
 ## Choices and their reasons
 
 - **The backend job starts a real PostgreSQL 17** as a service container, the same major
-  version as `docker-compose.yml`. 20 of the backend tests run real SQL, including the two
+  version as `docker-compose.yml`. 21 of the backend tests run real SQL, including the two
   that prove a seat cannot be sold twice. A fake database could not prove that.
 - **A skipped test fails the run.** The database tests skip themselves when no database
   answers. That is right on a laptop, but in CI a skipped test would look like a passing one,

@@ -83,6 +83,11 @@ Search for trips.
 
 The search matches trips whose terminals are in those cities. Results are ordered by departure time.
 
+*Updated 2026-10-12:* a trip whose departure time has passed (on the clock of Tehran) is left
+out, because it cannot be bought. So a search for today returns fewer trips as the day goes
+on, and a search for a past day returns an empty `Items`. `GET /trips/{id}` and the seat map
+still answer for a departed trip; holding a seat on it gives `409 trip_departed`.
+
 Returns `200`:
 
 ```json

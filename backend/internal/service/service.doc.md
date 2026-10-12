@@ -67,7 +67,7 @@ Created with `NewCities(store, lifetime, now)`. It serves the city list **from m
 | `List()` | Returns every city and the time the list was read. Reads the database only when it has no list, or the list is older than `lifetime` (one hour in the real program). |
 | `Invalidate()` | Forgets the list, so the next `List` reads the database again. |
 
-Why: the list changes almost never and every visitor needs it. Reading 915 cities and 12,242
+Why: the list changes almost never and every visitor needs it. Reading 915 cities and 12,397
 spellings from the database for each visitor would be wasted work.
 
 Three details worth knowing:

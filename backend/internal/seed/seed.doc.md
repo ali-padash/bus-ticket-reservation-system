@@ -17,7 +17,7 @@ Fills the database with demo data. Run it with `go run ./cmd/api seed` from `bac
 It runs inside one transaction, so it either fully works or changes nothing.
 
 1. Empties every table.
-2. Loads the 915 cities and their 12,242 search spellings from `cities.json`. English city and
+2. Loads the 915 cities and their 12,397 search spellings from `cities.json`. English city and
    province names are trimmed: 50 cities have one that ends in a stray space in the file (2026-10-12).
 3. Creates 4 bus types with their floor plans, 6 made-up companies, and 12 terminals in 8 big cities
    (Tehran has three, Mashhad and Esfahan two, the rest one).

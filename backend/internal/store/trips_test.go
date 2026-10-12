@@ -93,11 +93,22 @@ func insertTripOn(t *testing.T, db *gorm.DB, day string) uint {
 
 var tripDay = time.Date(2001, 2, 3, 0, 0, 0, 0, time.UTC)
 
+// The search only lists trips that have not left yet, so its tests need a trip in
+// the future. soonDay is the same day tomorrow() names.
+func soonDay(t *testing.T) time.Time {
+	t.Helper()
+	day, err := time.Parse("2006-01-02", tomorrow())
+	if err != nil {
+		t.Fatalf("cannot read tomorrow(): %v", err)
+	}
+	return day
+}
+
 func TestTripsBetween(t *testing.T) {
 	s := openTestStore(t)
-	tripID := insertTrip(t, s.db)
+	tripID := insertTripOn(t, s.db, tomorrow())
 
-	trips, err := s.TripsBetween(context.Background(), 900001, 900002, tripDay)
+	trips, err := s.TripsBetween(context.Background(), 900001, 900002, soonDay(t))
 
 	if err != nil {
 		t.Fatalf("TripsBetween() error: %v", err)
@@ -119,7 +130,7 @@ func TestTripsBetween(t *testing.T) {
 		VIP:                 true,
 		Price:               2_500_000,
 		DiscountPercentage:  10,
-		DepartureDate:       "2001-02-03",
+		DepartureDate:       tomorrow(),
 		DepartureTime:       "08:30",
 		AvailableSeats:      2,
 	}
@@ -133,16 +144,17 @@ func TestTripsBetween(t *testing.T) {
 
 func TestTripsBetweenFindsNothing(t *testing.T) {
 	s := openTestStore(t)
-	insertTrip(t, s.db)
+	insertTripOn(t, s.db, tomorrow())
+	day := soonDay(t)
 
 	cases := map[string]struct {
 		from, to uint
 		date     time.Time
 	}{
-		"the day after":       {900001, 900002, tripDay.AddDate(0, 0, 1)},
-		"the opposite way":    {900002, 900001, tripDay},
-		"another origin":      {1, 900002, tripDay},
-		"another destination": {900001, 1, tripDay},
+		"the day after":       {900001, 900002, day.AddDate(0, 0, 1)},
+		"the opposite way":    {900002, 900001, day},
+		"another origin":      {1, 900002, day},
+		"another destination": {900001, 1, day},
 	}
 	for name, c := range cases {
 		t.Run(name, func(t *testing.T) {
@@ -241,5 +253,20 @@ func TestTrip(t *testing.T) {
 
 	if _, err := s.Trip(context.Background(), 987654321); !errors.Is(err, domain.ErrTripNotFound) {
 		t.Errorf("Trip() of an unknown trip = %v, want ErrTripNotFound", err)
+	}
+}
+
+// A trip that has left cannot be bought, so the search must not offer it.
+func TestTripsBetweenHidesDepartedTrips(t *testing.T) {
+	s := openTestStore(t)
+	insertTrip(t, s.db) // departs on tripDay, in 2001
+
+	trips, err := s.TripsBetween(context.Background(), 900001, 900002, tripDay)
+
+	if err != nil {
+		t.Fatalf("TripsBetween() error: %v", err)
+	}
+	if len(trips) != 0 {
+		t.Errorf("got %d trips, want none: the only trip left long ago", len(trips))
 	}
 }

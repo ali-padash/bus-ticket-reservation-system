@@ -39,7 +39,7 @@ func (s *Store) CreateHold(ctx context.Context, hold domain.NewHold) error {
 		// Departure is stored as local Iranian date and time, so "now" is taken in that zone.
 		result := tx.Raw(`
 			SELECT price, discount_percentage,
-			       (departure_date + departure_time) > (now() AT TIME ZONE 'Asia/Tehran') AS upcoming
+			       `+upcoming+` AS upcoming
 			FROM services
 			WHERE id = ?`, hold.TripID).Scan(&trip)
 		if result.Error != nil {
