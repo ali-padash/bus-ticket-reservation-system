@@ -46,6 +46,17 @@ export interface Service {
   Status: number;
 }
 
+// One trip on its own (GET /trips/{id}): a search item plus its two cities. The two city IDs
+// and DepartureDate are what a link back to the search results needs.
+export interface Trip extends Service {
+  OriginCityID: number;
+  OriginPersianName: string;
+  OriginEnglishName: string;
+  DestinationCityID: number;
+  DestinationPersianName: string;
+  DestinationEnglishName: string;
+}
+
 export interface ServiceResponse {
   Date: string;
   OriginPersianName: string;
@@ -99,8 +110,10 @@ export interface TicketTrip {
   ID: number;
   CompanyPersianName: string;
   BusType: string;
+  OriginCityID: number;
   OriginPersianName: string;
   OriginTerminalPersianName: string;
+  DestinationCityID: number;
   DestinationPersianName: string;
   DestinationTerminalPersianName: string;
   DepartureDate: string;

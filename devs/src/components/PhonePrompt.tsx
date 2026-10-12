@@ -1,5 +1,6 @@
 import { useState } from "react";
 import s from "../assets/css/booking.module.css";
+import DigitInput from "./DigitInput";
 import { isValidPhone, toLatinDigits } from "../util/Validation";
 
 interface Props {
@@ -28,13 +29,7 @@ const PhonePrompt = ({ notFound, onSubmit }: Props) => {
       <h2>مشاهده بلیط</h2>
       <p>برای مشاهده بلیط، شماره موبایلی را که هنگام خرید وارد کرده‌اید بنویسید.</p>
       <div className={`${s.field} ${s.phoneField} ${invalid ? s.invalid : ""}`} style={{ margin: "14px auto 0" }}>
-        <input
-          type="tel"
-          placeholder="شماره موبایل"
-          aria-label="شماره موبایل"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
+        <DigitInput type="tel" label="شماره موبایل" value={phone} onChange={setPhone} />
         {invalid && <p className={s.fieldError}>شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود</p>}
       </div>
       {notFound && !invalid && (

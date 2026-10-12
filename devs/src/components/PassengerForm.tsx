@@ -1,4 +1,5 @@
 import s from "../assets/css/booking.module.css";
+import DigitInput from "./DigitInput";
 import { toPersianNum } from "../util/Function";
 import { FieldErrors, PassengerDraft, emptyPassenger } from "../util/Validation";
 
@@ -43,27 +44,31 @@ const PassengerForm = ({
         است؛ پس شماره موبایل خود را با دقت وارد کنید.
       </p>
       <div className={`${s.field} ${s.phoneField} ${fieldErrors.ContactPhone ? s.invalid : ""}`}>
-        <input
-          type="tel"
-          placeholder="شماره موبایل"
-          aria-label="شماره موبایل"
-          value={contactPhone}
-          onChange={(e) => setContactPhone(e.target.value)}
-        />
+        <DigitInput type="tel" label="شماره موبایل" value={contactPhone} onChange={setContactPhone} />
         {fieldErrors.ContactPhone && <p className={s.fieldError}>{fieldErrors.ContactPhone}</p>}
       </div>
       {seats.map((seatNumber, index) => {
         const passenger = passengers[seatNumber] ?? emptyPassenger;
         const errorOf = (name: keyof PassengerDraft) => fieldErrors[`Passengers[${index}].${name}`];
+        // The two name boxes are ordinary text boxes. The two number boxes show Persian digits
+        // as the visitor types.
         const textField = (name: "FirstName" | "LastName" | "NationalCode" | "BirthDate", label: string) => (
           <div className={`${s.field} ${errorOf(name) ? s.invalid : ""}`}>
-            <input
-              type="text"
-              placeholder={label}
-              aria-label={label}
-              value={passenger[name]}
-              onChange={(e) => setPassenger(seatNumber, { ...passenger, [name]: e.target.value })}
-            />
+            {name === "NationalCode" || name === "BirthDate" ? (
+              <DigitInput
+                label={label}
+                value={passenger[name]}
+                onChange={(text) => setPassenger(seatNumber, { ...passenger, [name]: text })}
+              />
+            ) : (
+              <input
+                type="text"
+                placeholder={label}
+                aria-label={label}
+                value={passenger[name]}
+                onChange={(e) => setPassenger(seatNumber, { ...passenger, [name]: e.target.value })}
+              />
+            )}
             {errorOf(name) && <p className={s.fieldError}>{errorOf(name)}</p>}
           </div>
         );

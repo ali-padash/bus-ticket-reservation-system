@@ -117,7 +117,6 @@ function ServicePage({ cities, citiesStatus }: Props) {
         originState={originState}
         destinationState={destinationState}
         errorFetching={errorFetching || !originID || !destinationID}
-        searchQuery={`from=${originID}&to=${destinationID}&date=${date}`}
       />
       <TicketModel />
       <BottomNavbar />

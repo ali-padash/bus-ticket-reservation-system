@@ -11,7 +11,8 @@ import TicketFailed from "../components/TicketFailed";
 import PhonePrompt from "../components/PhonePrompt";
 import { Ticket } from "../util/Models";
 import { ApiError, cancelTicket, lookupTicket, payTicket } from "../util/FetchFunction";
-import { readTicketSession, saveTicketSession } from "../util/TicketStorage";
+import { readPhone, savePhone } from "../util/TicketStorage";
+import { toLatinDigits } from "../util/Validation";
 
 interface Props {
   // True on /tickets/<code>/payment, the demo bank page.
@@ -25,11 +26,10 @@ interface Props {
 // ticket (code from the address, phone from this tab's sessionStorage) and shows whatever the
 // ticket's Status says. That is why a refresh loses nothing. (written 2026-10-12)
 function TicketPage({ bank = false }: Props) {
-  const { code = "" } = useParams();
+  // A code typed into the address with Persian digits is read as the same code.
+  const code = toLatinDigits(useParams().code ?? "");
   const navigate = useNavigate();
-  const [session, setSession] = useState(() => readTicketSession(code));
-  const phone = session?.phone ?? "";
-  const search = session?.search ?? "";
+  const [phone, setPhone] = useState(() => readPhone(code));
 
   const [ticket, setTicket] = useState<Ticket | null>(null);
   // The moment (on this computer's clock) the ticket above arrived. The countdown is the
@@ -56,7 +56,7 @@ function TicketPage({ bank = false }: Props) {
     lookupTicket(code, phone, abortController.signal)
       .then((newTicket) => {
         // Only a phone that really opens the ticket is remembered for this tab.
-        saveTicketSession(code, { phone, search });
+        savePhone(code, phone);
         receive(newTicket);
       })
       .catch((err) => {
@@ -64,7 +64,7 @@ function TicketPage({ bank = false }: Props) {
         setLookupProblem(err instanceof ApiError && err.code === "ticket_not_found" ? "not_found" : "failed");
       });
     return () => abortController.abort();
-  }, [code, phone, search, lookupVersion]);
+  }, [code, phone, lookupVersion]);
 
   const onHold = ticket?.Status === "reserved";
   const secondsPassed = Math.max(0, Math.floor((now - receivedAt) / 1000));
@@ -107,15 +107,13 @@ function TicketPage({ bank = false }: Props) {
       .finally(() => setBusy(false));
   };
 
-  const resultsLink = search ? `/services?${search}` : "/";
-
   if (!phone || lookupProblem === "not_found") {
     return (
       <BookingFrame>
         <PhonePrompt
           notFound={lookupProblem === "not_found"}
           onSubmit={(newPhone) => {
-            setSession({ phone: newPhone, search });
+            setPhone(newPhone);
             setLookupProblem(null);
             setLookupVersion((version) => version + 1);
           }}
@@ -154,6 +152,10 @@ function TicketPage({ bank = false }: Props) {
   }
 
   if (ticket.Status !== "reserved" || timeUp) {
+    // The way back to the results comes from the ticket, so it also works in a tab that never
+    // saw the search.
+    const { OriginCityID, DestinationCityID, DepartureDate } = ticket.Trip;
+    const resultsLink = `/services?from=${OriginCityID}&to=${DestinationCityID}&date=${DepartureDate}`;
     return (
       <BookingFrame>
         <TicketFailed reason={ticket.Status === "cancelled" ? "cancelled" : "expired"} resultsLink={resultsLink} />

@@ -18,7 +18,7 @@ const TicketIssued = ({ ticket }: Props) => {
       <i className={`fas fa-check-circle ${s.bigIcon}`} />
       <h2>بلیط شما صادر شد</h2>
       <p>کد بلیط</p>
-      <div className={s.code}>{ticket.Code}</div>
+      <div className={s.code}>{toPersianNum(ticket.Code)}</div>
       <p>این کد را همراه با شماره موبایل خود نگه دارید.</p>
       <div className={s.ticketDetails}>
         <div className={s.box}>
@@ -38,7 +38,7 @@ const TicketIssued = ({ ticket }: Props) => {
           <div className={s.priceRow}>
             <span>شرکت :</span>
             <span>
-              {trip.CompanyPersianName} - {trip.BusType}
+              {trip.CompanyPersianName} - {toPersianNum(trip.BusType)}
             </span>
           </div>
           <table className={s.table}>

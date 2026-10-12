@@ -15,11 +15,10 @@ interface Props {
   // Whether this card shows its seat map. The list owns it, so only one card is open.
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  searchQuery: string;
   index?: number;
 }
 
-const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, searchQuery, index = 0 }: Props) => {
+const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0 }: Props) => {
   const navigate = useNavigate();
   // The seat map is loaded each time the card is opened. One call gives both the drawing and
   // a fresh count of free seats; the count from the search can be a little old.
@@ -72,7 +71,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, searchQue
           <span>{item.CompanyPersianName}</span>
         </div>
         <div className={s.info}>
-          <h6>نوع اتوبوس {item.BusType}</h6>
+          <h6>نوع اتوبوس {toPersianNum(item.BusType)}</h6>
           <div className={s.inner}>
             <div className={s.od}>
               {originName + " - پایانه " + item.OriginTerminalPersianName}
@@ -101,7 +100,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, searchQue
             </div>
           </div>
           {item.Description && <div className={s.divider}></div>}
-          {item.Description && <div className={s.description}>{item.Description}</div>}
+          {item.Description && <div className={s.description}>{toPersianNum(item.Description)}</div>}
           {!item.Description && <div style={{ height: "30px" }}></div>}
         </div>
       </div>
@@ -111,7 +110,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, searchQue
         seatMap={seatMap}
         errorFetching={errorFetching}
         retry={() => setRetryCount((count) => count + 1)}
-        onBuy={() => navigate(`/booking/${item.ID}?${searchQuery}`)}
+        onBuy={() => navigate(`/booking/${item.ID}`)}
       />
     </div>
   );

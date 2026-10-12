@@ -1,4 +1,4 @@
-import { City, Passenger, RefundRule, SeatMap, ServiceResponse, Ticket } from "./Models";
+import { City, Passenger, RefundRule, SeatMap, ServiceResponse, Ticket, Trip } from "./Models";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 
@@ -48,6 +48,9 @@ export const fetchServices = (date: string, originID: number, destinationID: num
   const query = new URLSearchParams({ from: String(originID), to: String(destinationID), date });
   return callAPI<ServiceResponse>(`/trips?${query}`, signal);
 };
+
+// One trip by its ID, for the booking page, which knows nothing else about the trip.
+export const fetchTrip = (tripID: number, signal?: AbortSignal) => callAPI<Trip>(`/trips/${tripID}`, signal);
 
 export const fetchSeatMap = (tripID: number, signal?: AbortSignal) =>
   callAPI<SeatMap>(`/trips/${tripID}/seat-map`, signal);

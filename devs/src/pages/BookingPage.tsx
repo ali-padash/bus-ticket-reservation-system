@@ -6,8 +6,8 @@ import BookingSteps from "../components/BookingSteps";
 import TripSummary from "../components/TripSummary";
 import SeatPicker from "../components/SeatPicker";
 import PassengerForm from "../components/PassengerForm";
-import { Passenger, SeatMap, ServiceResponse } from "../util/Models";
-import { ApiError, fetchSeatMap, fetchServices, reserveSeats } from "../util/FetchFunction";
+import { Passenger, SeatMap, Trip } from "../util/Models";
+import { ApiError, fetchSeatMap, fetchTrip, reserveSeats } from "../util/FetchFunction";
 import {
   FieldErrors,
   PassengerDraft,
@@ -17,7 +17,7 @@ import {
   translateFieldErrors,
   validateBooking,
 } from "../util/Validation";
-import { saveTicketSession } from "../util/TicketStorage";
+import { savePhone } from "../util/TicketStorage";
 
 const MAX_SEATS = 4;
 
@@ -32,27 +32,21 @@ const parseSeats = (value: string | null): number[] => {
 
 // Steps 2 and 3 of buying: choosing seats, then typing the passengers.
 //
-// The address is /booking/<tripId>?from=&to=&date=&seats=18,19&step=passengers.
-// - from/to/date are the search the buyer came from. The API has no "one trip" route, so
-//   the page repeats that search and picks its trip out of the result. They are also the
-//   way back to the results.
+// The address is /booking/<tripId>?seats=18,19&step=passengers.
+// - The trip is loaded by its ID, so the address needs nothing else to show it. The way back
+//   to the results is built from the trip's two city IDs and its date.
 // - seats and step say where the buyer is, so refresh and the back button keep the place.
 // What is typed into the form is ordinary state: it is personal, so it is not put in the
-// address, and it is gone after a refresh. (written 2026-10-12)
+// address, and it is gone after a refresh. (updated 2026-10-12)
 function BookingPage() {
   const { tripId } = useParams();
   const tripID = Number(tripId);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const from = Number(searchParams.get("from"));
-  const to = Number(searchParams.get("to"));
-  const date = searchParams.get("date") ?? "";
-  const searchQuery = `from=${from}&to=${to}&date=${date}`;
-  const resultsLink = `/services?${searchQuery}`;
   const selectedSeats = parseSeats(searchParams.get("seats"));
   const onPassengerStep = searchParams.get("step") === "passengers" && selectedSeats.length > 0;
 
-  const [servicesData, setServicesData] = useState<ServiceResponse | null>(null);
+  const [trip, setTrip] = useState<Trip | null>(null);
   const [tripFailed, setTripFailed] = useState(false);
   const [seatMap, setSeatMap] = useState<SeatMap | null>(null);
   const [seatMapFailed, setSeatMapFailed] = useState(false);
@@ -70,13 +64,13 @@ function BookingPage() {
   useEffect(() => {
     const abortController = new AbortController();
     setTripFailed(false);
-    fetchServices(date, from, to, abortController.signal)
-      .then((data) => setServicesData(data))
+    fetchTrip(tripID, abortController.signal)
+      .then((data) => setTrip(data))
       .catch((err) => {
         if (err.name !== "AbortError") setTripFailed(true);
       });
     return () => abortController.abort();
-  }, [date, from, to]);
+  }, [tripID]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -89,7 +83,10 @@ function BookingPage() {
     return () => abortController.abort();
   }, [tripID, seatMapVersion]);
 
-  const trip = servicesData?.Items.find((item) => item.ID === tripID);
+  // Until the trip has arrived the page does not know which search it belongs to.
+  const resultsLink = trip
+    ? `/services?from=${trip.OriginCityID}&to=${trip.DestinationCityID}&date=${trip.DepartureDate}`
+    : "/";
 
   // The seats and the step live in the address. A seat click replaces the current history
   // entry (so "back" does not replay every click); a step change adds one.
@@ -136,7 +133,7 @@ function BookingPage() {
       .then((ticket) => {
         // The seats are now on hold. The phone is remembered for this tab only, so the
         // ticket page can open the ticket without the phone ever being in the address.
-        saveTicketSession(ticket.Code, { phone, search: searchQuery });
+        savePhone(ticket.Code, phone);
         navigate(`/tickets/${ticket.Code}`);
       })
       .catch((err) => {
@@ -157,7 +154,7 @@ function BookingPage() {
       });
   };
 
-  if (tripFailed || (servicesData && !trip)) {
+  if (tripFailed) {
     return (
       <BookingFrame>
         <div className={`${s.card} ${s.centred} ${s.failed}`}>
@@ -176,10 +173,10 @@ function BookingPage() {
   return (
     <BookingFrame>
       <div className={s.container}>
-        {servicesData && trip && (
+        {trip && (
           <TripSummary
-            originName={servicesData.OriginPersianName}
-            destinationName={servicesData.DestinationPersianName}
+            originName={trip.OriginPersianName}
+            destinationName={trip.DestinationPersianName}
             originTerminal={trip.OriginTerminalPersianName}
             destinationTerminal={trip.DestinationTerminalPersianName}
             company={trip.CompanyPersianName}

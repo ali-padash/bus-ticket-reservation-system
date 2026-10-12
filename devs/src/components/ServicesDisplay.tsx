@@ -13,9 +13,6 @@ interface Props {
   originState: { [key: string]: boolean };
   destinationState: { [key: string]: boolean };
   errorFetching: boolean;
-  // The search as it stands in the address ("from=1&to=21&date=..."). It is handed on to the
-  // booking page, so that page can find its trip again and knows the way back.
-  searchQuery: string;
 }
 
 const ServicesDisplay = ({
@@ -25,7 +22,6 @@ const ServicesDisplay = ({
   originState,
   destinationState,
   errorFetching,
-  searchQuery,
 }: Props) => {
   // Only one trip shows its seat map at a time. Keeping the open trip's ID here, in the
   // parent of all the cards, means opening one card closes the others without any signal.
@@ -89,7 +85,6 @@ const ServicesDisplay = ({
           destinationName={servicesData.DestinationPersianName}
           isOpen={item.ID === openTripID}
           setIsOpen={(isOpen) => setOpenTripID(isOpen ? item.ID : null)}
-          searchQuery={searchQuery}
         />
       ))}
     </div>

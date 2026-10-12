@@ -16,12 +16,19 @@ export const emptyPassenger: PassengerDraft = { FirstName: "", LastName: "", Nat
 // "ContactPhone", or "Passengers[0].NationalCode" for the first passenger.
 export type FieldErrors = { [field: string]: string };
 
-// The API only accepts Latin digits. Visitors with a Persian or Arabic keyboard type ۰-۹ or
-// ٠-٩, so every number is passed through here before it is checked or sent.
+// The opposite of toPersianNum. The number boxes show Persian digits (and an Arabic keyboard
+// types ٠-٩), while the API is sent Latin ones, so every number is passed through here before
+// it is checked, sent, or put in an address. (updated 2026-10-12)
 export const toLatinDigits = (text: string) =>
   text
     .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - "۰".charCodeAt(0)))
     .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - "٠".charCodeAt(0)));
+
+// A name is 1 to 50 characters: letters of any alphabet (Persian and English both pass), plus
+// a space, a hyphen, an apostrophe and the Persian half-space. Digits and other signs are
+// refused. This is the same rule the API applies. (written 2026-10-12)
+export const isValidName = (name: string) =>
+  [...name].length <= 50 && /^[\p{L}\p{M} '\u200c-]+$/u.test(name) && /\p{L}/u.test(name);
 
 export const isValidPhone = (phone: string) => /^09\d{9}$/.test(phone);
 
@@ -52,8 +59,8 @@ export const persianDateToGregorian = (text: string): string | null => {
 // fault found here and for one reported by the API, so the visitor sees one voice.
 const messages: { [field: string]: string } = {
   ContactPhone: "شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود",
-  FirstName: "نام را وارد نمایید (حداکثر ۵۰ حرف)",
-  LastName: "نام خانوادگی را وارد نمایید (حداکثر ۵۰ حرف)",
+  FirstName: "نام را فقط با حروف وارد نمایید (حداکثر ۵۰ حرف)",
+  LastName: "نام خانوادگی را فقط با حروف وارد نمایید (حداکثر ۵۰ حرف)",
   NationalCode: "کدملی معتبر نیست",
   BirthDate: "تاریخ تولد معتبر نیست (نمونه: ۱۳۷۴/۰۱/۲۱)",
   Gender: "جنسیت را انتخاب نمایید",
@@ -69,8 +76,8 @@ export const validateBooking = (contactPhone: string, passengers: PassengerDraft
   const nationalCodes = passengers.map((passenger) => toLatinDigits(passenger.NationalCode.trim()));
   passengers.forEach((passenger, index) => {
     const field = (name: string) => `Passengers[${index}].${name}`;
-    if (!passenger.FirstName.trim()) errors[field("FirstName")] = messages.FirstName;
-    if (!passenger.LastName.trim()) errors[field("LastName")] = messages.LastName;
+    if (!isValidName(passenger.FirstName.trim())) errors[field("FirstName")] = messages.FirstName;
+    if (!isValidName(passenger.LastName.trim())) errors[field("LastName")] = messages.LastName;
     if (!isValidNationalCode(nationalCodes[index])) errors[field("NationalCode")] = messages.NationalCode;
     else if (nationalCodes.indexOf(nationalCodes[index]) !== index) errors[field("NationalCode")] = duplicateNationalCode;
     if (!persianDateToGregorian(passenger.BirthDate)) errors[field("BirthDate")] = messages.BirthDate;

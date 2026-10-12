@@ -2,7 +2,7 @@ import s from "../assets/css/booking.module.css";
 import { getWeekdayName, parseDate, putComma, toPersianNum, turnToDate } from "../util/Function";
 
 // The props are plain values, not a trip object, because two different pages fill this box:
-// the booking page from a search result, and the ticket page from a ticket.
+// the booking page from a trip, and the ticket page from a ticket. (updated 2026-10-12)
 interface Props {
   originName: string;
   destinationName: string;
@@ -48,7 +48,7 @@ const TripSummary = ({
         </div>
       </div>
       <div className={s.summarySmall}>{company}</div>
-      <div className={s.summarySmall}>{busType}</div>
+      <div className={s.summarySmall}>{toPersianNum(busType)}</div>
       <div className={s.summaryRow}>
         <span>تاریخ:</span>
         {day && getWeekdayName(day)} {turnToDate(date)}
