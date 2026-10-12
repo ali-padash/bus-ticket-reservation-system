@@ -1,8 +1,11 @@
 # devs/src/pages
 
-One file per route.
+One file per route. Every route sits under a language, `/en` or `/fa`; `<lang>` below is one of
+the two. `LanguageLayout` (in `components/`) checks it before any page is drawn, and a page
+builds its links with `path()` from `useLocale()`, which puts the language in front
+(2026-10-12). See "Two languages" in [src.doc.md](../src.doc.md).
 
-## `MainPage.tsx` — route `/`
+## `MainPage.tsx` — route `/<lang>/`
 
 *Updated 2026-10-12.*
 
@@ -18,9 +21,9 @@ They live here because two children need them: the form, and the navbar, which d
 either is true. Everything else about the form (the keyboard handling included) is in
 `HomeHeader`; see [components.doc.md](../components/components.doc.md).
 
-## `ServicePage.tsx` — route `/services?from=&to=&date=`
+## `ServicePage.tsx` — route `/<lang>/services?from=&to=&date=`
 
-*Rewritten 2026-10-12.*
+*Updated 2026-10-12.*
 
 The results page: `WholeNavbar` → `SearchPanel` → heading and `FilterSearch` → `DaysTab` →
 `ServicesDisplay` → `TicketModel` → `BottomNavbar`.
@@ -44,6 +47,8 @@ State it owns and hands down:
 
 Details worth knowing:
 
+- The heading names the two cities in the page's language, from the search result
+  (`OriginPersianName` or `OriginEnglishName`).
 - The page receives the city list from `App`, but does not wait for it: the trips call uses
   the city IDs from the address. The list only fills the two city boxes with names.
 - A new search puts the three filters back to "all".
@@ -55,7 +60,7 @@ Details worth knowing:
 - The day strip and the calendar change only the `date` of the search on screen. The city
   boxes take effect when "search" is pressed (or the swap button, which searches at once).
 
-## `BookingPage.tsx` — route `/booking/<tripId>`
+## `BookingPage.tsx` — route `/<lang>/booking/<tripId>`
 
 *Updated 2026-10-12.*
 
@@ -64,7 +69,8 @@ The main card shows `BookingSteps` and then either `SeatPicker` or `PassengerFor
 
 The trip is loaded by its ID with `GET /trips/<id>`, so `/booking/<tripId>` on its own shows
 the trip. "Back to the results" is built from what that call returns: the two city IDs and the
-date. What else is in the address, and why:
+date. The trip's names and bus type are handed to `TripSummary` already in the page's language.
+What else is in the address, and why:
 
 | Part | Meaning |
 | --- | --- |
@@ -74,15 +80,21 @@ date. What else is in the address, and why:
 What is ordinary state: the seat map, the phone and passenger details being typed (kept by seat
 number, so going back to the seats and returning does not lose them), the messages per field.
 
-On submit: browser checks, then `POST /trips/<id>/tickets`.
+On submit: browser checks, then `POST /trips/<id>/tickets`. The birth date is read in the
+calendar of the page's language (Persian or Gregorian) and sent as Gregorian.
 
-- `201`: the phone is saved for this tab and the page moves to `/tickets/<code>`.
+- `201`: the phone is saved for this tab and the page moves to `/<lang>/tickets/<code>`.
 - `validation_failed`: a message under each field the server names.
 - `seats_unavailable`: back to the seat step, the lost seats dropped from the choice, the seat
   map loaded again, and a message naming them.
-- `trip_departed`, or anything else: a message above the buttons.
+- Any other code: its own sentence above the buttons; a fault without a known code gets the
+  general sentence.
 
-## `TicketPage.tsx` — routes `/tickets/<code>` and `/tickets/<code>/payment`
+The page keeps the *name* of each message, not the sentence (`fieldErrors` holds names such as
+`NationalCode`, `submitError` a key such as `errors.codes.trip_departed`). The sentence is
+looked up when it is drawn, so switching the language translates the messages on screen.
+
+## `TicketPage.tsx` — routes `/<lang>/tickets/<code>` and `/<lang>/tickets/<code>/payment`
 
 *Updated 2026-10-12.*
 
@@ -95,14 +107,16 @@ digits is read as the same code.
 | Situation | Shown |
 | --- | --- |
 | No phone in this tab, or the phone does not open the ticket | `PhonePrompt` |
-| `reserved`, on `/tickets/<code>` | `TicketReview`: passengers, prices, refund rules, countdown |
-| `reserved`, on `/tickets/<code>/payment` | `FakeBank`: the demo bank page with "pay" and "cancel" |
+| `reserved`, on `/<lang>/tickets/<code>` | `TicketReview`: passengers, prices, refund rules, countdown |
+| `reserved`, on `/<lang>/tickets/<code>/payment` | `FakeBank`: the demo bank page with "pay" and "cancel" |
 | `paid` | `TicketIssued`: the 12-digit code, trip, passengers and seats |
 | `cancelled`, `expired`, or the countdown at zero | `TicketFailed`: says the seats were released |
 
 "Pay" and "cancel" call the API, show the ticket that comes back, and return to
-`/tickets/<code>`. If the server says the ticket was already settled (`hold_expired`,
+`/<lang>/tickets/<code>`. If the server says the ticket was already settled (`hold_expired`,
 `ticket_cancelled`, `ticket_already_paid`), the page reads the ticket again and shows the truth.
+On the English pages the trip is shown from the ticket's English fields (`CompanyName`,
+`BusTypeEnglish`, `OriginEnglishName`, `OriginTerminalName` and the two for the destination).
 
 The review has no "edit" button: the seats are already on hold, so changing the details means
 cancelling and starting again.
@@ -113,7 +127,8 @@ cancelling and starting again.
 
 - `TicketModel` (a "no service on this route" notice) is always shown on the results page, with
   Tehran, Rasht and a date typed in by hand.
-- There is no "not found" route.
+- There is no "not found" page. An unknown address under a language goes to that language's
+  home page, and anything else to `/en/`.
 - A refresh on the passenger form keeps the seats but loses what was typed.
 - There is no page to find a ticket by typing its code; a ticket opens only from its address.
 - Pressing "search" twice without changing anything adds a second, identical entry to the

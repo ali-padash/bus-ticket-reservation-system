@@ -20,7 +20,7 @@
     margin: 15px 0;
     cursor: pointer;
     top: 8px;
-    left: 5%;
+    inset-inline-end: 5%;
 }
 
 .cross::before {
@@ -38,7 +38,7 @@
     font-size: 20px;
     padding: 5px;
     top: 25px;
-    right: calc(5% + 10px);
+    inset-inline-start: calc(5% + 10px);
     cursor: pointer;
 }
 

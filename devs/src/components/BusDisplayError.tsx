@@ -2,6 +2,7 @@ import RefundBox from "./RefundBox";
 import BusSchema from "./BusSchema";
 import Legend from "./Legend";
 import s from "../assets/css/busDetails.module.css";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   retry: () => void;
@@ -17,14 +18,15 @@ const placeholderLayout = [
 ];
 
 const BusSchemaError = ({ retry }: Props) => {
+  const { t } = useLocale();
   return (
     <div style={{ marginTop: "40px" }}>
       <div className={s.dividerLine} />
       <div className={s.cover + " " + s.errorCover}>
         <i className="fas fa-times"></i>
-        <h1>خطایی رخ داده است. دوباره تلاش کنید</h1>
+        <h1>{t("seatMap.errorTitle")}</h1>
         <button className={s.retryButton} onClick={retry}>
-          <span>تلاش مجدد</span>
+          <span>{t("common.retry")}</span>
           <i className="fas fa-sync-alt"></i>
         </button>
       </div>

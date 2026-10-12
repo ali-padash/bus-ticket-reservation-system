@@ -20,17 +20,19 @@
   width: var(--size);
   height: 80px;
   margin: auto;
+  flex-direction: row-reverse;
 }
 
 .blueHeader img {
   flex: 1;
-  margin: 8px 10px 8px 30px;
+  margin: 8px 0;
+  margin-inline: 10px 30px;
 }
 
 .blueHeader .title {
   flex: 4;
   color: white;
-  text-align: end;
+  text-align: start;
 }
 
 .blueHeader .title h6 {
@@ -60,6 +62,7 @@
 }
 
 .blueHeader .left {
+  right: auto;
   left: -13px;
   transform: rotateZ(calc(-43.5deg + 180deg));
 }
@@ -99,6 +102,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  flex-direction: row-reverse;
 }
 
 .theBody .odimg img {
@@ -116,7 +120,6 @@
 .theBody .inform {
   width: 100%;
   display: flex;
-  direction: rtl;
   align-items: center;
   justify-items: center;
 }
@@ -130,7 +133,7 @@
 }
 
 .theBody .inform .accessory img {
-  margin-left: 10px;
+  margin-inline-end: 10px;
 }
 
 .theBody button {

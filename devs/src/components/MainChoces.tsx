@@ -1,12 +1,15 @@
+import { useLocale } from "../util/useLocale";
+
 const MainChoces = () => {
+  const { t } = useLocale();
   return (
     <>
-        <li><a href="#">راهنما</a></li>
-        <li><a href="#">پنل آژانس</a></li>
-        <li><a href="#">دانستنی ها</a></li>
-        <li><a href="#">کنسلی بلیط</a></li>
-        <li><a href="#">استعلام بلیط‌</a></li>
-        <li><a href="#">بلیط اتوبوس</a></li>
+        <li><a href="#">{t("nav.guide")}</a></li>
+        <li><a href="#">{t("nav.agency")}</a></li>
+        <li><a href="#">{t("nav.articles")}</a></li>
+        <li><a href="#">{t("nav.cancelTicket")}</a></li>
+        <li><a href="#">{t("nav.findTicket")}</a></li>
+        <li><a href="#">{t("nav.busTickets")}</a></li>
     </>
   )
 }

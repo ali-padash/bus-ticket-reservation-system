@@ -10,16 +10,17 @@ import TicketIssued from "../components/TicketIssued";
 import TicketFailed from "../components/TicketFailed";
 import PhonePrompt from "../components/PhonePrompt";
 import { Ticket } from "../util/Models";
-import { ApiError, cancelTicket, lookupTicket, payTicket } from "../util/FetchFunction";
+import { ApiError, cancelTicket, errorTextKey, lookupTicket, payTicket } from "../util/FetchFunction";
 import { readPhone, savePhone } from "../util/TicketStorage";
-import { toLatinDigits } from "../util/Validation";
+import { toLatinDigits } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
-  // True on /tickets/<code>/payment, the demo bank page.
+  // True on /<language>/tickets/<code>/payment, the demo bank page.
   bank?: boolean;
 }
 
-// Steps 4 and 5 of buying, at /tickets/<code>: the review with its countdown, the demo bank,
+// Steps 4 and 5 of buying, at /<language>/tickets/<code>: the review with its countdown, the demo bank,
 // and then either the ticket or the failure page.
 //
 // The page keeps almost nothing of its own. Every time it opens it asks the server for the
@@ -29,6 +30,7 @@ function TicketPage({ bank = false }: Props) {
   // A code typed into the address with Persian digits is read as the same code.
   const code = toLatinDigits(useParams().code ?? "");
   const navigate = useNavigate();
+  const { t, path, name, text } = useLocale();
   const [phone, setPhone] = useState(() => readPhone(code));
 
   const [ticket, setTicket] = useState<Ticket | null>(null);
@@ -41,6 +43,7 @@ function TicketPage({ bank = false }: Props) {
   // Goes up by one each time the ticket should be asked for again.
   const [lookupVersion, setLookupVersion] = useState(0);
   const [busy, setBusy] = useState(false);
+  // Where the sentence for a failed "pay" or "cancel" is in the text files.
   const [actionError, setActionError] = useState<string | null>(null);
 
   const receive = (newTicket: Ticket) => {
@@ -92,16 +95,16 @@ function TicketPage({ bank = false }: Props) {
     action(code, phone)
       .then((newTicket) => {
         receive(newTicket);
-        navigate(`/tickets/${code}`, { replace: true });
+        navigate(path(`/tickets/${code}`), { replace: true });
       })
       .catch((err) => {
         const settled = ["hold_expired", "ticket_cancelled", "ticket_already_paid"];
         if (err instanceof ApiError && settled.includes(err.code)) {
           // The ticket's fate was already decided. Read it again and show what it is.
           setLookupVersion((version) => version + 1);
-          navigate(`/tickets/${code}`, { replace: true });
+          navigate(path(`/tickets/${code}`), { replace: true });
         } else {
-          setActionError("متاسفانه خطایی رخ داده است. لطفا دوباره تلاش کنید.");
+          setActionError(errorTextKey(err));
         }
       })
       .finally(() => setBusy(false));
@@ -128,15 +131,15 @@ function TicketPage({ bank = false }: Props) {
         <div className={`${s.card} ${s.centred}`}>
           {lookupProblem === "failed" ? (
             <>
-              <p>متاسفانه خطایی رخ داده است.</p>
+              <p>{t("common.error")}</p>
               <div className={s.centredActions}>
                 <button className={s.primary} onClick={() => setLookupVersion((version) => version + 1)}>
-                  تلاش مجدد
+                  {t("common.retry")}
                 </button>
               </div>
             </>
           ) : (
-            <p>در حال بارگذاری ...</p>
+            <p>{t("common.loading")}</p>
           )}
         </div>
       </BookingFrame>
@@ -155,7 +158,7 @@ function TicketPage({ bank = false }: Props) {
     // The way back to the results comes from the ticket, so it also works in a tab that never
     // saw the search.
     const { OriginCityID, DestinationCityID, DepartureDate } = ticket.Trip;
-    const resultsLink = `/services?from=${OriginCityID}&to=${DestinationCityID}&date=${DepartureDate}`;
+    const resultsLink = path(`/services?from=${OriginCityID}&to=${DestinationCityID}&date=${DepartureDate}`);
     return (
       <BookingFrame>
         <TicketFailed reason={ticket.Status === "cancelled" ? "cancelled" : "expired"} resultsLink={resultsLink} />
@@ -174,8 +177,8 @@ function TicketPage({ bank = false }: Props) {
           onCancel={() => finish(cancelTicket)}
         />
         <div className={s.centredActions}>
-          <Link className={s.plain} to={`/tickets/${code}`}>
-            بازگشت به اطلاعات سفر
+          <Link className={s.plain} to={path(`/tickets/${code}`)}>
+            {t("bank.backToReview")}
           </Link>
         </div>
       </BookingFrame>
@@ -186,12 +189,12 @@ function TicketPage({ bank = false }: Props) {
     <BookingFrame>
       <div className={s.container}>
         <TripSummary
-          originName={ticket.Trip.OriginPersianName}
-          destinationName={ticket.Trip.DestinationPersianName}
-          originTerminal={ticket.Trip.OriginTerminalPersianName}
-          destinationTerminal={ticket.Trip.DestinationTerminalPersianName}
-          company={ticket.Trip.CompanyPersianName}
-          busType={ticket.Trip.BusType}
+          originName={name(ticket.Trip.OriginPersianName, ticket.Trip.OriginEnglishName)}
+          destinationName={name(ticket.Trip.DestinationPersianName, ticket.Trip.DestinationEnglishName)}
+          originTerminal={name(ticket.Trip.OriginTerminalPersianName, ticket.Trip.OriginTerminalName)}
+          destinationTerminal={name(ticket.Trip.DestinationTerminalPersianName, ticket.Trip.DestinationTerminalName)}
+          company={name(ticket.Trip.CompanyPersianName, ticket.Trip.CompanyName)}
+          busType={text(ticket.Trip.BusType, ticket.Trip.BusTypeEnglish)}
           date={ticket.Trip.DepartureDate}
           time={ticket.Trip.DepartureTime}
           price={ticket.PricePerSeat}
@@ -203,7 +206,7 @@ function TicketPage({ bank = false }: Props) {
             secondsLeft={secondsLeft}
             busy={busy}
             actionError={actionError}
-            onPay={() => navigate(`/tickets/${code}/payment`)}
+            onPay={() => navigate(path(`/tickets/${code}/payment`))}
             onCancel={() => finish(cancelTicket)}
           />
         </div>

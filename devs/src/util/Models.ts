@@ -17,6 +17,9 @@ export interface Service {
   ID: number;
   IsVip: boolean;
   BusType: string;
+  // English texts, shown on the English pages. (added 2026-10-12)
+  BusTypeEnglish: string;
+  DescriptionEnglish: string;
   BusCode: string;
   Price: number;
   MidwayCity: string;
@@ -116,6 +119,14 @@ export interface TicketTrip {
   DestinationCityID: number;
   DestinationPersianName: string;
   DestinationTerminalPersianName: string;
+  // The same names in English, as slugs ("sepid-rah", "central"), and the bus type as a
+  // sentence. (added 2026-10-12)
+  CompanyName: string;
+  BusTypeEnglish: string;
+  OriginEnglishName: string;
+  OriginTerminalName: string;
+  DestinationEnglishName: string;
+  DestinationTerminalName: string;
   DepartureDate: string;
   DepartureTime: string;
 }

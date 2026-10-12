@@ -1,5 +1,5 @@
-import { toPersianNum } from "../util/Function";
 import { SeatStatus } from "../util/Models";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   seatNumber: number | null;
@@ -13,13 +13,14 @@ const backgroundColors = { M: "#aee2fa", F: "#ffb2d3", N: "#C5C5C5", S: "#27ae60
 const textColors = { M: "white", F: "white", N: "#777", S: "white", free: "#22819c" };
 
 const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
+  const { t, num } = useLocale();
   const look = status ?? "free";
   return (
     <div
       className="seat"
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
-      aria-label={onClick ? `صندلی ${toPersianNum(seatNumber ?? "")}` : undefined}
+      aria-label={onClick ? t("seatMap.seatLabel", { number: num(seatNumber ?? "") }) : undefined}
       onClick={onClick}
       onKeyDown={(e) => {
         if (onClick && (e.key === "Enter" || e.key === " ")) {
@@ -44,7 +45,7 @@ const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
         border: status == null ? "1px solid silver" : "none",
         cursor: onClick ? "pointer" : undefined,
       }}>
-      {seatNumber && toPersianNum(seatNumber)}
+      {seatNumber && num(seatNumber)}
     </div>
   );
 };

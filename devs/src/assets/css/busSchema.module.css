@@ -1,7 +1,11 @@
+/* The bus is a picture of a real thing, so it is drawn the same way in both languages: front
+   on the left, seat 1 behind the driver. Its direction is fixed here and does not follow the
+   page. (updated 2026-10-12) */
 .busSchema {
   height: 190px;
   display: flex;
   flex-direction: row;
+  direction: rtl;
 }
 
 .busSchema img {

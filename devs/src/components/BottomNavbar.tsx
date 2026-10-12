@@ -1,18 +1,16 @@
 import "../assets/css/bottomNavbar.css";
+import { useLocale } from "../util/useLocale";
+
+const links = ["waysToBuy", "terms", "faq", "cities", "companies", "blog", "newsletter", "careers", "api"];
 
 const BottomNavbar = () => {
+    const { t } = useLocale();
     return (
         <div className='bottom-navbar'>
             <ul>
-                <li><a href="#">روش های خرید</a></li>
-                <li><a href="#">شرایط و ضوابط</a></li>
-                <li><a href="#">پرسش و پاسخ ها</a></li>
-                <li><a href="#">شهر ها</a></li>
-                <li><a href="#">شرکت های مسافربری</a></li>
-                <li><a href="#">وبلاگ</a></li>
-                <li><a href="#">خبرنامه</a></li>
-                <li><a href="#">فرصت های شغلی</a></li>
-                <li><a href="#">api</a></li>
+                {links.map((link) => (
+                    <li key={link}><a href="#">{t(`footer.${link}`)}</a></li>
+                ))}
             </ul>
         </div>
     )

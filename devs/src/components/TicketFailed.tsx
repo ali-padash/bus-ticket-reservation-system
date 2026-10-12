@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import s from "../assets/css/booking.module.css";
 import BookingSteps from "./BookingSteps";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   // Why no ticket was issued: the buyer cancelled, or the 10 minutes ran out.
@@ -9,25 +10,23 @@ interface Props {
 }
 
 // Step 5 when there is no ticket. No money moves on this site, so the page says what really
-// happened: the seats were released.
+// happened: the seats were released. The two reasons use the same sentences as the API's
+// error codes of the same meaning.
 const TicketFailed = ({ reason, resultsLink }: Props) => {
+  const { t, path } = useLocale();
   return (
     <div className={`${s.card} ${s.centred} ${s.failed}`}>
       <BookingSteps current={5} />
       <i className={`fas fa-exclamation-circle ${s.bigIcon}`} />
-      <h2>خطا در صدور بلیط</h2>
-      <p>
-        {reason === "cancelled"
-          ? "خرید لغو شد و صندلی‌ها آزاد شدند."
-          : "مهلت ۱۰ دقیقه‌ای پرداخت به پایان رسید و صندلی‌ها آزاد شدند."}
-      </p>
-      <p>هیچ مبلغی از شما دریافت نشده است.</p>
+      <h2>{t("failed.title")}</h2>
+      <p>{t(reason === "cancelled" ? "errors.codes.ticket_cancelled" : "errors.codes.hold_expired")}</p>
+      <p>{t("failed.noCharge")}</p>
       <div className={s.centredActions}>
         <Link className={`${s.pay} ${s.buttonLink}`} to={resultsLink}>
-          بازگشت به صفحه سرویس
+          {t("failed.backToResults")}
         </Link>
-        <Link className={s.plain} to="/">
-          جستجوی مجدد سرویس
+        <Link className={s.plain} to={path("/")}>
+          {t("booking.searchAgain")}
         </Link>
       </div>
     </div>

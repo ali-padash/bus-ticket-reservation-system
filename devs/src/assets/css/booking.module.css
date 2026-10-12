@@ -3,7 +3,6 @@
    Colours follow the rest of the site: #3498db / #2980b9 blue, #2ecc71 green, #e74c3c red. */
 
 .page {
-  direction: rtl;
   background-color: #f0f0f0;
   padding: 25px 0 60px;
   min-height: 420px;
@@ -85,7 +84,7 @@
 .summarySeats strong {
   color: #3498db;
   font-size: 16px;
-  margin-left: 4px;
+  margin-inline-end: 4px;
 }
 
 /* ---- main card and step line ---- */
@@ -120,7 +119,7 @@
   width: 26px;
   height: 2px;
   background-color: #ddd;
-  margin-right: 4px;
+  margin-inline-start: 4px;
 }
 
 .steps li:last-child::after {
@@ -223,7 +222,7 @@
 }
 
 .chip i {
-  margin-left: 8px;
+  margin-inline-end: 8px;
 }
 
 /* ---- messages ---- */
@@ -276,12 +275,11 @@
   border: 1px solid #bbb;
   border-radius: 8px;
   padding: 0 12px;
-  font-family: 'IRANSansWeb', sans-serif;
+  font-family: var(--font);
   font-size: 14px;
   color: #333;
   background-color: white;
   outline: none;
-  direction: rtl;
 }
 
 .field input:focus,
@@ -395,7 +393,7 @@
 
 .table th,
 .table td {
-  text-align: right;
+  text-align: start;
   padding: 8px 6px;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -488,7 +486,7 @@
 }
 
 .ticketDetails {
-  text-align: right;
+  text-align: start;
   margin-top: 18px;
 }
 

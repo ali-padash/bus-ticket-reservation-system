@@ -13,7 +13,9 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 | Build tool | Vite 5 |
 | Routing | React Router 6 |
 | Shared state | None. State lives in the page that owns it and goes down by props; the search lives in the address. |
-| Calendar maths | `jalaali-js` (Persian calendar) |
+| Languages | English (the default) and Persian, with `i18next` + `react-i18next`. The language is the first part of the address: `/en/...`, `/fa/...`. |
+| Calendar maths | `jalaali-js` for the Persian calendar; the browser's own `Date` for the Gregorian one |
+| Fonts | IRANSans for Persian; Inter for English, served by the site itself from the `@fontsource-variable/inter` package |
 | Icons | `react-icons` (one icon), Font Awesome 5 from a CDN, and two icon font files |
 | Styling | Plain CSS files and CSS Modules, mixed. No CSS framework. |
 
@@ -23,9 +25,9 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 
 | Path | Contents | Doc |
 | --- | --- | --- |
-| `src/` | All application code. | [src.doc.md](src/src.doc.md) |
+| `src/` | All application code. Start with "Two languages" in its doc. | [src.doc.md](src/src.doc.md) |
 | `public/` | Only `vite.svg`, the default Vite icon. | — |
-| `index.html` | The single HTML page. It declares the site light-only (`color-scheme`), see [assets.doc.md](src/assets/assets.doc.md). | — |
+| `index.html` | The single HTML page. It declares the site light-only (`color-scheme`), see [assets.doc.md](src/assets/assets.doc.md). Its `lang`, `dir` and `<title>` are the English ones; the page sets the real ones as soon as it knows the language. | — |
 | `package.json` | Scripts and dependencies. | — |
 | `tsconfig*.json`, `vite.config.ts`, `.eslintrc.cjs` | Tool settings, all Vite defaults. | — |
 | `README.md` | The untouched Vite template README. Says nothing about this project. | — |
@@ -36,7 +38,7 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 
 ```bash
 npm install
-npm run dev      # starts on http://localhost:5173
+npm run dev      # starts on http://localhost:5173 and opens the English site at /en/
 npm run build    # runs tsc first, then the Vite build — passes
 npm run lint     # 0 errors, 0 warnings
 npx tsc --noEmit # 0 errors
@@ -52,16 +54,34 @@ The site expects the Go backend on `http://localhost:8080`. To point it elsewher
 
 *Updated 2026-10-12.*
 
-`npm run build` gives one JavaScript file of **243.52 kB (78.79 kB gzipped)**, measured after
-the booking pages were added. Before them it was 219.27 kB (70.96 kB gzipped), and 480.66 kB
-(115.01 kB gzipped) while the city list was still bundled in.
+`npm run build` gives one JavaScript file of **331.66 kB (108.19 kB gzipped)**, measured after
+the second language was added, and one stylesheet of 50.56 kB (10.61 kB gzipped).
+
+| When | JavaScript | Gzipped |
+| --- | --- | --- |
+| City list still bundled in | 480.66 kB | 115.01 kB |
+| City list from the API | 219.27 kB | 70.96 kB |
+| Booking pages added | 243.52 kB | 78.79 kB |
+| Two languages (2026-10-12) | 331.66 kB | 108.19 kB |
+
+The last step cost 88 kB (29 kB gzipped): the `i18next` and `react-i18next` libraries, and the
+two text files, about 15 kB each. Both text files travel to every visitor. Loading only the
+one in use would save about 5 kB gzipped and make the language switch wait for a download; it
+was not worth it at this size.
+
+The build also emits two Inter font files (48 kB for Latin, 85 kB for Latin with accents). A
+browser downloads one only when an English page shows a letter from it.
 
 ## Packages
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
 - Added `@types/jalaali-js`, the type definitions for the calendar library.
 - Removed `styled-components` and `persian-date`: installed but never imported.
+- Added `i18next` and `react-i18next` (2026-10-12): the text files and the `t()` function.
+- Added `@fontsource-variable/inter` (2026-10-12): the Inter font as files inside the project,
+  so no outside font host is needed. Only two of its files are used; see
+  [assets.doc.md](src/assets/assets.doc.md).
 - Removed `jotai`: after the data-flow cleanup nothing used it any more. Every value it held
   is now state in one page, passed down by props. If two far-apart components ever need the
   same value again, `npm i jotai` brings it back.
@@ -70,8 +90,10 @@ the booking pages were added. Before them it was 219.27 kB (70.96 kB gzipped), a
 
 *Updated 2026-10-12.*
 
-- `index.html` still has `<title>Vite + React + TS</title>` and `lang="en"`. The site is Persian
-  and right-to-left, so it should be `lang="fa" dir="rtl"`.
+- A visitor who opens a Persian address sees the English tab title for a moment, until the
+  page has loaded. A search engine that does not run JavaScript sees only the English one.
+- The results list is not built for screens narrower than about 1000px, in either language:
+  the texts of a trip card run into each other. This is older than the second language.
 - Font Awesome is loaded from a CDN at runtime, so icons vanish offline.
 - No tests and no test runner installed.
 - The `.gitignore` here ends with `**/.env*`.

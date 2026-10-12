@@ -12,12 +12,11 @@
 }
 
 .in input {
-    direction: rtl;
     width: 100%;
     font-size: 14px;
-    font-family: 'IRANSansWeb', sans-serif;
+    font-family: var(--font);
     box-sizing: border-box;
-    padding-right: 11%;
+    padding-inline-start: 11%;
     border-radius: 8px;
     border: 1px solid #BBB;
     outline: none;
@@ -25,7 +24,7 @@
 
 .in .fas {
     position: absolute;
-    right: 4%;
+    inset-inline-start: 4%;
     font-size: 12px;
     align-self: center;
 }
@@ -56,7 +55,7 @@
 
 .row .text {
     flex: 1;
-    text-align: right;
+    text-align: start;
     font-size: 13px;
     font-weight: bold;
     color: #555;
@@ -66,7 +65,7 @@
     color: #a94442;
     font-weight: lighter;
     text-align: center;
-    transform: translateX(-8px);
+    transform: translateX(calc(-8px * var(--x)));
 }
 
 .search {
@@ -93,7 +92,6 @@
 }
 
 h1 {
-    direction: rtl;
     text-align: center;
     font-weight: 100;
     color: #555;

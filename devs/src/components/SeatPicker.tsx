@@ -3,7 +3,7 @@ import s from "../assets/css/booking.module.css";
 import BusSchema from "./BusSchema";
 import Legend from "./Legend";
 import { SeatMap } from "../util/Models";
-import { toPersianNum } from "../util/Function";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   seatMap: SeatMap | null;
@@ -31,16 +31,17 @@ const SeatPicker = ({
   onContinue,
   resultsLink,
 }: Props) => {
+  const { t, num } = useLocale();
   return (
     <>
-      <h2>انتخاب صندلی</h2>
-      <p className={s.intro}>
-        لطفا برای انتخاب صندلی، بر روی شماره صندلی‌های مورد نظر خود کلیک کنید. صندلی‌های سفید قابل انتخاب هستند و
-        صندلی‌های رنگی قبلا خریداری شده‌اند.
-      </p>
+      <h2>{t("seats.title")}</h2>
+      <p className={s.intro}>{t("seats.intro")}</p>
       {takenSeats.length > 0 && (
         <div className={`${s.notice} ${s.errorNotice}`}>
-          صندلی شماره {toPersianNum(takenSeats.join("، "))} لحظاتی پیش توسط فرد دیگری گرفته شد. لطفا صندلی دیگری انتخاب کنید.
+          {t("errors.codes.seats_unavailable", {
+            count: takenSeats.length,
+            seats: num(takenSeats.join(t("common.listSeparator"))),
+          })}
         </div>
       )}
       <div className={s.busArea}>
@@ -54,31 +55,31 @@ const SeatPicker = ({
         ) : seatMapFailed ? (
           <div className={s.busPlaceholder}>
             <button className={s.primary} onClick={retry}>
-              تلاش مجدد
+              {t("common.retry")}
             </button>
           </div>
         ) : (
-          <div className={s.busPlaceholder}>در حال بارگذاری ...</div>
+          <div className={s.busPlaceholder}>{t("common.loading")}</div>
         )}
         <Legend className={s.legend} showSelected />
       </div>
-      {limitReached && <div className={s.notice}>حداکثر ۴ صندلی در هر خرید قابل انتخاب است.</div>}
-      <h4>صندلی انتخابی شما برای سفر</h4>
+      {limitReached && <div className={s.notice}>{t("seats.limit")}</div>}
+      <h4>{t("seats.chosenTitle")}</h4>
       <div className={s.chips}>
-        {selectedSeats.length === 0 && "هنوز صندلی انتخاب نشده است."}
+        {selectedSeats.length === 0 && t("seats.noneChosen")}
         {selectedSeats.map((seatNumber) => (
           <button key={seatNumber} className={s.chip} onClick={() => onToggleSeat(seatNumber)}>
             <i className="fas fa-times" />
-            صندلی شماره {toPersianNum(seatNumber)}
+            {t("seats.seatNumber", { number: num(seatNumber) })}
           </button>
         ))}
       </div>
       <div className={s.actions}>
         <Link className={s.plain} to={resultsLink}>
-          بازگشت به لیست سرویس‌ها
+          {t("seats.backToResults")}
         </Link>
         <button className={s.primary} disabled={selectedSeats.length === 0} onClick={onContinue}>
-          انتخاب صندلی و ثبت مشخصات مسافر
+          {t("seats.continue")}
         </button>
       </div>
     </>

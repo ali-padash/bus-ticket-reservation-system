@@ -34,7 +34,7 @@
   border-bottom: 1px solid #DDD;
   padding: 15px;
   font-size: 18px;
-  text-align: right;
+  text-align: start;
 }
 
 .alertBox p {
@@ -57,7 +57,7 @@
   padding: 0px 13px;
   cursor: pointer;
   top: 5px;
-  left: 0px;
+  inset-inline-end: 0px;
 }
 
 .cross::before {

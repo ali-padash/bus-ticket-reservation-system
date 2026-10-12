@@ -1,8 +1,12 @@
 import s from "../assets/css/booking.module.css";
-import { getWeekdayName, parseDate, putComma, toPersianNum, turnToDate } from "../util/Function";
+import { parseDate } from "../util/Function";
+import { shortDate, weekdayName } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 // The props are plain values, not a trip object, because two different pages fill this box:
-// the booking page from a trip, and the ticket page from a ticket. (updated 2026-10-12)
+// the booking page from a trip, and the ticket page from a ticket. The names and the bus type
+// arrive already in the page's language; the date, time and price are formatted here.
+// (updated 2026-10-12)
 interface Props {
   originName: string;
   destinationName: string;
@@ -28,43 +32,45 @@ const TripSummary = ({
   price,
   availableSeats,
 }: Props) => {
+  const l = useLocale();
+  const { t } = l;
   const day = parseDate(date);
   return (
     <aside className={`${s.card} ${s.summary}`}>
-      <h3>اطلاعات سرویس</h3>
+      <h3>{t("summary.title")}</h3>
       <div className={s.summaryRoute}>
         {originName}
-        <i className="fas fa-arrow-left" />
+        <i className={`fas ${l.icons.arrow}`} />
         {destinationName}
       </div>
       <div className={s.summaryTerminals}>
         <div className={s.summaryRow}>
-          <span>مبدأ:</span>
-          <strong>پایانه {originTerminal}</strong>
+          <span>{t("summary.origin")}</span>
+          <strong>{t("common.terminal", { name: originTerminal })}</strong>
         </div>
         <div className={s.summaryRow}>
-          <span>مقصد:</span>
-          <strong>پایانه {destinationTerminal}</strong>
+          <span>{t("summary.destination")}</span>
+          <strong>{t("common.terminal", { name: destinationTerminal })}</strong>
         </div>
       </div>
       <div className={s.summarySmall}>{company}</div>
-      <div className={s.summarySmall}>{toPersianNum(busType)}</div>
+      <div className={s.summarySmall}>{busType}</div>
       <div className={s.summaryRow}>
-        <span>تاریخ:</span>
-        {day && getWeekdayName(day)} {turnToDate(date)}
+        <span>{t("summary.date")}</span>
+        {day && weekdayName(l.lang, day)} {shortDate(l.lang, date)}
       </div>
       <div className={s.summaryRow}>
-        <span>ساعت:</span>
-        {toPersianNum(time)}
+        <span>{t("summary.time")}</span>
+        {l.num(time)}
       </div>
       <div className={s.summaryRow}>
-        <span>قیمت:</span>
-        {toPersianNum(putComma(price))} ریال
+        <span>{t("summary.price")}</span>
+        {l.price(price)}
       </div>
       {availableSeats !== undefined && (
         <div className={s.summarySeats}>
-          <strong>{toPersianNum(availableSeats)}</strong>
-          صندلی خالی
+          <strong>{l.num(availableSeats)}</strong>
+          {t("summary.freeSeats", { count: availableSeats })}
         </div>
       )}
     </aside>

@@ -22,6 +22,27 @@ export class ApiError extends Error {
   }
 }
 
+// The codes that have a sentence of their own in the text files, under `errors.codes`.
+const knownCodes = [
+  "bad_request",
+  "city_not_found",
+  "trip_not_found",
+  "ticket_not_found",
+  "seats_unavailable",
+  "trip_departed",
+  "hold_expired",
+  "ticket_cancelled",
+  "ticket_already_paid",
+  "validation_failed",
+  "internal_error",
+];
+
+// Where the sentence for a failed call is found in the text files. A page keeps this key, not
+// the sentence, so the message changes language together with the page. Anything that is not
+// a known code (the network is down, a new code) gets the general sentence. (written 2026-10-12)
+export const errorTextKey = (err: unknown) =>
+  `errors.codes.${err instanceof ApiError && knownCodes.includes(err.code) ? err.code : "unknown"}`;
+
 // Every call goes through here, so the address, the error check and the JSON parsing are
 // written once. A status outside 200-299 becomes an ApiError; an aborted call rejects with an
 // AbortError, which the callers ignore. Passing `body` makes it a POST. (updated 2026-10-12)

@@ -1,6 +1,8 @@
 import React from "react";
 import "../assets/css/calendarInput.css";
 import Calendar from "./Calendar";
+import LongDate from "./LongDate";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   display: boolean;
@@ -10,6 +12,7 @@ interface Props {
 }
 
 const CalendarInput = ({ display, setDisplay, selectedDate, onSelectDate }: Props) => {
+  const { t } = useLocale();
   const calendarDivRef = React.useRef<HTMLDivElement>(null);
   const today = new Date();
 
@@ -31,26 +34,20 @@ const CalendarInput = ({ display, setDisplay, selectedDate, onSelectDate }: Prop
     <div className="calendar-div" ref={calendarDivRef}>
       <div className="calendar-input" onClick={() => setDisplay(!display)}>
         <i className="fas fa-calendar" style={{ color: "#555" }} />
-        <span>{selectedDate.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { day: "numeric" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { month: "long" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { year: "numeric" })}</span>
+        <LongDate date={selectedDate} />
       </div>
       <div
         className={`expandable-card2-content${display ? " show" : ""} calendar`}
         style={{ width: "400px", paddingInline: "0", paddingBottom: "0"}}>
         <Calendar className="calendar-2" selectedDate={selectedDate} onSelectDate={onSelectDate} />
         <div className="bottom-calendar">
-          <div className="crosss unselectable" onClick={() => setDisplay(false)}>
+          <div className="crosss unselectable" role="button" aria-label={t("home.closeCalendar")} onClick={() => setDisplay(false)}>
             ×
           </div>
           <div className="today-info" onClick={() => onSelectDate(today)}>
-            <i className="fas fa-share"/>
-            <span>امروز،</span>{" "}
-            <span>{today.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
-            <span>{today.toLocaleString("fa-IR", { day: "numeric" })}</span>{" "}
-            <span>{today.toLocaleString("fa-IR", { month: "long" })}</span>{" "}
-            <span>{today.toLocaleString("fa-IR", { year: "numeric" })}</span>
+            <i className="fas fa-share mirror-in-ltr"/>
+            <span>{t("calendar.today")}</span>{" "}
+            <LongDate date={today} />
           </div>
         </div>
       </div>

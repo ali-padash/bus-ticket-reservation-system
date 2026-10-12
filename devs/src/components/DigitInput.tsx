@@ -1,23 +1,25 @@
 import { useLayoutEffect, useRef } from "react";
-import { toPersianNum } from "../util/Function";
-import { toLatinDigits } from "../util/Validation";
+import { toLatinDigits } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
+  // The text in Latin digits, which is also what `onChange` reports.
   value: string;
-  // Called with the text already turned into Persian digits.
   onChange: (text: string) => void;
   type?: "text" | "tel";
   label: string;
 }
 
-// A text box that shows every digit as a Persian one, whichever keyboard typed it.
+// A text box for numbers. It shows the digits of the page's language (Persian digits in
+// Persian, Latin digits in English), whichever keyboard typed them.
 //
-// The page keeps the Persian text; it is turned back into Latin digits only when it is checked
-// or sent to the API. Because the box shows something other than what was typed, the browser
+// The page keeps the text in Latin digits, the form the API takes, and this box only changes
+// how it is shown. Because the box can show something other than what was typed, the browser
 // would throw the caret to the end after each key. So the caret's place is noted when a key
 // arrives and put back after React has drawn the new text; one digit replaces one digit, so
-// the place is the same. (written 2026-10-12)
+// the place is the same. (updated 2026-10-12)
 const DigitInput = ({ value, onChange, type = "text", label }: Props) => {
+  const { num } = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
   const caret = useRef<number | null>(null);
 
@@ -33,10 +35,10 @@ const DigitInput = ({ value, onChange, type = "text", label }: Props) => {
       type={type}
       placeholder={label}
       aria-label={label}
-      value={value}
+      value={num(value)}
       onChange={(e) => {
         caret.current = e.target.selectionStart;
-        onChange(toPersianNum(toLatinDigits(e.target.value)) ?? "");
+        onChange(toLatinDigits(e.target.value));
       }}
     />
   );

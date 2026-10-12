@@ -3,6 +3,7 @@ import BusSchema from './BusSchema'
 import Legend from './Legend'
 import s from "../assets/css/busDetails.module.css";
 import { SeatMap } from '../util/Models';
+import { useLocale } from '../util/useLocale';
 
 interface Props {
   setShowDetails: (showDetails: boolean) => void
@@ -11,12 +12,13 @@ interface Props {
 }
 
 const BusDetailsDisplay = ({ setShowDetails, seatMap, onBuy }: Props) => {
+  const { t } = useLocale();
   return (
     <>
     <div className={s.cover}>
-      <button className={s.transparentBuy} onClick={onBuy}>خرید</button>
+      <button className={s.transparentBuy} onClick={onBuy}>{t("seatMap.buy")}</button>
       <button className={s.backButton} onClick={() => setShowDetails(false)}>
-        بازگشت
+        {t("seatMap.back")}
       </button>
     </div>
     <div className={s.dividerLine} />
@@ -25,7 +27,7 @@ const BusDetailsDisplay = ({ setShowDetails, seatMap, onBuy }: Props) => {
       <Legend className={s.legend} />
     </div>
     <RefundBox />
-    <button className={s.greenBuy} onClick={onBuy}>خرید</button>
+    <button className={s.greenBuy} onClick={onBuy}>{t("seatMap.buy")}</button>
   </>
   )
 }

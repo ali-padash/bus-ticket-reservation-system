@@ -3,6 +3,7 @@ import "../assets/css/searchPanel.css";
 import CustomAutocomplete from "./CustomAutocomplete";
 import CalenderInput from "./CalendarInput";
 import { CitiesStatus, City } from "../util/Models";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   cities: City[];
@@ -27,6 +28,7 @@ const SearchPanel = ({
   onSearch,
   onSelectDate,
 }: Props) => {
+  const { t } = useLocale();
   const [origin, setOrigin] = useState(initialOrigin);
   const [destination, setDestination] = useState(initialDestination);
   const [display, setDisplay] = useState(false);
@@ -81,26 +83,26 @@ const SearchPanel = ({
   const alertMessage = () => {
     const isSourceMissing = showMissing && !origin;
     const isDestinationMissing = showMissing && !destination;
-    if (isSourceMissing && isDestinationMissing) return "لطفا مبداء و مقصد را وارد نمایید";
-    else if (isSourceMissing) return "لطفا مبداء را وارد نمایید";
-    else if (isDestinationMissing) return "لطفا مقصد را وارد نمایید";
+    if (isSourceMissing && isDestinationMissing) return t("search.missingBoth");
+    else if (isSourceMissing) return t("search.missingOrigin");
+    else if (isDestinationMissing) return t("search.missingDestination");
     return "";
   };
 
   return (
-    <div className="search-panel" style={{ direction: "rtl" }}>
+    <div className="search-panel">
       <div className="container">
         <div className="row">
-          <div className="text">مبداء</div>
-          <div className="text">مقصد</div>
-          <div className="text">تاریخ حرکت</div>
+          <div className="text">{t("search.origin")}</div>
+          <div className="text">{t("search.destination")}</div>
+          <div className="text">{t("search.departureDate")}</div>
           <div className="text special">{alertMessage()}</div>
         </div>
         <div className="row" style={{ color: "#333" }}>
           <div className="in to">
             <i className="fas fa-map-marker-alt" style={{ color: "#555" }}></i>
             <CustomAutocomplete
-              placeholder="مبداء را تایپ نمایید"
+              placeholder={t("home.originPlaceholder")}
               cities={cities}
               citiesStatus={citiesStatus}
               value={origin}
@@ -110,11 +112,11 @@ const SearchPanel = ({
               style={{ color: "#333" }}
             />
           </div>
-          <i className="fas fa-exchange-alt custom-gap" onClick={handleExchange}></i>
+          <i className="fas fa-exchange-alt custom-gap" role="button" aria-label={t("search.swap")} onClick={handleExchange}></i>
           <div className="in from">
             <i className="fas fa-map-marker-alt" style={{ color: "#555" }}></i>
             <CustomAutocomplete
-              placeholder="مقصد را تایپ نمایید"
+              placeholder={t("home.destinationPlaceholder")}
               cities={cities}
               citiesStatus={citiesStatus}
               value={destination}
@@ -136,7 +138,7 @@ const SearchPanel = ({
           />
           <div className="custom-gap" />
           <button className="search" id="search-button" onClick={() => search(origin, destination)}>
-            جستجو
+            {t("search.submit")}
             <i className="fas fa-search" />
           </button>
         </div>

@@ -4,9 +4,9 @@ import { SeatMap, Service } from "../util/Models";
 import { TbClockHour9 } from "react-icons/tb";
 import s from "../assets/css/panel.module.css";
 import defaultImg from "../assets/images/CompanyDefaultLogo.png";
-import { toPersianNum, putComma } from "../util/Function";
 import BusDetails from "./BusDetails";
 import { fetchSeatMap } from "../util/FetchFunction";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   item: Service;
@@ -20,6 +20,9 @@ interface Props {
 
 const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0 }: Props) => {
   const navigate = useNavigate();
+  const { t, num, amount, name, text, icons, path } = useLocale();
+  const company = name(item.CompanyPersianName, item.CompanyName);
+  const description = text(item.Description, item.DescriptionEnglish);
   // The seat map is loaded each time the card is opened. One call gives both the drawing and
   // a fresh count of free seats; the count from the search can be a little old.
   // (updated 2026-10-12)
@@ -67,31 +70,31 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
     <div className={s.panel} ref={ref} style={{ animationDuration: `${Math.min(index * 0.05 + 0.3, 0.6)}s` }}>
       <div className={s.flexRow}>
         <div className={s.companyLogo}>
-          <img src={item.CompanyLogo} alt="CompanyLogo" onError={(e) => (e.currentTarget.src = defaultImg)} />
-          <span>{item.CompanyPersianName}</span>
+          <img src={item.CompanyLogo} alt={t("trip.companyLogoAlt", { company })} onError={(e) => (e.currentTarget.src = defaultImg)} />
+          <span>{company}</span>
         </div>
         <div className={s.info}>
-          <h6>نوع اتوبوس {toPersianNum(item.BusType)}</h6>
+          <h6>{t("trip.busType", { type: text(item.BusType, item.BusTypeEnglish) })}</h6>
           <div className={s.inner}>
             <div className={s.od}>
-              {originName + " - پایانه " + item.OriginTerminalPersianName}
-              <i className="fas fa-arrow-left" />
-              {destinationName + " - پایانه " + item.DestinationTerminalPersianName}
+              {t("trip.place", { city: originName, terminal: name(item.OriginTerminalPersianName, item.OriginTerminalName) })}
+              <i className={`fas ${icons.arrow}`} />
+              {t("trip.place", { city: destinationName, terminal: name(item.DestinationTerminalPersianName, item.DestinationTerminalName) })}
             </div>
             <div className={s.departureTime}>
-              {toPersianNum(item.DepartureTime)}
+              {num(item.DepartureTime)}
               <TbClockHour9 className={s.iconClock} />
             </div>
             <div className={s.price}>
-              {toPersianNum(putComma(item.Price))} <span> ریال</span>
+              {amount(item.Price)} <span> {t("common.rial")}</span>
             </div>
             <div className={s.buy}>
-              <button onClick={() => setIsOpen(!isOpen)}>مشاهده و خرید</button>
+              <button onClick={() => setIsOpen(!isOpen)}>{t("trip.viewAndBuy")}</button>
               <span>
-                تعداد صندلی های خالی:
+                {t("trip.freeSeats")}
                 <span className={s.availableSeatCount}>
                   {!loadingSeatCount ? (
-                    toPersianNum(seatMap?.AvailableSeatCount ?? item.AvailableSeatCount)
+                    num(seatMap?.AvailableSeatCount ?? item.AvailableSeatCount)
                   ) : (
                     <i className="fas fa-spinner"></i>
                   )}
@@ -99,9 +102,9 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
               </span>
             </div>
           </div>
-          {item.Description && <div className={s.divider}></div>}
-          {item.Description && <div className={s.description}>{toPersianNum(item.Description)}</div>}
-          {!item.Description && <div style={{ height: "30px" }}></div>}
+          {description && <div className={s.divider}></div>}
+          {description && <div className={s.description}>{description}</div>}
+          {!description && <div style={{ height: "30px" }}></div>}
         </div>
       </div>
       <BusDetails
@@ -110,7 +113,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
         seatMap={seatMap}
         errorFetching={errorFetching}
         retry={() => setRetryCount((count) => count + 1)}
-        onBuy={() => navigate(`/booking/${item.ID}`)}
+        onBuy={() => navigate(path(`/booking/${item.ID}`))}
       />
     </div>
   );

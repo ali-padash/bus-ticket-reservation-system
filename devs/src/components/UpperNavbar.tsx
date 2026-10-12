@@ -1,6 +1,9 @@
 import React from "react";
 import "../assets/css/upperNavbar.css";
 import logo from "../assets/images/logoWhite.282e17b9.svg";
+import LanguageSwitch from "./LanguageSwitch";
+import { PHONE_AREA, PHONE_NUMBER } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   scrolled: boolean;
@@ -10,39 +13,48 @@ interface Props {
 }
 
 const UpperNavbar = ({ scrolled, style, isFocused, setBringList }: Props) => {
+  const { t, num } = useLocale();
   return (
-    <div className={`upper-top-bar${scrolled ? " show" : ""}`} style={style} tabIndex={0}> 
+    <div className={`upper-top-bar${scrolled ? " show" : ""}`} style={style} tabIndex={0}>
       <div className={"element-cover" + (isFocused ? " show" : "")} />
       <div className="one">
         <a href="#" className="register">
-          ثبت نام
+          {t("nav.register")}
         </a>
         <div className="separator-line"></div>
         <a href="#" className="enter">
-          ورود
+          {t("nav.login")}
         </a>
+        <div className="separator-line" data-lang-switch></div>
+        <LanguageSwitch />
         <a href="#" className="call-us">
-          تماس با ما
+          {t("nav.contact")}
         </a>
         <div className="separator-line"></div>
         <a href="#" className="about-us">
-          درباره ما
+          {t("nav.about")}
         </a>
         <div className="separator-line"></div>
+        {/* A phone number is read from left to right in both languages, so its two halves sit
+            in a span with its own direction. (updated 2026-10-12) */}
         <p>
-          <span>۰۲۱</span>
-          <span style={{ marginRight: "20px" }}>۵۳۸۲۶</span> پشتیبانی و فروش
+          <span className="label">{t("nav.support")}</span>{" "}
+          <span className="phone" dir="ltr">
+            <span>{num(PHONE_AREA)}</span>
+            <span>{num(PHONE_NUMBER)}</span>
+          </span>
         </p>
       </div>
       <div className="two">
-        <img src={logo} alt="white-logo" />
+        <img src={logo} alt={t("nav.logoAlt")} />
         <div className="call-us">
-          <h6>پشتیبانی و فروش</h6>
-          <span>۰۲۱</span>
-          <span>۵۳۸۲۶</span>
+          <h6>{t("nav.support")}</h6>
+          <span>{num(PHONE_AREA)}</span>
+          <span>{num(PHONE_NUMBER)}</span>
         </div>
-        <div className="menu-div" onClick={() => setBringList(true)}>
-          <span>منو</span>
+        <LanguageSwitch className="language" />
+        <div className="menu-div" role="button" aria-label={t("nav.openMenu")} onClick={() => setBringList(true)}>
+          <span>{t("nav.menu")}</span>
           <i className="fas fa-bars"></i>
         </div>
       </div>

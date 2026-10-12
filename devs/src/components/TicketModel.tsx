@@ -3,39 +3,42 @@ import img from "../assets/images/reserve.svg"
 import busDash from "../assets/images/bus_dash.svg"
 import calendar from "../assets/images/calender.svg"
 import volume from "../assets/images/volume.svg"
+import { useLocale } from "../util/useLocale";
 
+// The pictures here are decoration, so they carry an empty alt text.
 const TicketModel = () => {
+  const { t } = useLocale();
   return (
     <div className={s.ticketModel}>
       <div className={s.whole}>
         <div className={s.blueHeader}>
           <div className={s.title}>
-            <h6>در حال هماهنگی</h6>
-            <p>برای ایجاد سرویس اتوبوسی در این مسیر هستیم</p>
+            <h6>{t("notify.heading")}</h6>
+            <p>{t("notify.subheading")}</p>
           </div>
-          <img src={img} alt="logo"/>
+          <img src={img} alt=""/>
           <div className={s.dash}/>
           <div className={s.right}/>
           <div className={s.left}/>
         </div>
         <div className={s.theBody}>
-          <h5>در صورت نبود سرویس یا صندلی خالی، می‌توانید در سامانه اطلاع‌رسانی <br/> ثبت‌نام کنید تا از سرویس‌های جدید اطلاع پیدا کنید</h5>
+          <h5>{t("notify.textLine1")} <br/> {t("notify.textLine2")}</h5>
           <div className={s.odimg}>
-            <span>تهران</span>
-            <img src={busDash} alt="busDash"/>
-            <span>رشت</span>
+            <span>{t("notify.sampleOrigin")}</span>
+            <img src={busDash} alt=""/>
+            <span>{t("notify.sampleDestination")}</span>
           </div>
           <div className={s.inform}>
             <div className={s.accessory}>
-              <img src={calendar}/>
-              <span>۱۴۰۳-۱-۲۵</span>
+              <img src={calendar} alt=""/>
+              <span>{t("notify.sampleDate")}</span>
             </div>
             <div className={s.accessory}>
-              <img src={volume}/>
-              <span>سرویس‌های جدید در حال هماهنگی هستند</span>
+              <img src={volume} alt=""/>
+              <span>{t("notify.status")}</span>
             </div>
           </div>
-          <button>ثبت نام در سامانه اطلاع رسانی</button>
+          <button>{t("notify.signUp")}</button>
         </div>
       </div>
     </div>

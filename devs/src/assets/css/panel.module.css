@@ -78,7 +78,7 @@
   text-align: center;
   flex: 1;
   font-size: 20px;
-  margin-right: 20px;
+  margin-inline-start: 20px;
 }
 
 .panel .info .inner .departureTime .iconClock {
@@ -146,8 +146,15 @@
 .panel .availableSeatCount {
   position: absolute;
   top: -11px;
-  right: 110px;
-  text-align: right;
+  inset-inline-start: 110px;
+  text-align: start;
+}
+
+/* The number above is placed by a fixed distance that fits the Persian label. The English
+   label has another length, so there the number simply follows the label. (added 2026-10-12) */
+:root[dir="ltr"] .panel .availableSeatCount {
+  position: static;
+  margin-inline-start: 4px;
 }
 
 @keyframes spin {

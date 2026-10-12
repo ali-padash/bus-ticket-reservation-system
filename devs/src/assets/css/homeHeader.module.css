@@ -9,6 +9,24 @@
     position: relative;
 }
 
+/* The picture has its bus on the left, clear of the search form on the right. In English the
+   form moves to the left, so the picture is flipped to keep the bus in view. It has no text
+   in it. (added 2026-10-12) */
+:root[dir="ltr"] .home-header {
+    background-image: none;
+}
+
+:root[dir="ltr"] .home-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('../images/header.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scaleX(-1);
+}
+
 .home-header .container {
     position: absolute;
     z-index: 100;
@@ -20,7 +38,7 @@
     align-items: center;
     justify-items: center;
     border-radius: 15px;
-    right: 10%;
+    inset-inline-start: 10%;
 }
 
 .home-header .container .in {
@@ -33,13 +51,14 @@
     align-items: center;
     border: none;
     font-size: 20px;
+    flex-direction: row-reverse;
 }
 
 .home-header .container .in p {
     position: absolute;
     font-size: 14px;
     bottom: -40px;
-    right: 2px;
+    inset-inline-start: 2px;
     color: #e74c3c;
     overflow: hidden;
     text-wrap: nowrap;
@@ -54,7 +73,7 @@
 .alert-container {
     position: absolute;
     bottom: 0px;
-    right: 95px;
+    inset-inline-start: 95px;
     background-color: transparent;
     height: 30px;
     width: 50%;
@@ -66,9 +85,8 @@
     padding: 24px 5% 24px 5%;
     outline: none;
     border: none;
-    font-family: 'IRANSansWeb', sans-serif;
+    font-family: var(--font);
     font-size: 24px;
-    direction: rtl;
 }
 
 .home-header .container input::placeholder {
@@ -111,8 +129,9 @@
 
 @media (max-width: 1024px) {
     .home-header .container {
-        margin-left: 0;
-        left: 17%;
+        margin-inline-end: 0;
+        inset-inline-start: auto;
+        inset-inline-end: 17%;
         max-width: none; 
         width: 60%;
         top: 20px;
@@ -121,14 +140,14 @@
         height: 510px;
     }
     .alert-container {
-        right: 105px;
+        inset-inline-start: 105px;
     }
 }
 
 @media (max-width: 768px) {
     .home-header .container {
         padding: 30px 50px;
-        left: 6%;
+        inset-inline-end: 6%;
         width: calc(88% - 100px);
     }
     .home-header {
@@ -141,7 +160,7 @@
     }
     .alert-container {
         font-size: 13px;
-        right: 120px;
+        inset-inline-start: 120px;
     }
 }
 
@@ -207,7 +226,7 @@
 @media (max-width: 480px) {
     .home-header .container {
         border-radius: 0;
-        left: 0;
+        inset-inline-end: 0;
         padding: 30px 30px;
         width: calc(100% - 60px);
         top: 0;
@@ -223,7 +242,7 @@
         height: 490px;
     }
     .alert-container {
-        right: 90px;
+        inset-inline-start: 90px;
     }
 }
 
@@ -249,6 +268,6 @@
         padding: 8px 30%;
     }
     .alert-container {
-        right: 70px;
+        inset-inline-start: 70px;
     }
 }

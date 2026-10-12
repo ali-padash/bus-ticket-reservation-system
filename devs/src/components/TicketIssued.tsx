@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import s from "../assets/css/booking.module.css";
 import BookingSteps from "./BookingSteps";
 import { Ticket } from "../util/Models";
-import { getWeekdayName, parseDate, toPersianNum, turnToDate } from "../util/Function";
+import { parseDate } from "../util/Function";
+import { shortDate, weekdayName } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   ticket: Ticket;
@@ -10,53 +12,65 @@ interface Props {
 
 // Step 5 when the payment went through: the ticket itself.
 const TicketIssued = ({ ticket }: Props) => {
+  const { lang, t, num, name, text, path } = useLocale();
   const trip = ticket.Trip;
   const day = parseDate(trip.DepartureDate);
   return (
     <div className={`${s.card} ${s.centred} ${s.issued}`}>
       <BookingSteps current={5} />
       <i className={`fas fa-check-circle ${s.bigIcon}`} />
-      <h2>بلیط شما صادر شد</h2>
-      <p>کد بلیط</p>
-      <div className={s.code}>{toPersianNum(ticket.Code)}</div>
-      <p>این کد را همراه با شماره موبایل خود نگه دارید.</p>
+      <h2>{t("issued.title")}</h2>
+      <p>{t("issued.codeLabel")}</p>
+      <div className={s.code}>{num(ticket.Code)}</div>
+      <p>{t("issued.keepCode")}</p>
       <div className={s.ticketDetails}>
         <div className={s.box}>
           <div className={s.priceRow}>
-            <span>مسیر :</span>
+            <span>{t("issued.route")}</span>
             <span>
-              {trip.OriginPersianName} (پایانه {trip.OriginTerminalPersianName}) به {trip.DestinationPersianName} (پایانه{" "}
-              {trip.DestinationTerminalPersianName})
+              {t("issued.routeValue", {
+                origin: name(trip.OriginPersianName, trip.OriginEnglishName),
+                originTerminal: name(trip.OriginTerminalPersianName, trip.OriginTerminalName),
+                destination: name(trip.DestinationPersianName, trip.DestinationEnglishName),
+                destinationTerminal: name(trip.DestinationTerminalPersianName, trip.DestinationTerminalName),
+              })}
             </span>
           </div>
           <div className={s.priceRow}>
-            <span>تاریخ و ساعت :</span>
+            <span>{t("issued.dateTime")}</span>
             <span>
-              {day && getWeekdayName(day)} {turnToDate(trip.DepartureDate)} - {toPersianNum(trip.DepartureTime)}
+              {t("issued.dateTimeValue", {
+                weekday: day ? weekdayName(lang, day) : "",
+                date: shortDate(lang, trip.DepartureDate),
+                time: num(trip.DepartureTime),
+              })}
             </span>
           </div>
           <div className={s.priceRow}>
-            <span>شرکت :</span>
+            <span>{t("issued.company")}</span>
             <span>
-              {trip.CompanyPersianName} - {toPersianNum(trip.BusType)}
+              {t("issued.companyValue", {
+                company: name(trip.CompanyPersianName, trip.CompanyName),
+                busType: text(trip.BusType, trip.BusTypeEnglish),
+              })}
             </span>
           </div>
           <table className={s.table}>
             <thead>
               <tr>
-                <th>صندلی</th>
-                <th>نام مسافر</th>
-                <th>کدملی</th>
+                <th>{t("review.seat")}</th>
+                <th>{t("review.passengerName")}</th>
+                <th>{t("review.nationalCode")}</th>
               </tr>
             </thead>
             <tbody>
               {ticket.Passengers.map((passenger) => (
                 <tr key={passenger.SeatNumber}>
-                  <td>{toPersianNum(passenger.SeatNumber)}</td>
+                  <td>{num(passenger.SeatNumber)}</td>
                   <td>
                     {passenger.FirstName} {passenger.LastName}
                   </td>
-                  <td>{toPersianNum(passenger.NationalCode)}</td>
+                  <td>{num(passenger.NationalCode)}</td>
                 </tr>
               ))}
             </tbody>
@@ -64,8 +78,8 @@ const TicketIssued = ({ ticket }: Props) => {
         </div>
       </div>
       <div className={s.centredActions}>
-        <Link className={`${s.primary} ${s.buttonLink}`} to="/">
-          بازگشت به صفحه اصلی
+        <Link className={`${s.primary} ${s.buttonLink}`} to={path("/")}>
+          {t("issued.home")}
         </Link>
       </div>
     </div>

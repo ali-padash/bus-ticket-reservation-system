@@ -54,7 +54,8 @@
 
 .dummyPanel .dummyInfo .dummyInner .dummyOd {
   background-color: #EEE;
-  margin: 10px 0px 20px 100px;
+  margin: 10px 0px 20px;
+  margin-inline-end: 100px;
   font-size: 13px;
   flex: 1.5;
   max-height: 50px;

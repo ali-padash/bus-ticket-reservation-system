@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "../assets/css/daysTab.css";
-import { addDays, formatDate, getWeekdayName, toPersianNum } from "../util/Function";
+import { addDays, formatDate } from "../util/Function";
+import { dayAndMonth, weekdayName } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   selectedDate: Date;
@@ -8,6 +10,7 @@ interface Props {
 }
 
 const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
+  const { lang, t, num, icons } = useLocale();
   const currentDate = new Date();
   const [numberOfTabs, setNumberOfTabs] = useState(7);
 
@@ -38,10 +41,12 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
 
   const daysToShow = Array.from({ length: numberOfTabs }, (_, i) => addDays(startDate, i));
   return (
-    <div className="days-tab unselectable" style={{ direction: "rtl" }}>
+    <div className="days-tab unselectable">
       <div className="days-tab-container">
         <i
-          className="fas fa-chevron-right"
+          className={`fas ${icons.back} previous`}
+          role="button"
+          aria-label={t("results.previousDay")}
           onClick={() => {
             handleChange(-1);
           }}></i>
@@ -52,14 +57,16 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
             onClick={() => {
               handleChange(date);
             }}>
-            <span className="weekday">{getWeekdayName(date)}</span>
+            <span className="weekday">{weekdayName(lang, date)}</span>
             <span className="date-after-weekday" style={{ margin: "5px" }}>
-              {toPersianNum(date.toLocaleDateString("fa-IR", { month: "numeric", day: "numeric" }))}
+              {num(dayAndMonth(lang, date))}
             </span>
           </div>
         ))}
         <i
-          className="fas fa-chevron-left"
+          className={`fas ${icons.forward}`}
+          role="button"
+          aria-label={t("results.nextDay")}
           onClick={() => {
             handleChange(1);
           }}></i>

@@ -3,7 +3,8 @@
   display: flex;
   width: 100%;
   flex-direction: row;
-  border-radius: 0 5px 5px 0;
+  border-start-start-radius: 5px;
+  border-end-start-radius: 5px;
   box-shadow: 2px 2px 4.25px rgba(0, 0, 0, 0.07);
   font-size: 13px;
 }
@@ -13,7 +14,8 @@
   display: flex;
   width: 40px;
   background-color: #e74c3c;
-  border-radius: 0 5px 5px 0;
+  border-start-start-radius: 5px;
+  border-end-start-radius: 5px;
   justify-content: center;
   align-items: center;
 }
@@ -37,16 +39,17 @@
   position: absolute;
   width: 0;
   height: 0;
-  left: -8px;
+  inset-inline-end: -8px;
   top: 50%;
   transform: translateY(-50%);
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right: 10px solid #e74c3c;
+  border-inline-start: 10px solid #e74c3c;
 }
 
 .refundDescription {
-  padding: 10px 15px 10px 0;
+  padding: 10px 0;
+  padding-inline-start: 15px;
 }
 
 .description {

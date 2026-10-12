@@ -23,11 +23,15 @@
     background-color: #3498db;
 }
 
+/* The four cards keep one order (first card on the left) in both languages, at every
+   number of columns; a grid cannot be reversed the way a flex row can. Each card carries the
+   direction of its own text as a `dir` attribute. (updated 2026-10-12) */
 .cards-pp {
     margin-top: 60px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     width: 75%;
+    direction: ltr;
 }
 
 @media (max-width: 1024px) {

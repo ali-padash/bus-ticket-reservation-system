@@ -46,7 +46,6 @@
 
 
 .card-with-icon-verticall-content {
-    direction: rtl;
     display: flex;
     flex-direction: column;
     align-items: center;

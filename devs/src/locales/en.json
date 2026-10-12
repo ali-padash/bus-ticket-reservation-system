@@ -1,0 +1,305 @@
+{
+  "meta": {
+    "title": "Safar724 - Bus tickets"
+  },
+  "common": {
+    "loading": "Loading ...",
+    "error": "Sorry, something went wrong.",
+    "retry": "Try again",
+    "rial": "IRR",
+    "price": "{{amount}} IRR",
+    "terminal": "{{name}} Terminal",
+    "listSeparator": ", "
+  },
+  "nav": {
+    "register": "Sign up",
+    "login": "Log in",
+    "contact": "Contact us",
+    "about": "About us",
+    "support": "Support and sales",
+    "menu": "Menu",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu",
+    "slogan": "The easiest way to book and buy bus tickets",
+    "logoAlt": "Safar724 logo",
+    "otherLanguage": "فارسی",
+    "guide": "Help",
+    "agency": "Agency panel",
+    "articles": "Travel tips",
+    "cancelTicket": "Cancel a ticket",
+    "findTicket": "Find a ticket",
+    "busTickets": "Bus tickets"
+  },
+  "footer": {
+    "waysToBuy": "Ways to buy",
+    "terms": "Terms and conditions",
+    "faq": "Questions and answers",
+    "cities": "Cities",
+    "companies": "Bus companies",
+    "blog": "Blog",
+    "newsletter": "Newsletter",
+    "careers": "Careers",
+    "api": "API"
+  },
+  "home": {
+    "title": "Buy bus tickets",
+    "subtitle": "From every terminal and bus company in the country",
+    "originPlaceholder": "Type the origin",
+    "destinationPlaceholder": "Type the destination",
+    "originMissing": "Please choose an origin",
+    "destinationMissing": "Please choose a destination",
+    "search": "Search",
+    "chooseDate": "Choose a date",
+    "dateTooltip": "Date",
+    "closeCalendar": "Close the calendar"
+  },
+  "cities": {
+    "error": "Could not load the city list",
+    "noMatch": "No match found"
+  },
+  "calendar": {
+    "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today,"
+  },
+  "steps": {
+    "headingLine1": "Your bus ticket",
+    "headingLine2": "is ready in 4 steps!",
+    "smsTitle": "Get your ticket number by text message",
+    "smsText": "That is all: your online purchase is done. A ticket bought here does not need to be printed. Just keep the ticket number that was sent to you by text message.",
+    "seatTitle": "Choose your seat",
+    "seatText": "Buying online lets you pick your own seat. Look at the seat map of the bus, choose the seat you like and enjoy your trip.",
+    "busTitle": "Choose the ticket that suits you",
+    "busText": "We work with all bus companies. Their tickets are shown with price, departure time, terminal and bus type, so you can choose the one that suits you.",
+    "routeTitle": "Enter the origin and destination",
+    "routeText": "Buying a bus ticket on Safar724 is simple and needs no sign-up. Enter the origin and destination to see the best, most trusted and cheapest bus tickets."
+  },
+  "info": {
+    "printTitle": "Print or view your ticket",
+    "printText": "Enter the ticket number that was sent to you by text message to print or view your ticket at any time.",
+    "trackTitle": "Recover your ticket number",
+    "trackText": "Did your ticket number not arrive, or have you forgotten it? Do not worry. This section is for finding it again.",
+    "refundTitle": "Refund a bus ticket",
+    "refundText": "Want to cancel your ticket? Have your plans changed? Just follow the refund steps. It is a simple process."
+  },
+  "faq": {
+    "heading": "Bus tickets: frequently asked questions",
+    "more": "More...",
+    "toggle": "Show or hide the answer",
+    "extraCostQuestion": "Does buying a bus ticket on Safar724 cost extra?",
+    "extraCostAnswer": "No. Buying on Safar724 adds no extra cost for the passenger: the online price is the same as the price at the terminal. Buying online also lets you see discounted tickets on different routes and buy at the best price.",
+    "pricesQuestion": "Does Safar724 set the ticket prices?",
+    "pricesAnswer": "No. Safar724 has no part in setting ticket prices. All prices are set by the bus companies and shown to passengers on the Safar724 website.",
+    "vipQuestion": "What is the difference between a VIP and a regular bus ticket?",
+    "vipAnswer": "A VIP ticket is for a bus with fewer seats, seats that recline further, and extras such as a charger and a seat-back screen. Travelling on a VIP bus is more comfortable, and a VIP ticket costs more.",
+    "childrenQuestion": "Do children under 2 need a ticket?",
+    "childrenAnswer": "Yes. Everyone who sits in a seat of their own needs a ticket, so a seat must be booked for them. This also applies to online booking.",
+    "petsQuestion": "Can I take a pet on the bus?",
+    "petsAnswer": "Carrying animals on intercity buses is against road transport rules. For details, see the article about pets on intercity buses on the Safar724 website.",
+    "cancelQuestion": "Can a bus ticket be cancelled online?",
+    "cancelAnswer": "If the ticket was bought online on Safar724, it can be cancelled online. Go to the refund section and enter the 12-digit ticket number. A ticket bought at a terminal or on another website cannot be cancelled on Safar724.",
+    "printQuestion": "Do I need to print my ticket after buying online?",
+    "printAnswer": "No. The ticket number sent to you by text message is enough for your trip."
+  },
+  "trust": {
+    "headingLine1": "Why 11,332,785 people",
+    "headingLine2": "have trusted us to buy their bus tickets?",
+    "text": "Safar724 lists a wide range of trips and lets you buy bus tickets from bus companies and cooperatives right away, with no need to sign up. Seeing the bus type and its photos, and choosing the seat you want, lets you plan a trip to anywhere in the country with confidence.",
+    "supportTitle": "Friendly support",
+    "supportText": "Do not worry about any problem. Whether it is the departure time, a text message that did not arrive or anything else, our support team is ready to help you by phone or online.",
+    "companiesTitle": "Trusted companies and Iran's terminals in one place",
+    "companiesText": "From Seir-o-Safar and Mihan Noor to Adl and Royal Safar; from Volvo to Scania and MAN; from VIP and reclining seats to single and regular seats: all of them are here for you to book and buy, online or by phone.",
+    "discountsTitle": "Discounts and special prices",
+    "discountsText": "With Safar724 you can compare the prices and discounts of the bus companies, and easily choose and book cheap, good-quality tickets at the times and on the routes you want.",
+    "buyingTitle": "Several ways to buy",
+    "buyingText": "Safar724 lets you book and buy bus tickets online on the website and in the app, and also by phone, from terminals across the country."
+  },
+  "search": {
+    "origin": "Origin",
+    "destination": "Destination",
+    "departureDate": "Departure date",
+    "missingBoth": "Please enter an origin and a destination",
+    "missingOrigin": "Please enter an origin",
+    "missingDestination": "Please enter a destination",
+    "swap": "Swap origin and destination",
+    "submit": "Search"
+  },
+  "results": {
+    "heading": "Bus tickets from {{origin}} to {{destination}}",
+    "sortBy": "Sort by",
+    "sortTime": "Time",
+    "sortPrice": "Price",
+    "filterCompany": "Filter by company",
+    "allCompanies": "All companies",
+    "filterTerminal": "Filter by terminal",
+    "originTerminal": "Origin terminal",
+    "allOriginTerminals": "All origin terminals",
+    "destinationTerminal": "Destination terminal",
+    "allDestinationTerminals": "All destination terminals",
+    "previousDay": "Previous day",
+    "nextDay": "Next day",
+    "found_one": "<b>{{number}}</b> trip found from <b>{{origin}}</b> to <b>{{destination}}</b> on <b>{{date}}</b>, departing at <b>{{from}}</b>",
+    "found_other": "<b>{{number}}</b> trips found from <b>{{origin}}</b> to <b>{{destination}}</b> on <b>{{date}}</b>, departing between <b>{{from}}</b> and <b>{{to}}</b>",
+    "noTrips": "Sorry, there are no bus tickets from {{origin}} to {{destination}} on {{date}}.",
+    "noTripsHint": "Please check other days to see prices, departure times and buses from {{origin}} to {{destination}}."
+  },
+  "trip": {
+    "busType": "Bus: {{type}}",
+    "place": "{{city}} - {{terminal}} Terminal",
+    "viewAndBuy": "View and buy",
+    "freeSeats": "Free seats:",
+    "companyLogoAlt": "{{company}} logo"
+  },
+  "notify": {
+    "heading": "Being arranged",
+    "subheading": "We are setting up bus trips on this route",
+    "textLine1": "If there is no trip or no free seat, you can sign up for alerts",
+    "textLine2": "to hear about new trips",
+    "sampleOrigin": "Tehran",
+    "sampleDestination": "Rasht",
+    "sampleDate": "2024-04-13",
+    "status": "New trips are being arranged",
+    "signUp": "Sign up for alerts"
+  },
+  "seatMap": {
+    "buy": "Buy",
+    "back": "Back",
+    "boughtForMen": "Bought for men",
+    "boughtForWomen": "Bought for women",
+    "notForSale": "Not for sale",
+    "yourChoice": "Your choice",
+    "available": "Available",
+    "seatLabel": "Seat {{number}}",
+    "errorTitle": "Something went wrong. Please try again"
+  },
+  "refund": {
+    "title": "Refund terms",
+    "see": "See the refund terms",
+    "close": "Close",
+    "intro": "If you cancel your ticket online, the bus company deducts a cancellation fee from the ticket price as follows.",
+    "sampleEarly": "From purchase until one hour before departure: 10% fee",
+    "sampleLate": "From one hour before departure: 10% fee",
+    "upTo_one": "Up to {{hours}} hour before departure",
+    "upTo_other": "Up to {{hours}} hours before departure",
+    "lessThan_one": "Less than {{hours}} hour before departure",
+    "lessThan_other": "Less than {{hours}} hours before departure",
+    "untilDeparture": "Until departure"
+  },
+  "booking": {
+    "stepTrip": "Choose a trip",
+    "stepSeats": "Choose seats",
+    "stepPassengers": "Passenger details",
+    "stepReview": "Review and pay",
+    "stepTicket": "Ticket",
+    "searchAgain": "Search again"
+  },
+  "summary": {
+    "title": "Trip details",
+    "origin": "From:",
+    "destination": "To:",
+    "date": "Date:",
+    "time": "Time:",
+    "price": "Price:",
+    "freeSeats_one": "free seat",
+    "freeSeats_other": "free seats"
+  },
+  "seats": {
+    "title": "Choose your seats",
+    "intro": "Click the numbers of the seats you want. White seats are available; coloured seats have already been bought.",
+    "limit": "You can choose at most 4 seats per purchase.",
+    "chosenTitle": "Your seats for this trip",
+    "noneChosen": "No seat chosen yet.",
+    "seatNumber": "Seat {{number}}",
+    "backToResults": "Back to the trip list",
+    "continue": "Continue to passenger details"
+  },
+  "passengers": {
+    "title": "Passenger details",
+    "intro": "To complete your purchase, enter the details of the passengers. The ticket can be found again with the mobile number you enter, so please type it carefully.",
+    "phone": "Mobile number",
+    "seatHeading": "Passenger in seat {{number}}",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "nationalCode": "National ID",
+    "birthDate": "Born (1995-03-21)",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "idHint": "When boarding, each passenger must show the national ID card that matches the national ID entered here.",
+    "back": "Back to the previous step",
+    "submit": "Continue to payment"
+  },
+  "review": {
+    "title": "Review and pay",
+    "intro": "This is the last step where you can check the details, so please look them over once more.",
+    "countdown": "Your seats are held until this time runs out. Time left to pay:",
+    "seat": "Seat",
+    "passengerName": "Passenger",
+    "nationalCode": "National ID",
+    "phone": "Mobile number:",
+    "seatPrice": "Price per seat:",
+    "seatCountLabel": "Seats:",
+    "seatCount_one": "{{number}} seat",
+    "seatCount_other": "{{number}} seats",
+    "total": "Total to pay:",
+    "cancel": "Cancel the purchase",
+    "pay": "Accept the terms and pay"
+  },
+  "bank": {
+    "title": "Demo payment page",
+    "notice": "This page is a demo. No money moves and you are not asked for any bank details.",
+    "amount": "Amount to pay",
+    "pay": "Pay",
+    "cancel": "Cancel",
+    "backToReview": "Back to the review"
+  },
+  "issued": {
+    "title": "Your ticket is issued",
+    "codeLabel": "Ticket code",
+    "keepCode": "Keep this code together with your mobile number.",
+    "route": "Route:",
+    "routeValue": "{{origin}} ({{originTerminal}} Terminal) to {{destination}} ({{destinationTerminal}} Terminal)",
+    "dateTime": "Date and time:",
+    "dateTimeValue": "{{weekday}} {{date}} - {{time}}",
+    "company": "Company:",
+    "companyValue": "{{company}} - {{busType}}",
+    "home": "Back to the home page"
+  },
+  "failed": {
+    "title": "The ticket was not issued",
+    "noCharge": "You have not been charged.",
+    "backToResults": "Back to the trip list"
+  },
+  "phonePrompt": {
+    "title": "View your ticket",
+    "intro": "To view the ticket, enter the mobile number you gave when buying it."
+  },
+  "errors": {
+    "fields": {
+      "ContactPhone": "The mobile number must be 11 digits and start with 09",
+      "FirstName": "Use letters only for the first name (50 at most)",
+      "LastName": "Use letters only for the last name (50 at most)",
+      "NationalCode": "This national ID is not valid",
+      "BirthDate": "This date of birth is not valid (example: 1995-03-21)",
+      "Gender": "Choose a gender",
+      "duplicateNationalCode": "This national ID is already entered for another passenger",
+      "other": "This is not valid"
+    },
+    "codes": {
+      "bad_request": "Sorry, something went wrong. Please try again.",
+      "city_not_found": "The origin or destination city was not found.",
+      "trip_not_found": "This trip was not found",
+      "ticket_not_found": "No ticket was found with this code and mobile number.",
+      "seats_unavailable_one": "Seat {{seats}} was taken by someone else a moment ago. Please choose another seat.",
+      "seats_unavailable_other": "Seats {{seats}} were taken by someone else a moment ago. Please choose other seats.",
+      "trip_departed": "This bus has already left and can no longer be booked.",
+      "hold_expired": "The 10 minutes to pay ran out and the seats were released.",
+      "ticket_cancelled": "The purchase was cancelled and the seats were released.",
+      "ticket_already_paid": "This ticket has already been paid for.",
+      "validation_failed": "Some of the details are not valid.",
+      "internal_error": "Sorry, something went wrong. Please try again.",
+      "unknown": "Sorry, something went wrong. Please try again."
+    }
+  }
+}

@@ -1,6 +1,6 @@
 .card-with-icon {
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     align-items: center;
     padding: 2.25vw;
     transition: 0.3s;
@@ -42,7 +42,6 @@
 
 .card-with-icon-content {
     width: 150%;
-    direction: rtl;
     padding: 10px 0;
 }
 

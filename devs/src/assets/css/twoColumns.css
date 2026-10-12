@@ -7,17 +7,20 @@
 
 .bus-common-questions {
     background-color: #f8f8f8;
-    direction: rtl;
     overflow-x: hidden;
     /* padding: 0; */
     height: 730px;
+    /* The questions take the first column (where reading starts) and the three cards the
+       second, although the cards come first in the page. (updated 2026-10-12) */
+    grid-column: 1;
+    grid-row: 1;
 }
 
 .bus-common-questions h1 {
     font-size: 2.6vw;
-    margin-right: 25px;
+    margin-inline-start: 25px;
     margin-top: 15px;
-    text-align: right;
+    text-align: start;
 }
 
 .bus-common-questions .more {
@@ -27,17 +30,18 @@
     background-color: rgba(0, 0, 0, 0);
     border: 1px solid darkslategray;
     border-radius: 4px;
-    font-family: "IRANSansWeb", sans-serif;
+    font-family: var(--font);
     color: #707070;
     cursor: pointer;
     text-decoration: none;
-    margin: 20px 40px 0 0;
+    margin: 20px 0 0;
+    margin-inline-start: 40px;
 }
 
 .seperator-line-bcq {
     width: 80px;
     height: 10px;
-    margin-right: 25px;
+    margin-inline-start: 25px;
     margin-bottom: 40px;
     background-color: #3498db;
 }
@@ -46,12 +50,14 @@
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     height: 350px;
+    grid-column: 2;
+    grid-row: 1;
 }
 
 @media (max-width: 940px) {
     .bus-common-questions h1 {
         font-size: calc(25px + 2vw);
-        margin-right: 25px;
+        margin-inline-start: 25px;
         margin-top: 15px;
     }
 
@@ -73,6 +79,6 @@
 @media (max-width: 480px) {
     .bus-common-questions h1 {
         font-size: 6vw;
-        margin-left: 0;
+        margin-inline-end: 0;
     }
 }

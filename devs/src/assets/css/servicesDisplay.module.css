@@ -1,5 +1,4 @@
 .service {
-  direction: rtl;
   width: 1170px;
   margin: auto;
 }
@@ -13,7 +12,6 @@
 .no-service-alert {
   margin: 60px 0 180px 0;
   font-size: 18px;
-  direction: rtl;
   color: #555;
   line-height: 55px;
   text-align: center;

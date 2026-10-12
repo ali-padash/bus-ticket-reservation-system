@@ -2,6 +2,7 @@ import React from "react";
 import logo from "../assets/images/logo.png";
 import "../assets/css/lowerNavbar.css";
 import MainChoces from "./MainChoces";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   scrolled: boolean;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const LowerNavbar = ({ scrolled, bringList, setBringList, menuListRef, iconListRef, isFocused }: Props) => {
+  const { t } = useLocale();
   return (
     <div
       className="lower-top-bar"
@@ -21,24 +23,26 @@ const LowerNavbar = ({ scrolled, bringList, setBringList, menuListRef, iconListR
         transform: scrolled ? "translateY(0px)" : "translateY(40px)",
       }}>
       <div className={"element-cover" + (isFocused ? " show" : "")} />
-      <i className="fas fa-bars" ref={iconListRef} onClick={() => setBringList(!bringList)}></i>
+      <i
+        className="fas fa-bars"
+        role="button"
+        aria-label={t(bringList ? "nav.closeMenu" : "nav.openMenu")}
+        ref={iconListRef}
+        onClick={() => setBringList(!bringList)}></i>
 
-      <ul
-        className="menu"
-        ref={menuListRef}
-        style={{
-          transform: bringList ? "translate(-50px, -18px)" : "translate(-250px, -18px)",
-        }}>
+      {/* Where the menu slides to is in the CSS (`.menu` and `.menu.open`), because the
+          direction of the slide depends on the writing direction. (updated 2026-10-12) */}
+      <ul className={`menu${bringList ? " open" : ""}`} ref={menuListRef}>
         <MainChoces />
-        <i onClick={() => setBringList(false)}>×</i>
+        <i role="button" aria-label={t("nav.closeMenu")} onClick={() => setBringList(false)}>×</i>
       </ul>
       <a href="#" className="before-logo">
-        آسان ترین راه رزرو و خرید بلیط اتوبوس
+        {t("nav.slogan")}
       </a>
       <a href="#" className="actual-logo">
         <img
           src={logo}
-          alt="logo"
+          alt={t("nav.logoAlt")}
           style={{
             width: scrolled ? "90px" : "110px",
             transition: "all 0.2s ease-in-out",

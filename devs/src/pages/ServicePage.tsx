@@ -11,6 +11,7 @@ import TicketModel from "../components/TicketModel";
 import { CitiesStatus, City, ServiceResponse } from "../util/Models";
 import { formatDate, parseDate } from "../util/Function";
 import { fetchServices } from "../util/FetchFunction";
+import { useLocale } from "../util/useLocale";
 
 // A city ID from the address: a whole number above zero, or null if it is anything else.
 const parseCityID = (value: string | null): number | null => {
@@ -24,8 +25,9 @@ interface Props {
 }
 
 function ServicePage({ cities, citiesStatus }: Props) {
-  // The search is the address: /services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD.
+  // The search is the address: /<language>/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD.
   // Nothing else remembers it, so a refresh or a shared link repeats the same search.
+  const { t, name } = useLocale();
   const [searchParams, setSearchParams] = useSearchParams();
   const originID = parseCityID(searchParams.get("from"));
   const destinationID = parseCityID(searchParams.get("to"));
@@ -94,8 +96,11 @@ function ServicePage({ cities, citiesStatus }: Props) {
       <div style={{ backgroundColor: "#FBFBFB", paddingTop: "10px" }}>
         <h1 style={{ marginTop: 0 }}>
           {servicesData
-            ? `بلیط اتوبوس ${servicesData.OriginPersianName} ${servicesData.DestinationPersianName}`
-            : "در حال بارگذاری ..."}
+            ? t("results.heading", {
+                origin: name(servicesData.OriginPersianName, servicesData.OriginEnglishName),
+                destination: name(servicesData.DestinationPersianName, servicesData.DestinationEnglishName),
+              })
+            : t("common.loading")}
         </h1>
         <FilterSearch
           servicesData={servicesData}

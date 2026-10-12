@@ -50,7 +50,8 @@ const BusSchema = ({ layout, seats, className = "", blur = false, selectedSeats 
           })}
         </div>
       </div>
-      <img src={busFront} alt="bus front" />
+      {/* Decoration: the seats themselves are what a screen reader should read. */}
+      <img src={busFront} alt="" />
     </div>
   );
 };

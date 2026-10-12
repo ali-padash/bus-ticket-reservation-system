@@ -1,4 +1,6 @@
 import "../assets/css/dateDiv.css";
+import LongDate from "./LongDate";
+
 interface Props {
   className: string;
   selectedDate: Date;
@@ -11,10 +13,7 @@ const DateDiv = ({ className, selectedDate, onOpen }: Props) => {
       {/* Invisible, but it can take the focus, so the Tab key reaches the date and opens the calendar. */}
       <input type="text" onFocus={onOpen} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
       <div className="date">
-        <span>{selectedDate.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { day: "numeric" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { month: "long" })}</span>{" "}
-        <span>{selectedDate.toLocaleString("fa-IR", { year: "numeric" })}</span>
+        <LongDate date={selectedDate} />
       </div>
       <i className="icon-date"></i>
     </div>

@@ -1,6 +1,23 @@
 # devs/src/components
 
-52 components in one flat folder. Grouped here by what they are for.
+55 components in one flat folder. Grouped here by what they are for.
+
+No component has a text for the visitor written into it. Each takes its texts, digits, dates
+and names in the page's language from `useLocale()`; see "Two languages" in
+[src.doc.md](../src.doc.md) and [locales.doc.md](../locales/locales.doc.md).
+
+## Language
+
+*Written 2026-10-12.*
+
+| Component | Job |
+| --- | --- |
+| `LanguageLayout` | Sits above every page. Reads the language from the first part of the address, sets `lang`, `dir` and the tab title on the document, and sends an address without a language to its English page. |
+| `LanguageSwitch` | The link to the same page in the other language. It replaces only the first part of the address and keeps the rest, query included. Shown in the top bar, in the blue bar on phones, and in the phone menu. |
+| `LongDate` | A date written out in the page's language and calendar, as four spans: weekday, day, month, year. Used by the two date fields. |
+
+The link is written in the language it leads to ("فارسی" on an English page) and marked with
+that language, so someone who cannot read the page they landed on can still find it.
 
 ## Navigation and page frame
 
@@ -21,7 +38,7 @@ Every link goes to `#`. None of them lead anywhere.
 
 | Component | Job |
 | --- | --- |
-| `HomeHeader` | The big search form on the landing page. Holds the two cities and the date, and submits by navigating to `/services?from=&to=&date=`. |
+| `HomeHeader` | The big search form on the landing page. Holds the two cities and the date, and submits by navigating to `/<lang>/services?from=&to=&date=`. |
 | `SearchPanel` | The compact search bar on the results page. Holds the two city boxes as a draft and tells the page when to search. It makes no API call itself; `ServicePage` does. |
 | `CustomAutocomplete` | City text box with a suggestion list. A controlled component, see below. |
 | `CustomInput` | Wraps `CustomAutocomplete` with the landing-page styling and the "missing" message. |
@@ -42,6 +59,11 @@ the focus on), `onFocus`, `onBlur`, and `inputRef` (so the parent can focus or b
 Inside, the box keeps only what is its own business: the text being typed (`draft`), the
 suggestions, and which suggestion is highlighted.
 
+It works the same in both languages (2026-10-12). The city list carries every spelling of a
+city, Persian and English, so typing "ras" or "رش" finds Rasht on either page. What changes
+with the language is only what is shown: the city's and the province's name. Typed text counts
+as a choice when it equals a suggested name, ignoring capitals.
+
 ### Keyboard
 
 Both forms behave the same way. **Enter** walks origin → destination → calendar → search.
@@ -57,11 +79,15 @@ none of them stores the date.
 
 | Component | Job |
 | --- | --- |
-| `Calendar` | A Persian (Jalali) month grid. |
+| `Calendar` | A month grid in the calendar of the page's language: a Persian (Jalali) month with the week from Saturday, or a Gregorian month with the week from Monday. Dates go in and out as ordinary `Date` values, so nothing outside knows which calendar is shown. Friday is red in both. |
 | `DateDiv` | Landing page: shows the chosen date; clicking opens `DateBox`. |
 | `DateBox` | Landing page: popup holding a `Calendar`. |
 | `CalendarInput` | Results page: date field plus dropdown `Calendar`. |
 | `DaysTab` | Results page: a strip of 3, 5 or 7 days (by screen width) to jump between dates. |
+
+The arrows of the calendar and of the day strip point the way the text runs: their icon comes
+from `useLocale().icons`, where "back" and "forward" swap between the two directions
+(2026-10-12).
 
 ## Results list
 
@@ -87,7 +113,7 @@ none of them stores the date.
 | --- | --- |
 | `BusDetails` | Shows loading / error / map inside a trip card. The card (`Panel`) loads the data from `GET /trips/{id}/seat-map`. |
 | `BusDetailsDisplay` | Lays out the map, legend, refund box and buy buttons. Both buy buttons open the booking page. |
-| `BusSchema` | Draws the bus from the API's `Layout` (rows of seat numbers, `null` = empty floor). It knows no bus model. With `onToggleSeat` the free seats can be clicked. |
+| `BusSchema` | Draws the bus from the API's `Layout` (rows of seat numbers, `null` = empty floor). It knows no bus model. With `onToggleSeat` the free seats can be clicked. The bus is drawn the same way in both languages, front on the left: it is a picture of a real thing, not text. |
 | `Seat` | One square. Blue = man, pink = woman, grey = not for sale, white = free, green = chosen by this visitor. Clickable ones work with Enter and Space too. |
 | `Legend` | Explains the seat colours; the booking page adds the green one. |
 | `BusLoading` | Spinner. |
@@ -104,15 +130,15 @@ none of them stores the date.
 | --- | --- |
 | `BookingFrame` | Navbar above, footer below, grey page between. Used by both booking pages. |
 | `BookingSteps` | The five-step line; steps up to the current one are blue. |
-| `TripSummary` | The "service information" box. Takes plain values, because a trip fills it on one page and a ticket on the other. |
+| `TripSummary` | The "trip details" box. Takes plain values, because a trip fills it on one page and a ticket on the other. Names and bus type arrive in the page's language; it formats the date, time and price itself. |
 | `SeatPicker` | Step 2: the bus, the legend, the chosen seats as removable chips, the 4-seat notice, the "just taken" notice. |
-| `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date (Persian calendar) and gender for each seat, with a message under each wrong field. |
+| `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date and gender for each seat, with a message under each wrong field. The birth date is typed in the calendar of the page: Persian (`1374/01/21`) or Gregorian (`1995-03-21`). It receives the names of the messages and looks the sentences up itself. |
 | `TicketReview` | Step 4: passengers, phone, prices, the refund rules from the API, the countdown, "confirm and pay" and "cancel". |
 | `FakeBank` | The demo bank page. Says plainly that no money moves. |
 | `TicketIssued` | Step 5, success: the ticket. |
 | `TicketFailed` | Step 5, failure: cancelled or out of time; says the seats were released. |
 | `PhonePrompt` | Asks for the buyer's phone when the ticket address is opened without it. |
-| `DigitInput` | A text box that shows Persian digits whichever keyboard typed them. Used for the mobile number, national code and birth date. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
+| `DigitInput` | A text box for numbers that shows the digits of the page's language whichever keyboard typed them. Used for the mobile number, national code and birth date. The page keeps the text in Latin digits and this box only changes how it is shown, so what was typed survives a change of language. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
 
 These components only show things and report clicks. The two pages hold the state and make the
 API calls; see [pages.doc.md](../pages/pages.doc.md).
@@ -129,9 +155,12 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 ### Things that look finished but are not
 
+*Updated 2026-10-12.*
+
 - `RefundBox` (inside a trip card on the results page) still shows two fixed lines, and the
-  second says "50" in the badge and "10%" in the text. The review page shows the real rules
-  from the API; this box should use them too.
+  second says "50" in the badge and "10%" in the text, in both languages. The review page
+  shows the real rules from the API; this box should use them too.
+- `TicketModel` shows a made-up route and date (Tehran, Rasht), now as texts in `locales/`.
 - "Left out from earlier passengers", login and "my tickets" do not exist.
 
 ### Decisions made in the 2026-10-12 cleanup
@@ -158,6 +187,22 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
   away before scrolling), `CustomInput` (calendar and dark cover fade out before the box comes
   forward). The fifth, in `BusDetails`, went on 2026-10-12: a closed card now simply keeps its
   last seat map and replaces it when opened again.
+
+### Decisions made when the second language was added
+
+*Written 2026-10-12.*
+
+- **Pictures that only decorate have an empty alt text** (the bus front, the spinner logo, the
+  icons of `TicketModel`). They used to carry English file-like names such as "busDash". The
+  logos and company logos have a real description in each language.
+- **Clickable icons got a name for screen readers** (`role="button"` and an `aria-label` from
+  the text files): the menu buttons, the close crosses, the month and day arrows, the swap
+  button, the question toggles. Their keyboard support is still missing, see below.
+- **The four cards of "why people trust us" keep one order in both languages.** They sit in a
+  grid, which cannot be reversed the way a flex row can, so the grid's direction is fixed and
+  each card is given the direction of its own text.
+- **The phone number is drawn left to right in both languages**, inside its own `dir="ltr"`
+  span, because a phone number is read that way everywhere.
 
 ### Small behaviour changes from the cleanup
 
@@ -192,6 +237,8 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 ### Structure
 
-- A flat folder of 52 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
+*Updated 2026-10-12.*
+
+- A flat folder of 55 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
   `layout/`, `landing/`) would make it far easier to read.
 - Each component's CSS lives far away in `assets/css/`. Keeping the CSS next to its component is easier.

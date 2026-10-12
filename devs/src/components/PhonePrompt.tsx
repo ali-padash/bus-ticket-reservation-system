@@ -1,7 +1,9 @@
 import { useState } from "react";
 import s from "../assets/css/booking.module.css";
 import DigitInput from "./DigitInput";
-import { isValidPhone, toLatinDigits } from "../util/Validation";
+import { toLatinDigits } from "../util/Locale";
+import { isValidPhone } from "../util/Validation";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   // True when a phone was tried and no ticket has this code with that phone.
@@ -12,6 +14,7 @@ interface Props {
 // Shown when the ticket's address is opened without the phone at hand: in a new tab, or
 // from a link. A ticket only opens with its code and the buyer's phone together.
 const PhonePrompt = ({ notFound, onSubmit }: Props) => {
+  const { t } = useLocale();
   const [phone, setPhone] = useState("");
   const [invalid, setInvalid] = useState(false);
 
@@ -26,18 +29,18 @@ const PhonePrompt = ({ notFound, onSubmit }: Props) => {
         if (isValidPhone(latinPhone)) onSubmit(latinPhone);
       }}>
       <i className={`fas fa-ticket-alt ${s.bigIcon}`} />
-      <h2>مشاهده بلیط</h2>
-      <p>برای مشاهده بلیط، شماره موبایلی را که هنگام خرید وارد کرده‌اید بنویسید.</p>
+      <h2>{t("phonePrompt.title")}</h2>
+      <p>{t("phonePrompt.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${invalid ? s.invalid : ""}`} style={{ margin: "14px auto 0" }}>
-        <DigitInput type="tel" label="شماره موبایل" value={phone} onChange={setPhone} />
-        {invalid && <p className={s.fieldError}>شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود</p>}
+        <DigitInput type="tel" label={t("passengers.phone")} value={phone} onChange={setPhone} />
+        {invalid && <p className={s.fieldError}>{t("errors.fields.ContactPhone")}</p>}
       </div>
       {notFound && !invalid && (
-        <div className={`${s.notice} ${s.errorNotice}`}>بلیطی با این کد و شماره موبایل پیدا نشد.</div>
+        <div className={`${s.notice} ${s.errorNotice}`}>{t("errors.codes.ticket_not_found")}</div>
       )}
       <div className={s.centredActions}>
         <button type="submit" className={s.primary}>
-          مشاهده بلیط
+          {t("phonePrompt.title")}
         </button>
       </div>
     </form>

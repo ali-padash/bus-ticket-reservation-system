@@ -1,6 +1,6 @@
 import s from "../assets/css/booking.module.css";
 import DigitInput from "./DigitInput";
-import { toPersianNum } from "../util/Function";
+import { useLocale } from "../util/useLocale";
 import { FieldErrors, PassengerDraft, emptyPassenger } from "../util/Validation";
 
 interface Props {
@@ -10,8 +10,10 @@ interface Props {
   // What has been typed so far, by seat number.
   passengers: { [seatNumber: number]: PassengerDraft };
   setPassenger: (seatNumber: number, passenger: PassengerDraft) => void;
-  // Messages by field name: "ContactPhone", or "Passengers[0].NationalCode" for the first seat.
+  // Message names by field name: "ContactPhone", or "Passengers[0].NationalCode" for the first
+  // seat. The sentence for a name is in the text files, under `errors.fields`.
   fieldErrors: FieldErrors;
+  // The place of a sentence in the text files, for example "errors.codes.trip_departed".
   submitError: string | null;
   submitting: boolean;
   onSubmit: () => void;
@@ -31,6 +33,9 @@ const PassengerForm = ({
   onSubmit,
   onBack,
 }: Props) => {
+  const { t, num } = useLocale();
+  // The sentence for the fault in one field, in the language of the page.
+  const message = (field: string) => (fieldErrors[field] ? t(`errors.fields.${fieldErrors[field]}`) : undefined);
   return (
     <form
       noValidate
@@ -38,20 +43,17 @@ const PassengerForm = ({
         e.preventDefault();
         onSubmit();
       }}>
-      <h2>ثبت مشخصات مسافر</h2>
-      <p className={s.intro}>
-        برای تکمیل فرآیند خرید، باید اطلاعات مسافران را وارد نمایید. بلیط با شماره موبایلی که وارد می‌کنید قابل پیگیری
-        است؛ پس شماره موبایل خود را با دقت وارد کنید.
-      </p>
+      <h2>{t("passengers.title")}</h2>
+      <p className={s.intro}>{t("passengers.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${fieldErrors.ContactPhone ? s.invalid : ""}`}>
-        <DigitInput type="tel" label="شماره موبایل" value={contactPhone} onChange={setContactPhone} />
-        {fieldErrors.ContactPhone && <p className={s.fieldError}>{fieldErrors.ContactPhone}</p>}
+        <DigitInput type="tel" label={t("passengers.phone")} value={contactPhone} onChange={setContactPhone} />
+        {message("ContactPhone") && <p className={s.fieldError}>{message("ContactPhone")}</p>}
       </div>
       {seats.map((seatNumber, index) => {
         const passenger = passengers[seatNumber] ?? emptyPassenger;
-        const errorOf = (name: keyof PassengerDraft) => fieldErrors[`Passengers[${index}].${name}`];
-        // The two name boxes are ordinary text boxes. The two number boxes show Persian digits
-        // as the visitor types.
+        const errorOf = (name: keyof PassengerDraft | "SeatNumber") => message(`Passengers[${index}].${name}`);
+        // The two name boxes are ordinary text boxes. The two number boxes show the digits of
+        // the page's language as the visitor types. (updated 2026-10-12)
         const textField = (name: "FirstName" | "LastName" | "NationalCode" | "BirthDate", label: string) => (
           <div className={`${s.field} ${errorOf(name) ? s.invalid : ""}`}>
             {name === "NationalCode" || name === "BirthDate" ? (
@@ -74,44 +76,40 @@ const PassengerForm = ({
         );
         return (
           <div className={s.passengerBlock} key={seatNumber}>
-            <h4>اطلاعات مسافر صندلی شماره {toPersianNum(seatNumber)}</h4>
+            <h4>{t("passengers.seatHeading", { number: num(seatNumber) })}</h4>
             <div className={s.fields}>
-              {textField("FirstName", "نام")}
-              {textField("LastName", "نام خانوادگی")}
-              {textField("NationalCode", "کدملی")}
-              {textField("BirthDate", "تاریخ تولد (۱۳۷۴/۰۱/۲۱)")}
+              {textField("FirstName", t("passengers.firstName"))}
+              {textField("LastName", t("passengers.lastName"))}
+              {textField("NationalCode", t("passengers.nationalCode"))}
+              {textField("BirthDate", t("passengers.birthDate"))}
               <div className={`${s.field} ${errorOf("Gender") ? s.invalid : ""}`}>
                 <select
-                  aria-label="جنسیت"
+                  aria-label={t("passengers.gender")}
                   value={passenger.Gender}
                   onChange={(e) => {
                     const gender = e.target.value === "M" || e.target.value === "F" ? e.target.value : "";
                     setPassenger(seatNumber, { ...passenger, Gender: gender });
                   }}>
-                  <option value="">جنسیت</option>
-                  <option value="M">مرد</option>
-                  <option value="F">زن</option>
+                  <option value="">{t("passengers.gender")}</option>
+                  <option value="M">{t("passengers.male")}</option>
+                  <option value="F">{t("passengers.female")}</option>
                 </select>
                 {errorOf("Gender") && <p className={s.fieldError}>{errorOf("Gender")}</p>}
               </div>
             </div>
-            {fieldErrors[`Passengers[${index}].SeatNumber`] && (
-              <p className={s.fieldError}>{fieldErrors[`Passengers[${index}].SeatNumber`]}</p>
-            )}
+            {errorOf("SeatNumber") && <p className={s.fieldError}>{errorOf("SeatNumber")}</p>}
           </div>
         );
       })}
-      <p className={s.hint}>
-        مسافر گرامی هنگام سوار شدن ارائه کارت ملی منطبق با کد ملی های درج شده الزامی است.
-      </p>
-      {fieldErrors.Passengers && <div className={`${s.notice} ${s.errorNotice}`}>{fieldErrors.Passengers}</div>}
-      {submitError && <div className={`${s.notice} ${s.errorNotice}`}>{submitError}</div>}
+      <p className={s.hint}>{t("passengers.idHint")}</p>
+      {message("Passengers") && <div className={`${s.notice} ${s.errorNotice}`}>{message("Passengers")}</div>}
+      {submitError && <div className={`${s.notice} ${s.errorNotice}`}>{t(submitError)}</div>}
       <div className={s.actions}>
         <button type="button" className={s.plain} onClick={onBack}>
-          بازگشت به مرحله قبلی
+          {t("passengers.back")}
         </button>
         <button type="submit" className={s.primary} disabled={submitting}>
-          تکمیل خرید و پرداخت
+          {t("passengers.submit")}
         </button>
       </div>
     </form>

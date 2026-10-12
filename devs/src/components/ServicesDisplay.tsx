@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { ServiceResponse } from "../util/Models";
 import s from "../assets/css/servicesDisplay.module.css";
-import { turnTimeToInteger, turnToDate } from "../util/Function";
+import { turnTimeToInteger } from "../util/Function";
+import { shortDate } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 import Panel from "./Panel";
 import DummyPanel from "./DummyPanel";
 import ServicesDisplayTitle from "./ServicesDisplayTitle";
@@ -23,6 +25,7 @@ const ServicesDisplay = ({
   destinationState,
   errorFetching,
 }: Props) => {
+  const { lang, t, name } = useLocale();
   // Only one trip shows its seat map at a time. Keeping the open trip's ID here, in the
   // parent of all the cards, means opening one card closes the others without any signal.
   const [openTripID, setOpenTripID] = useState<number | null>(null);
@@ -44,7 +47,7 @@ const ServicesDisplay = ({
 
   if (!servicesData)
     return errorFetching ? (
-      <p className={s["no-service-alert"]}>متاسفانه خطایی رخ داده است.</p>
+      <p className={s["no-service-alert"]}>{t("common.error")}</p>
     ) : (
       <div className={s.service}>
         <div className={s.dummyText} />
@@ -54,19 +57,20 @@ const ServicesDisplay = ({
       </div>
     );
 
+  // The two city names in the page's language, for the messages and for each card.
+  const originName = name(servicesData.OriginPersianName, servicesData.OriginEnglishName);
+  const destinationName = name(servicesData.DestinationPersianName, servicesData.DestinationEnglishName);
+
   if (!servicesData.Items.length)
     return (
       <p className={s["no-service-alert"]}>
-        {`متاسفانه بلیط اتوبوس ${servicesData.OriginPersianName} به ${
-          servicesData.DestinationPersianName
-        } در تاریخ ${turnToDate(servicesData.Date)}
-         وجود ندارد.`}
+        {t("results.noTrips", { origin: originName, destination: destinationName, date: shortDate(lang, servicesData.Date) })}
         <br />
-        {`برای خرید بلیط اتوبوس و مشاهده قیمت، ساعات حرکت و اتوبوس های مسیر ${servicesData.OriginPersianName} ${servicesData.DestinationPersianName} لطفا روز های دیگر را بررسی کنید.`}
+        {t("results.noTripsHint", { origin: originName, destination: destinationName })}
       </p>
     );
 
-  if (!items.length) return <p className={s["no-service-alert"]}>متاسفانه خطایی رخ داده است.</p>;
+  if (!items.length) return <p className={s["no-service-alert"]}>{t("common.error")}</p>;
 
   // The earliest and latest departure among the trips on screen, for the heading.
   const byTime = [...items].sort((a, b) => turnTimeToInteger(a.DepartureTime) - turnTimeToInteger(b.DepartureTime));
@@ -81,8 +85,8 @@ const ServicesDisplay = ({
           key={item.ID}
           index={index}
           item={item}
-          originName={servicesData.OriginPersianName}
-          destinationName={servicesData.DestinationPersianName}
+          originName={originName}
+          destinationName={destinationName}
           isOpen={item.ID === openTripID}
           setIsOpen={(isOpen) => setOpenTripID(isOpen ? item.ID : null)}
         />

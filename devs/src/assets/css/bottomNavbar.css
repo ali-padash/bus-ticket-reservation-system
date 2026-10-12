@@ -5,7 +5,6 @@
     background-color: #3498db;
     width: 100%;
     color: white;
-    direction: rtl;
     font-size: 14px;
     margin-top: 100px;
 }
@@ -28,7 +27,7 @@
 .bottom-navbar li:not(:first-child)::after {
     content: '';
     position: absolute;
-    right: -18px;
+    inset-inline-start: -18px;
     /* Adjust based on your spacing */
     top: 50%;
     transform: translateY(-50%);

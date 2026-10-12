@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import s from "../assets/css/refundBox.module.css";
 import RefundItem from "./RefundItem";
 import AlertBox from "./AlertBox";
+import { useLocale } from "../util/useLocale";
+
 const RefundBox = () => {
+  const { t, num } = useLocale();
   const [showCondition, setShowCondition] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [render, setRender] = useState<boolean>(false);
@@ -27,27 +30,24 @@ const RefundBox = () => {
   return screenWidth < 1024 ? (
     <>
       <button className={s.seeCondition} onClick={() => setShowCondition(!showCondition)}>
-        مشاهده شرایط استرداد
+        {t("refund.see")}
       </button>
       {render && (
-        <AlertBox title="شرایط استرداد" setShowCondition={setShowCondition} showCondition={showCondition}>
-          <p>
-            در صورت کنسلی بلیط به صورت آنلاین توسط شما، هزینه استرداد طبق شرایط زیر توسط شرکت مسافربری از مبلغ بلیط کسر
-            خواهد شد.
-          </p>
+        <AlertBox title={t("refund.title")} setShowCondition={setShowCondition} showCondition={showCondition}>
+          <p>{t("refund.intro")}</p>
           <div className={s.cancelationCondition}>
-            <RefundItem title="۱۰">از لحظه خرید تا یک ساعت قبل حرکت کسر ۱۰٪ جریمه</RefundItem>
-            <RefundItem title="۵۰">از یک ساعت قبل حرکت کسر ۱۰٪ جریمه</RefundItem>
+            <RefundItem title={num(10)}>{t("refund.sampleEarly")}</RefundItem>
+            <RefundItem title={num(50)}>{t("refund.sampleLate")}</RefundItem>
           </div>
         </AlertBox>
       )}
     </>
   ) : (
     <div className={s.cancelationCondition}>
-      <span>شرایط استرداد</span>
+      <span>{t("refund.title")}</span>
       <div className={s.divider} />
-      <RefundItem title="۱۰">از لحظه خرید تا یک ساعت قبل حرکت کسر ۱۰٪ جریمه</RefundItem>
-      <RefundItem title="۵۰">از یک ساعت قبل حرکت کسر ۱۰٪ جریمه</RefundItem>
+      <RefundItem title={num(10)}>{t("refund.sampleEarly")}</RefundItem>
+      <RefundItem title={num(50)}>{t("refund.sampleLate")}</RefundItem>
     </div>
   );
 };

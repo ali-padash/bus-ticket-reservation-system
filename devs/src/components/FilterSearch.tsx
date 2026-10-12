@@ -4,6 +4,7 @@ import InputBox from "./InputBox";
 import "../assets/css/filterSearch.css";
 import IdFilter from "./IdFilter";
 import { ServiceResponse } from "../util/Models";
+import { useLocale } from "../util/useLocale";
 
 type CheckedState = { [key: string]: boolean };
 
@@ -30,6 +31,7 @@ const FilterSearch = ({
   destinationState,
   setDestinationState,
 }: Props) => {
+  const { t, name } = useLocale();
   // The filter lists are worked out from the search result, so they are not kept in state:
   // every company and terminal that appears in the result, once, as id -> name.
   const { companyData, originData, destinationData } = useMemo(() => {
@@ -38,24 +40,24 @@ const FilterSearch = ({
     const destinationData = new Map<string, string>();
 
     servicesData?.Items.forEach((item) => {
-      companyData.set(item.CompanyId.toString(), item.CompanyPersianName);
-      originData.set(item.OriginTerminalCode, item.OriginTerminalPersianName);
-      destinationData.set(item.DestinationTerminalCode, item.DestinationTerminalPersianName);
+      companyData.set(item.CompanyId.toString(), name(item.CompanyPersianName, item.CompanyName));
+      originData.set(item.OriginTerminalCode, name(item.OriginTerminalPersianName, item.OriginTerminalName));
+      destinationData.set(item.DestinationTerminalCode, name(item.DestinationTerminalPersianName, item.DestinationTerminalName));
     });
 
     return { companyData, originData, destinationData };
-  }, [servicesData]);
+  }, [servicesData, name]);
 
   return (
     <div className="filter-search">
-      <ExpandableCard2 title="مرتب سازی بر اساس">
+      <ExpandableCard2 title={t("results.sortBy")}>
         <InputBox
           type="radio"
           name="sort"
           id="s1"
           checked={!sortBasedOnPrice}
           onChange={() => setSortBasedOnPrice(false)}>
-          ساعت
+          {t("results.sortTime")}
         </InputBox>
         <InputBox
           type="radio"
@@ -63,23 +65,23 @@ const FilterSearch = ({
           id="s2"
           checked={sortBasedOnPrice}
           onChange={() => setSortBasedOnPrice(true)}>
-          قیمت
+          {t("results.sortPrice")}
         </InputBox>
       </ExpandableCard2>
-      <ExpandableCard2 title="فیلتر بر اساس شرکت">
+      <ExpandableCard2 title={t("results.filterCompany")}>
         <IdFilter
-          allElementTitle="همه شرکت ها"
+          allElementTitle={t("results.allCompanies")}
           elements={companyData}
           id="company"
           checkedState={checkedState}
           setCheckedState={setCheckedState}
         />
       </ExpandableCard2>
-      <ExpandableCard2 title="فیلتر بر اساس پایانه" direction="row">
+      <ExpandableCard2 title={t("results.filterTerminal")} direction="row">
         <div className="end-start-point">
-          <p>پایانه مبداء</p>
+          <p>{t("results.originTerminal")}</p>
           <IdFilter
-            allElementTitle="همه پایانه های مبداء"
+            allElementTitle={t("results.allOriginTerminals")}
             elements={originData}
             id="origin"
             checkedState={originState}
@@ -87,9 +89,9 @@ const FilterSearch = ({
           />
         </div>
         <div className="end-start-point">
-          <p>پایانه مقصد</p>
+          <p>{t("results.destinationTerminal")}</p>
           <IdFilter
-            allElementTitle="همه پایانه های مقصد"
+            allElementTitle={t("results.allDestinationTerminals")}
             elements={destinationData}
             id="destination"
             checkedState={destinationState}

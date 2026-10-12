@@ -6,6 +6,7 @@ import styles from "../assets/css/homeHeader.module.css";
 import { useNavigate } from "react-router-dom";
 import { CitiesStatus, City } from "../util/Models";
 import { formatDate } from "../util/Function";
+import { useLocale } from "../util/useLocale";
 
 export type FocusedField = "origin" | "destination" | null;
 
@@ -22,6 +23,7 @@ interface Props {
 
 const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calendarOpen, setCalendarOpen }: Props) => {
   const navigate = useNavigate();
+  const { t, path } = useLocale();
   const [origin, setOrigin] = useState<City | null>(null);
   const [destination, setDestination] = useState<City | null>(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -36,8 +38,8 @@ const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calen
       setShowMissing(true);
       return;
     }
-    navigate(`/services?from=${origin.ID}&to=${destination.ID}&date=${formatDate(selectedDate)}`);
-  }, [origin, destination, selectedDate, navigate]);
+    navigate(path(`/services?from=${origin.ID}&to=${destination.ID}&date=${formatDate(selectedDate)}`));
+  }, [origin, destination, selectedDate, navigate, path]);
 
   // Enter walks through the form: origin -> destination -> calendar -> search.
   // Escape closes everything. The keys are caught on the window because they must also work
@@ -85,8 +87,8 @@ const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calen
       <div className={styles["home-header"]}>
         <div className={styles.container}>
           <div className={`black-cover${focusedField !== null || calendarOpen ? " show" : ""}`}></div>
-          <h2>خرید بلیط اتوبوس</h2>
-          <h5>از تمامی ترمینال ها و شرکت های مسافربری کشور</h5>
+          <h2>{t("home.title")}</h2>
+          <h5>{t("home.subtitle")}</h5>
           <CustomInput
             className={`${styles.in} from`}
             covered={focusedField === "destination" || calendarOpen}
@@ -99,8 +101,8 @@ const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calen
             onFocus={() => handleFocus("origin")}
             onBlur={handleBlur}
             inputRef={originRef}
-            placeholder="مبداء را تایپ نمایید"
-            alertMassage="لطفا مبداء را انتخاب نمایید"
+            placeholder={t("home.originPlaceholder")}
+            alertMassage={t("home.originMissing")}
             alertBoolean={showMissing && !origin}
           />
           <CustomInput
@@ -118,8 +120,8 @@ const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calen
             onFocus={() => handleFocus("destination")}
             onBlur={handleBlur}
             inputRef={destinationRef}
-            placeholder="مقصد را تایپ نمایید"
-            alertMassage="لطفا مقصد را انتخاب نمایید"
+            placeholder={t("home.destinationPlaceholder")}
+            alertMassage={t("home.destinationMissing")}
             alertBoolean={showMissing && !destination}
             delay="0.1s"
           />
@@ -132,7 +134,7 @@ const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calen
           />
           <button type="submit" id="search-button" className={styles.search}>
             <div className={`element-cover${focusedField !== null ? ` ${" show"}` : ""}`} />
-            جستوجو
+            {t("home.search")}
           </button>
         </div>
       </div>

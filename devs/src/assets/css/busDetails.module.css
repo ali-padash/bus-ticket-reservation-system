@@ -76,7 +76,7 @@
 }
 .busDetails .errorCover .retryButton i {
   font-size: 16px;
-  margin-right: 8px;
+  margin-inline-start: 8px;
 }
 
 .busDetails .errorCover h1{
@@ -99,9 +99,9 @@
 
 .busInformation {
   margin: 20px 10px;
-  margin-right: 20px;
+  margin-inline-start: 20px;
   width: 65%;
-  float: left;
+  float: inline-end;
 }
 
 .legend div {
@@ -125,7 +125,7 @@
 .busDetails .greenBuy {
   position: absolute;
   bottom: calc(100% - 320px);
-  left: 0;
+  inset-inline-end: 0;
   padding: 10px 55px;
   font-size: 24px;
   background-color: #2ecc71;

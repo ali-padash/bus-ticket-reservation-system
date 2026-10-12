@@ -7,16 +7,10 @@ import TripSummary from "../components/TripSummary";
 import SeatPicker from "../components/SeatPicker";
 import PassengerForm from "../components/PassengerForm";
 import { Passenger, SeatMap, Trip } from "../util/Models";
-import { ApiError, fetchSeatMap, fetchTrip, reserveSeats } from "../util/FetchFunction";
-import {
-  FieldErrors,
-  PassengerDraft,
-  emptyPassenger,
-  persianDateToGregorian,
-  toLatinDigits,
-  translateFieldErrors,
-  validateBooking,
-} from "../util/Validation";
+import { ApiError, errorTextKey, fetchSeatMap, fetchTrip, reserveSeats } from "../util/FetchFunction";
+import { FieldErrors, PassengerDraft, emptyPassenger, translateFieldErrors, validateBooking } from "../util/Validation";
+import { parseBirthDate, toLatinDigits } from "../util/Locale";
+import { useLocale } from "../util/useLocale";
 import { savePhone } from "../util/TicketStorage";
 
 const MAX_SEATS = 4;
@@ -32,7 +26,7 @@ const parseSeats = (value: string | null): number[] => {
 
 // Steps 2 and 3 of buying: choosing seats, then typing the passengers.
 //
-// The address is /booking/<tripId>?seats=18,19&step=passengers.
+// The address is /<language>/booking/<tripId>?seats=18,19&step=passengers.
 // - The trip is loaded by its ID, so the address needs nothing else to show it. The way back
 //   to the results is built from the trip's two city IDs and its date.
 // - seats and step say where the buyer is, so refresh and the back button keep the place.
@@ -42,6 +36,7 @@ function BookingPage() {
   const { tripId } = useParams();
   const tripID = Number(tripId);
   const navigate = useNavigate();
+  const { lang, t, path, name, text } = useLocale();
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedSeats = parseSeats(searchParams.get("seats"));
   const onPassengerStep = searchParams.get("step") === "passengers" && selectedSeats.length > 0;
@@ -58,6 +53,8 @@ function BookingPage() {
   const [contactPhone, setContactPhone] = useState("");
   const [passengers, setPassengers] = useState<{ [seatNumber: number]: PassengerDraft }>({});
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  // Where the sentence for a failed submit is in the text files. Keeping the key, not the
+  // sentence, lets the message change language with the page.
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -85,8 +82,8 @@ function BookingPage() {
 
   // Until the trip has arrived the page does not know which search it belongs to.
   const resultsLink = trip
-    ? `/services?from=${trip.OriginCityID}&to=${trip.DestinationCityID}&date=${trip.DepartureDate}`
-    : "/";
+    ? path(`/services?from=${trip.OriginCityID}&to=${trip.DestinationCityID}&date=${trip.DepartureDate}`)
+    : path("/");
 
   // The seats and the step live in the address. A seat click replaces the current history
   // entry (so "back" does not replay every click); a step change adds one.
@@ -113,7 +110,7 @@ function BookingPage() {
 
   const handleSubmit = () => {
     const drafts = selectedSeats.map((seatNumber) => passengers[seatNumber] ?? emptyPassenger);
-    const errors = validateBooking(contactPhone, drafts);
+    const errors = validateBooking(lang, contactPhone, drafts);
     setFieldErrors(errors);
     setSubmitError(null);
     if (Object.keys(errors).length > 0) return;
@@ -124,7 +121,7 @@ function BookingPage() {
       FirstName: draft.FirstName.trim(),
       LastName: draft.LastName.trim(),
       NationalCode: toLatinDigits(draft.NationalCode.trim()),
-      BirthDate: persianDateToGregorian(draft.BirthDate) ?? "",
+      BirthDate: parseBirthDate(lang, draft.BirthDate) ?? "",
       Gender: draft.Gender === "F" ? "F" : "M",
     }));
 
@@ -134,7 +131,7 @@ function BookingPage() {
         // The seats are now on hold. The phone is remembered for this tab only, so the
         // ticket page can open the ticket without the phone ever being in the address.
         savePhone(ticket.Code, phone);
-        navigate(`/tickets/${ticket.Code}`);
+        navigate(path(`/tickets/${ticket.Code}`));
       })
       .catch((err) => {
         setSubmitting(false);
@@ -146,10 +143,10 @@ function BookingPage() {
           setTakenSeats(err.seats);
           setSeatMapVersion((version) => version + 1);
           goTo(selectedSeats.filter((seat) => !err.seats.includes(seat)), "seats", true);
-        } else if (err instanceof ApiError && err.code === "trip_departed") {
-          setSubmitError("این اتوبوس حرکت کرده است و دیگر قابل خرید نیست.");
         } else {
-          setSubmitError("متاسفانه خطایی رخ داده است. لطفا دوباره تلاش کنید.");
+          // Every other code has its sentence in the text files; an unknown fault gets
+          // the general one.
+          setSubmitError(errorTextKey(err));
         }
       });
   };
@@ -159,10 +156,10 @@ function BookingPage() {
       <BookingFrame>
         <div className={`${s.card} ${s.centred} ${s.failed}`}>
           <i className={`fas fa-exclamation-circle ${s.bigIcon}`} />
-          <h2>این سرویس پیدا نشد</h2>
+          <h2>{t("errors.codes.trip_not_found")}</h2>
           <div className={s.centredActions}>
-            <Link className={`${s.primary} ${s.buttonLink}`} to="/">
-              جستجوی مجدد سرویس
+            <Link className={`${s.primary} ${s.buttonLink}`} to={path("/")}>
+              {t("booking.searchAgain")}
             </Link>
           </div>
         </div>
@@ -175,12 +172,12 @@ function BookingPage() {
       <div className={s.container}>
         {trip && (
           <TripSummary
-            originName={trip.OriginPersianName}
-            destinationName={trip.DestinationPersianName}
-            originTerminal={trip.OriginTerminalPersianName}
-            destinationTerminal={trip.DestinationTerminalPersianName}
-            company={trip.CompanyPersianName}
-            busType={trip.BusType}
+            originName={name(trip.OriginPersianName, trip.OriginEnglishName)}
+            destinationName={name(trip.DestinationPersianName, trip.DestinationEnglishName)}
+            originTerminal={name(trip.OriginTerminalPersianName, trip.OriginTerminalName)}
+            destinationTerminal={name(trip.DestinationTerminalPersianName, trip.DestinationTerminalName)}
+            company={name(trip.CompanyPersianName, trip.CompanyName)}
+            busType={text(trip.BusType, trip.BusTypeEnglish)}
             date={trip.DepartureDate}
             time={trip.DepartureTime}
             price={trip.Price}

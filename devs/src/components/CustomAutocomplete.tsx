@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, KeyboardEvent, useEffect, useRef } from "react";
 import "../assets/css/autocomplete.css";
 import { CitiesStatus, City } from "../util/Models";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   cities: City[];
@@ -33,6 +34,7 @@ const CustomAutocomplete = ({
   offset = "11%",
   style = undefined,
 }: Props) => {
+  const { t, cityName, provinceName } = useLocale();
   // The text being typed. It is null whenever the box simply shows the chosen city's name.
   const [draft, setDraft] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<City[]>([]);
@@ -40,11 +42,11 @@ const CustomAutocomplete = ({
   const [alertNoMatch, setAlertNoMatch] = useState(false);
   const selectedItemRef = useRef<HTMLLIElement>(null);
 
-  const inputValue = draft ?? value?.PersianName ?? "";
+  const inputValue = draft ?? (value ? cityName(value) : "");
 
   // Until the city list has arrived there is nothing to suggest, so the box cannot be typed
   // in and says why in place of its usual hint.
-  const statusMessage = { loading: "در حال بارگذاری ...", error: "خطا در دریافت فهرست شهرها", ready: null }[citiesStatus];
+  const statusMessage = { loading: t("common.loading"), error: t("cities.error"), ready: null }[citiesStatus];
 
   // Keep the highlighted suggestion in view while moving through the list with the arrow keys.
   useEffect(() => {
@@ -56,7 +58,13 @@ const CustomAutocomplete = ({
       ? []
       : cities
           .filter((city) =>
-            city.SearchExpressions.some((expression) => expression.toLowerCase().startsWith(text.toLowerCase()))
+            // SearchExpressions holds every spelling of a city, Persian and English, so the
+            // same list serves both languages. The name as shown is checked too, because the
+            // English one is written with spaces ("Abadeh Tashk") and the data has a hyphen.
+            // (updated 2026-10-12)
+            [...city.SearchExpressions, cityName(city)].some((expression) =>
+              expression.toLowerCase().startsWith(text.toLowerCase())
+            )
           )
           .sort((a, b) => b.Order - a.Order);
     setSuggestions(filteredSuggestions);
@@ -75,7 +83,7 @@ const CustomAutocomplete = ({
     const text = event.target.value;
     setDraft(text);
     // Typed text counts as a choice only when it is exactly the name of one suggested city.
-    const exactMatches = showSuggestions(text).filter((city) => city.PersianName === text);
+    const exactMatches = showSuggestions(text).filter((city) => cityName(city).toLowerCase() === text.toLowerCase());
     onChange(exactMatches.length === 1 ? exactMatches[0] : null);
   };
 
@@ -134,7 +142,7 @@ const CustomAutocomplete = ({
         <ul className="suggestions">
           {suggestions.map((suggestion, index) => (
             <li
-              style={{ paddingRight: offset }}
+              style={{ paddingInlineStart: offset }}
               key={suggestion.ID}
               ref={index === selectedOption ? selectedItemRef : undefined}
               className={index === selectedOption ? "selected" : ""}
@@ -147,9 +155,9 @@ const CustomAutocomplete = ({
                 closeSuggestions();
                 onPick();
               }}>
-              {suggestion.PersianName}
+              {cityName(suggestion)}
               {" - "}
-              <span style={{ fontSize: "12px", color: "#777" }}>{suggestion.ProvincePersianName}</span>
+              <span style={{ fontSize: "12px", color: "#777" }}>{provinceName(suggestion)}</span>
             </li>
           ))}
         </ul>
@@ -157,7 +165,7 @@ const CustomAutocomplete = ({
         inputValue.length > 1 &&
         alertNoMatch && (
           <ul className="suggestions">
-            <li className="no-match" style={{ paddingRight: offset }}>موردی یافت نشد</li>
+            <li className="no-match" style={{ paddingInlineStart: offset }}>{t("cities.noMatch")}</li>
           </ul>
         )
       )}

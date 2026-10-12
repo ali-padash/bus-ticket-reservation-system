@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import s from "../assets/css/alertBox.module.css";
+import { useLocale } from "../util/useLocale";
 
 interface Props {
   children?: ReactNode;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const AlertBox = ({ children, title, showCondition, setShowCondition }: Props) => {
+  const { t } = useLocale();
   const [render, setRender] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -29,7 +31,7 @@ const AlertBox = ({ children, title, showCondition, setShowCondition }: Props) =
   return (
     <div className={s.blackCover + (render ? " " + s.show : "")}>
       <div className={s.alertBox + (render ? " " + s.show : "")} ref={ref}>
-        <i className={s.cross} onClick={() => setShowCondition(false)} />
+        <i className={s.cross} role="button" aria-label={t("refund.close")} onClick={() => setShowCondition(false)} />
         <h1>{title}</h1>
         <div className={s.content}>{children}</div>
       </div>
