@@ -13,6 +13,7 @@
   position: relative;
   display: flex;
   width: 40px;
+  flex-shrink: 0;
   background-color: #e74c3c;
   border-start-start-radius: 5px;
   border-end-start-radius: 5px;
@@ -67,4 +68,15 @@
   .description {
     word-spacing: 1px;
   }
+}
+
+/* Latin digits are wider than Persian ones, so the badge gets more room and its letters stand
+   closer together in English. (added 2026-10-12) */
+:root[dir="ltr"] .refundItem .refundTitle {
+  width: 46px;
+}
+
+:root[dir="ltr"] .refundItem .refundTitle .title,
+:root[dir="ltr"] .refundItem .refundTitle .percentage {
+  letter-spacing: 0.5px;
 }

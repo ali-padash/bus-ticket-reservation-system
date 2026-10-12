@@ -14,8 +14,10 @@ A mixed bag: types, helper functions, API calls, everything that depends on the 
 | `useLocale.ts` | The hook that gives a component its language, see below. | Yes |
 | `Validation.ts` | Checks for the passenger form, and the name of the message for each wrong field. | Yes |
 | `TicketStorage.ts` | Keeps a ticket's phone in `sessionStorage`, per tab (`savePhone`, `readPhone`). | Yes |
+| `SavedPassengers.ts` | Keeps the phone and up to 8 passengers in `localStorage`, only when the visitor asks for it (`readSavedDetails`, `saveDetails`, `forgetDetails`). What is read back is checked field by field, because anything can be in storage. (written 2026-10-12) | Yes |
+| `useRefundRules.ts` | A hook: loads one trip's refund terms and words each line in the page's language. Used by the trip card and the review step, so the two cannot disagree. (written 2026-10-12) | Yes |
 | `Function.ts` | Small helpers that do not depend on the language, see below. | Yes |
-| `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
+| `cities.json` | 915 cities with all their alternate spellings (12,397). **494 KB.** Every city has an English name since 2026-10-12, see below. | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
 
 Deleted on 2026-10-12 because nothing used them: `Constant.ts`, `serviceResponse.json`, and
 `GlobalState.ts` (its values are now page state, see [src.doc.md](../src.doc.md)). `BusModels.ts`
@@ -95,6 +97,18 @@ the English sentence, so the API may reword its sentences freely.
 `errors.codes.<code>` for each of the API's 11 codes, and `errors.codes.unknown` for anything
 else, such as a network that is down (added 2026-10-12).
 
+## Birth dates in two calendars
+
+*Written 2026-10-12.*
+
+`Locale.ts` has three functions for the one field that is typed differently per language:
+
+- `parseBirthDate(lang, text)`: what was typed, to Gregorian `YYYY-MM-DD` for the API.
+- `formatBirthDate(lang, isoDate)`: the opposite, used when a remembered passenger is put
+  into the form.
+- `convertBirthDate(from, to, text)`: the two together, used when the language is switched
+  with a date already typed. Text that is not a whole, real date is left alone.
+
 ## Passenger form checks (`Validation.ts`)
 
 *Updated 2026-10-12.*
@@ -141,7 +155,12 @@ file on 2026-10-12; their work is done by `Locale.ts` for both languages.
 
 - `cities.json` is no longer used by the website but still lives in the website's folder,
   because the backend seed reads it from here. It would sit better next to the seed.
-- 120 of the 915 cities have no English name in the data, so the English pages show their
-  Persian name. They are small places; the backend session has been told on the board.
+- 120 of the 915 cities had no English name. On 2026-10-12 they were written by hand into
+  `cities.json` as slugs in the style of the others ("aran-va-bidgol", "jajrud"), and each
+  slug was added to that city's spellings (155 new spellings), so typing it finds the city.
+  They are transliterations made without a reference list, so a few may differ from the
+  spelling a map uses. Two are the same place as an older entry (Badreh, and Abarghu beside
+  Abarkuh); the data already had them twice. The database only shows the names after the
+  backend seed is run again.
 - File names are vague (`Function.ts`, `Models.ts`) and use capital letters, unlike the usual
   `camelCase.ts` style.

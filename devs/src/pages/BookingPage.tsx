@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import s from "../assets/css/booking.module.css";
 import BookingFrame from "../components/BookingFrame";
@@ -9,9 +9,10 @@ import PassengerForm from "../components/PassengerForm";
 import { Passenger, SeatMap, Trip } from "../util/Models";
 import { ApiError, errorTextKey, fetchSeatMap, fetchTrip, reserveSeats } from "../util/FetchFunction";
 import { FieldErrors, PassengerDraft, emptyPassenger, translateFieldErrors, validateBooking } from "../util/Validation";
-import { parseBirthDate, toLatinDigits } from "../util/Locale";
+import { convertBirthDate, formatBirthDate, parseBirthDate, toLatinDigits } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
 import { savePhone } from "../util/TicketStorage";
+import { SavedPassenger, forgetDetails, readSavedDetails, saveDetails } from "../util/SavedPassengers";
 
 const MAX_SEATS = 4;
 
@@ -50,7 +51,11 @@ function BookingPage() {
   const [limitReached, setLimitReached] = useState(false);
   const [takenSeats, setTakenSeats] = useState<number[]>([]);
 
-  const [contactPhone, setContactPhone] = useState("");
+  // What this browser was asked to remember from an earlier purchase: read once, when the
+  // page opens. The phone box starts with the remembered number. (added 2026-10-12)
+  const [saved] = useState(readSavedDetails);
+  const [remember, setRemember] = useState(saved.passengers.length > 0);
+  const [contactPhone, setContactPhone] = useState(saved.phone);
   const [passengers, setPassengers] = useState<{ [seatNumber: number]: PassengerDraft }>({});
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   // Where the sentence for a failed submit is in the text files. Keeping the key, not the
@@ -80,6 +85,24 @@ function BookingPage() {
     return () => abortController.abort();
   }, [tripID, seatMapVersion]);
 
+  // A birth date is typed in the calendar of the page's language. When the language is
+  // switched in the middle of the form, the dates already typed are written again in the
+  // other calendar, so the same day stays in the box. The ref remembers which language the
+  // text in the boxes belongs to. (added 2026-10-12)
+  const draftLang = useRef(lang);
+  useEffect(() => {
+    const from = draftLang.current;
+    if (from === lang) return;
+    draftLang.current = lang;
+    setPassengers((drafts) => {
+      const converted: { [seatNumber: number]: PassengerDraft } = {};
+      Object.entries(drafts).forEach(([seatNumber, draft]) => {
+        converted[Number(seatNumber)] = { ...draft, BirthDate: convertBirthDate(from, lang, draft.BirthDate) };
+      });
+      return converted;
+    });
+  }, [lang]);
+
   // Until the trip has arrived the page does not know which search it belongs to.
   const resultsLink = trip
     ? path(`/services?from=${trip.OriginCityID}&to=${trip.DestinationCityID}&date=${trip.DepartureDate}`)
@@ -108,6 +131,14 @@ function BookingPage() {
     }
   };
 
+  // Puts a remembered passenger into the boxes of one seat, with the birth date written in
+  // the calendar of the page.
+  const fillPassenger = (seatNumber: number, passenger: SavedPassenger) =>
+    setPassengers({
+      ...passengers,
+      [seatNumber]: { ...passenger, BirthDate: formatBirthDate(lang, passenger.BirthDate) },
+    });
+
   const handleSubmit = () => {
     const drafts = selectedSeats.map((seatNumber) => passengers[seatNumber] ?? emptyPassenger);
     const errors = validateBooking(lang, contactPhone, drafts);
@@ -116,14 +147,14 @@ function BookingPage() {
     if (Object.keys(errors).length > 0) return;
 
     const phone = toLatinDigits(contactPhone.trim());
-    const toSend: Passenger[] = drafts.map((draft, index) => ({
-      SeatNumber: selectedSeats[index],
+    const details: SavedPassenger[] = drafts.map((draft) => ({
       FirstName: draft.FirstName.trim(),
       LastName: draft.LastName.trim(),
       NationalCode: toLatinDigits(draft.NationalCode.trim()),
       BirthDate: parseBirthDate(lang, draft.BirthDate) ?? "",
       Gender: draft.Gender === "F" ? "F" : "M",
     }));
+    const toSend: Passenger[] = details.map((passenger, index) => ({ SeatNumber: selectedSeats[index], ...passenger }));
 
     setSubmitting(true);
     reserveSeats(tripID, phone, toSend)
@@ -131,6 +162,9 @@ function BookingPage() {
         // The seats are now on hold. The phone is remembered for this tab only, so the
         // ticket page can open the ticket without the phone ever being in the address.
         savePhone(ticket.Code, phone);
+        // The API accepted the details, so they are worth keeping, if the buyer asked for it.
+        if (remember) saveDetails(phone, details);
+        else forgetDetails();
         navigate(path(`/tickets/${ticket.Code}`));
       })
       .catch((err) => {
@@ -193,6 +227,10 @@ function BookingPage() {
               setContactPhone={setContactPhone}
               passengers={passengers}
               setPassenger={(seatNumber, passenger) => setPassengers({ ...passengers, [seatNumber]: passenger })}
+              savedPassengers={saved.passengers}
+              fillPassenger={fillPassenger}
+              remember={remember}
+              setRemember={setRemember}
               fieldErrors={fieldErrors}
               submitError={submitError}
               submitting={submitting}

@@ -83,6 +83,19 @@ number, so going back to the seats and returning does not lose them), the messag
 On submit: browser checks, then `POST /trips/<id>/tickets`. The birth date is read in the
 calendar of the page's language (Persian or Gregorian) and sent as Gregorian.
 
+*Added 2026-10-12.* Two things keep the form easy to fill:
+
+- **Language switch.** The birth dates already typed belong to the calendar of the language
+  they were typed in. When the language of the page changes, an effect writes each whole,
+  valid date again in the other calendar (`convertBirthDate`), so `1374/01/21` becomes
+  `1995-04-10` and the visitor types nothing twice.
+- **Remembered passengers.** If the visitor ticks "remember these passengers on this device",
+  the phone and the passengers of an accepted purchase are kept in `localStorage`
+  (`util/SavedPassengers.ts`). The next time, the phone box starts filled and each seat shows
+  the remembered names; one click fills that seat. Sending the form with the box unticked
+  forgets everything kept. It is opt-in because a national ID is personal, and it is in the
+  browser because the API has no accounts.
+
 - `201`: the phone is saved for this tab and the page moves to `/<lang>/tickets/<code>`.
 - `validation_failed`: a message under each field the server names.
 - `seats_unavailable`: back to the seat step, the lost seats dropped from the choice, the seat

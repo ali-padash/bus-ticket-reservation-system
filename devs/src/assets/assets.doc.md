@@ -80,6 +80,22 @@ The exception is `booking.module.css` (added 2026-10-12), which is shared by the
 pages and their ten components: frame, step line, forms, buttons and the small result pages.
 `expandableCard.css` also holds the styles for `ExpandableCard2`.
 
+### Narrow screens on the results page
+
+*Written 2026-10-12.*
+
+The results page had no layout below about 1000px. It now has two steps, in the files of the
+parts themselves:
+
+| Width | What changes | File |
+| --- | --- | --- |
+| up to 1000px | A trip card puts the route on its own line; the time, the price and the button share the next. | `panel.module.css` |
+| up to 600px | The search bar has two lines (the two cities, then the date and the button) and no headings; the three menus wrap. | `searchPanel.css`, `filterSearch.css` |
+| up to 560px | The card's button goes under the time and the price, full width; the logo is smaller. | `panel.module.css` |
+| up to 530px | The list and the day tabs follow the screen's width, not a 500px minimum, so the page no longer scrolls sideways. | `servicesDisplay.module.css`, `daysTab.css` |
+
+Nothing above 1000px was touched, so the desktop pages look as before.
+
 ## `fonts/`
 
 *Updated 2026-10-12.*

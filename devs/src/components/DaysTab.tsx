@@ -12,7 +12,6 @@ interface Props {
 const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
   const { lang, t, num, icons } = useLocale();
   const currentDate = new Date();
-  const [numberOfTabs, setNumberOfTabs] = useState(7);
 
   const handleChange = (variable: number | Date) => {
     if (typeof variable === "number") onSelectDate(addDays(selectedDate, variable));
@@ -32,6 +31,9 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
     if (width < 1024) return 5;
     return 7;
   };
+  // The count starts from the screen's width, so a phone never draws seven tabs first.
+  // (added 2026-10-12)
+  const [numberOfTabs, setNumberOfTabs] = useState(getTabCountBasedOnWidth);
 
   useEffect(() => {
     const handleResize = () => setNumberOfTabs(getTabCountBasedOnWidth());

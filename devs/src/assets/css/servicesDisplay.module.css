@@ -30,3 +30,11 @@
     width: clamp(500px, 1050px,95%);
   }
 }
+
+/* A phone is narrower than the 500px the rule above keeps, so there the block follows the
+   screen and the page does not scroll sideways. (added 2026-10-12) */
+@media (max-width: 530px) {
+  .service {
+    width: 95%;
+  }
+}

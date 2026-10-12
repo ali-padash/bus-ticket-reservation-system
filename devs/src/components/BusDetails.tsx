@@ -5,6 +5,7 @@ import BusSchemaError from "./BusDisplayError";
 import BusDetailsDisplay from "./BusDetailsDisplay";
 
 interface Props {
+  tripID: number;
   showDetails: boolean;
   setShowDetails: (showDetails: boolean) => void;
   // The trip card loads the seat map and hands it over; this only decides what to show.
@@ -14,17 +15,17 @@ interface Props {
   onBuy: () => void;
 }
 
-const BusDetails = ({ showDetails, setShowDetails, seatMap, errorFetching, retry, onBuy }: Props) => {
+const BusDetails = ({ tripID, showDetails, setShowDetails, seatMap, errorFetching, retry, onBuy }: Props) => {
   const busDetailsClasses = `${s.busDetails} ${showDetails ? s.show : ""}`;
 
   return (
     <div className={busDetailsClasses}>
       {seatMap ? (
-        <BusDetailsDisplay seatMap={seatMap} setShowDetails={setShowDetails} onBuy={onBuy} />
+        <BusDetailsDisplay tripID={tripID} seatMap={seatMap} setShowDetails={setShowDetails} onBuy={onBuy} />
       ) : !errorFetching ? (
         <BusLoading />
       ) : (
-        <BusSchemaError retry={retry} />
+        <BusSchemaError tripID={tripID} retry={retry} />
       )}
     </div>
   );

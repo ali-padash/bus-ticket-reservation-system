@@ -165,3 +165,81 @@
     transform: rotate(0deg);
   }
 }
+
+/* Below 1000px the four parts of a card no longer fit on one line, so the route gets a line
+   of its own and the time, the price and the button share the next one. (added 2026-10-12) */
+@media (max-width: 1000px) {
+  .panel .companyLogo {
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  .panel .info {
+    min-width: 0;
+  }
+
+  .panel .info .inner {
+    height: auto;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .panel .info .inner .od {
+    flex: 0 0 100%;
+    max-height: none;
+  }
+
+  .panel .info .inner .departureTime {
+    flex: 0 0 auto;
+    margin-inline-start: 0;
+  }
+
+  .panel .info .inner .price {
+    flex: 1 1 auto;
+  }
+
+  .panel .info .inner .buy {
+    flex: 0 0 190px;
+  }
+
+  .panel .info .inner .buy button {
+    padding: 4px 0;
+    width: 100%;
+  }
+
+  .panel .info .description {
+    max-width: 100%;
+    text-overflow: ellipsis;
+  }
+}
+
+/* On a phone the button moves under the time and the price and takes the full width. */
+@media (max-width: 560px) {
+  .panel .companyLogo {
+    width: 84px;
+  }
+
+  .panel .companyLogo img {
+    width: 56px;
+  }
+
+  .panel .info .inner {
+    font-size: 14px;
+  }
+
+  .panel .info .inner .price {
+    text-align: end;
+    padding-inline-end: 6px;
+  }
+
+  .panel .info .inner .departureTime,
+  .panel .info .inner .price {
+    font-size: 18px;
+  }
+
+  .panel .info .inner .buy {
+    flex: 0 0 100%;
+  }
+}

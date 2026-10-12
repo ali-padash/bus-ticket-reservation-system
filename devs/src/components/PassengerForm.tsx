@@ -2,6 +2,7 @@ import s from "../assets/css/booking.module.css";
 import DigitInput from "./DigitInput";
 import { useLocale } from "../util/useLocale";
 import { FieldErrors, PassengerDraft, emptyPassenger } from "../util/Validation";
+import { SavedPassenger } from "../util/SavedPassengers";
 
 interface Props {
   seats: number[];
@@ -10,6 +11,13 @@ interface Props {
   // What has been typed so far, by seat number.
   passengers: { [seatNumber: number]: PassengerDraft };
   setPassenger: (seatNumber: number, passenger: PassengerDraft) => void;
+  // Passengers this browser remembers from an earlier purchase. One click on a name fills
+  // the boxes of a seat. (added 2026-10-12)
+  savedPassengers: SavedPassenger[];
+  fillPassenger: (seatNumber: number, passenger: SavedPassenger) => void;
+  // Whether the visitor wants this browser to remember the passengers after this purchase.
+  remember: boolean;
+  setRemember: (remember: boolean) => void;
   // Message names by field name: "ContactPhone", or "Passengers[0].NationalCode" for the first
   // seat. The sentence for a name is in the text files, under `errors.fields`.
   fieldErrors: FieldErrors;
@@ -27,6 +35,10 @@ const PassengerForm = ({
   setContactPhone,
   passengers,
   setPassenger,
+  savedPassengers,
+  fillPassenger,
+  remember,
+  setRemember,
   fieldErrors,
   submitError,
   submitting,
@@ -46,7 +58,14 @@ const PassengerForm = ({
       <h2>{t("passengers.title")}</h2>
       <p className={s.intro}>{t("passengers.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${fieldErrors.ContactPhone ? s.invalid : ""}`}>
-        <DigitInput type="tel" label={t("passengers.phone")} value={contactPhone} onChange={setContactPhone} />
+        <DigitInput
+          type="tel"
+          name="tel"
+          autoComplete="tel-national"
+          label={t("passengers.phone")}
+          value={contactPhone}
+          onChange={setContactPhone}
+        />
         {message("ContactPhone") && <p className={s.fieldError}>{message("ContactPhone")}</p>}
       </div>
       {seats.map((seatNumber, index) => {
@@ -54,10 +73,24 @@ const PassengerForm = ({
         const errorOf = (name: keyof PassengerDraft | "SeatNumber") => message(`Passengers[${index}].${name}`);
         // The two name boxes are ordinary text boxes. The two number boxes show the digits of
         // the page's language as the visitor types. (updated 2026-10-12)
+        //
+        // `name` and `autoComplete` let the browser offer what it already knows. The section
+        // word keeps the seats apart, so two passengers are not filled with one person. The
+        // national ID has no standard autofill name, so the browser offers what was typed
+        // into that box before. (added 2026-10-12)
+        const section = `section-seat${seatNumber}`;
+        const autofill = {
+          FirstName: `${section} given-name`,
+          LastName: `${section} family-name`,
+          NationalCode: "on",
+          BirthDate: `${section} bday`,
+        };
         const textField = (name: "FirstName" | "LastName" | "NationalCode" | "BirthDate", label: string) => (
           <div className={`${s.field} ${errorOf(name) ? s.invalid : ""}`}>
             {name === "NationalCode" || name === "BirthDate" ? (
               <DigitInput
+                name={`${name}-${seatNumber}`}
+                autoComplete={autofill[name]}
                 label={label}
                 value={passenger[name]}
                 onChange={(text) => setPassenger(seatNumber, { ...passenger, [name]: text })}
@@ -65,6 +98,8 @@ const PassengerForm = ({
             ) : (
               <input
                 type="text"
+                name={`${name}-${seatNumber}`}
+                autoComplete={autofill[name]}
                 placeholder={label}
                 aria-label={label}
                 value={passenger[name]}
@@ -77,6 +112,16 @@ const PassengerForm = ({
         return (
           <div className={s.passengerBlock} key={seatNumber}>
             <h4>{t("passengers.seatHeading", { number: num(seatNumber) })}</h4>
+            {savedPassengers.length > 0 && (
+              <div className={s.savedPassengers}>
+                <span>{t("passengers.saved")}</span>
+                {savedPassengers.map((saved) => (
+                  <button type="button" key={saved.NationalCode} onClick={() => fillPassenger(seatNumber, saved)}>
+                    {saved.FirstName} {saved.LastName}
+                  </button>
+                ))}
+              </div>
+            )}
             <div className={s.fields}>
               {textField("FirstName", t("passengers.firstName"))}
               {textField("LastName", t("passengers.lastName"))}
@@ -84,6 +129,8 @@ const PassengerForm = ({
               {textField("BirthDate", t("passengers.birthDate"))}
               <div className={`${s.field} ${errorOf("Gender") ? s.invalid : ""}`}>
                 <select
+                  name={`Gender-${seatNumber}`}
+                  autoComplete={`${section} sex`}
                   aria-label={t("passengers.gender")}
                   value={passenger.Gender}
                   onChange={(e) => {
@@ -102,6 +149,10 @@ const PassengerForm = ({
         );
       })}
       <p className={s.hint}>{t("passengers.idHint")}</p>
+      <label className={s.remember}>
+        <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+        {t("passengers.remember")}
+      </label>
       {message("Passengers") && <div className={`${s.notice} ${s.errorNotice}`}>{message("Passengers")}</div>}
       {submitError && <div className={`${s.notice} ${s.errorNotice}`}>{t(submitError)}</div>}
       <div className={s.actions}>

@@ -6,12 +6,13 @@ import { SeatMap } from '../util/Models';
 import { useLocale } from '../util/useLocale';
 
 interface Props {
+  tripID: number
   setShowDetails: (showDetails: boolean) => void
   seatMap: SeatMap
   onBuy: () => void
 }
 
-const BusDetailsDisplay = ({ setShowDetails, seatMap, onBuy }: Props) => {
+const BusDetailsDisplay = ({ tripID, setShowDetails, seatMap, onBuy }: Props) => {
   const { t } = useLocale();
   return (
     <>
@@ -26,7 +27,7 @@ const BusDetailsDisplay = ({ setShowDetails, seatMap, onBuy }: Props) => {
       <BusSchema layout={seatMap.Layout} seats={seatMap.Seats} />
       <Legend className={s.legend} />
     </div>
-    <RefundBox />
+    <RefundBox tripID={tripID} />
     <button className={s.greenBuy} onClick={onBuy}>{t("seatMap.buy")}</button>
   </>
   )

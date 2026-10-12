@@ -54,8 +54,9 @@ The site expects the Go backend on `http://localhost:8080`. To point it elsewher
 
 *Updated 2026-10-12.*
 
-`npm run build` gives one JavaScript file of **331.66 kB (108.19 kB gzipped)**, measured after
-the second language was added, and one stylesheet of 50.56 kB (10.61 kB gzipped).
+`npm run build` gives one JavaScript file of **334.01 kB (109.05 kB gzipped)** and one
+stylesheet of 53.61 kB (11.06 kB gzipped), measured after the narrow-screen results list and
+the remembered passengers were added.
 
 | When | JavaScript | Gzipped |
 | --- | --- | --- |
@@ -63,8 +64,9 @@ the second language was added, and one stylesheet of 50.56 kB (10.61 kB gzipped)
 | City list from the API | 219.27 kB | 70.96 kB |
 | Booking pages added | 243.52 kB | 78.79 kB |
 | Two languages (2026-10-12) | 331.66 kB | 108.19 kB |
+| Real refund terms on the card, remembered passengers (2026-10-12) | 334.01 kB | 109.05 kB |
 
-The last step cost 88 kB (29 kB gzipped): the `i18next` and `react-i18next` libraries, and the
+The two-languages step cost 88 kB (29 kB gzipped): the `i18next` and `react-i18next` libraries, and the
 two text files, about 15 kB each. Both text files travel to every visitor. Loading only the
 one in use would save about 5 kB gzipped and make the language switch wait for a download; it
 was not worth it at this size.
@@ -90,10 +92,11 @@ browser downloads one only when an English page shows a letter from it.
 
 *Updated 2026-10-12.*
 
-- A visitor who opens a Persian address sees the English tab title for a moment, until the
-  page has loaded. A search engine that does not run JavaScript sees only the English one.
-- The results list is not built for screens narrower than about 1000px, in either language:
-  the texts of a trip card run into each other. This is older than the second language.
+- `index.html` is one file for both languages and is written for English. A few lines of
+  script in its head set the language, the direction and the Persian tab title for a `/fa`
+  address before anything is drawn, so the English title no longer shows for a moment. A
+  search engine that does not run JavaScript still sees only the English title. The Persian
+  title is written twice: there and in `src/locales/fa.json`.
 - Font Awesome is loaded from a CDN at runtime, so icons vanish offline.
 - No tests and no test runner installed.
 - The `.gitignore` here ends with `**/.env*`.

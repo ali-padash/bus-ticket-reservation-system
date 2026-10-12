@@ -105,3 +105,21 @@
     font-weight: bold;
     font-size: 14px;
 }
+
+/* On a phone the three menus share the width of the screen and may wrap. (added 2026-10-12) */
+@media (max-width: 600px) {
+    .filter-search {
+        margin-inline-start: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .expandable-card2-header {
+        padding-inline: 10px 30px;
+    }
+
+    .expandable-card2 i {
+        inset-inline-end: 10px;
+    }
+}

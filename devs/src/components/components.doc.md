@@ -118,7 +118,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | `Legend` | Explains the seat colours; the booking page adds the green one. |
 | `BusLoading` | Spinner. |
 | `BusDisplayError` | Error state with a retry button. (The file exports `BusSchemaError`.) |
-| `RefundBox` | Refund conditions. A popup under 1024 px wide, inline above that. |
+| `RefundBox` | The refund terms of the trip whose card is open, loaded from the API through `useRefundRules` (the same lines the review step shows). A popup up to 1024 px wide, inline above that. Draws nothing until the terms have arrived. (updated 2026-10-12) |
 | `RefundItem` | One refund line. |
 | `AlertBox` | Generic modal used by `RefundBox`. |
 
@@ -132,7 +132,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | `BookingSteps` | The five-step line; steps up to the current one are blue. |
 | `TripSummary` | The "trip details" box. Takes plain values, because a trip fills it on one page and a ticket on the other. Names and bus type arrive in the page's language; it formats the date, time and price itself. |
 | `SeatPicker` | Step 2: the bus, the legend, the chosen seats as removable chips, the 4-seat notice, the "just taken" notice. |
-| `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date and gender for each seat, with a message under each wrong field. The birth date is typed in the calendar of the page: Persian (`1374/01/21`) or Gregorian (`1995-03-21`). It receives the names of the messages and looks the sentences up itself. |
+| `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date and gender for each seat, with a message under each wrong field. The birth date is typed in the calendar of the page: Persian (`1374/01/21`) or Gregorian (`1995-03-21`). It receives the names of the messages and looks the sentences up itself. Every box has a `name` and an `autoComplete` word so the browser can offer what it knows (phone, given name, family name), with one section per seat. Above each seat it lists the passengers the browser was asked to remember, as buttons that fill the seat, and at the bottom it has the "remember these passengers" box. (updated 2026-10-12) |
 | `TicketReview` | Step 4: passengers, phone, prices, the refund rules from the API, the countdown, "confirm and pay" and "cancel". |
 | `FakeBank` | The demo bank page. Says plainly that no money moves. |
 | `TicketIssued` | Step 5, success: the ticket. |
@@ -157,9 +157,6 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 *Updated 2026-10-12.*
 
-- `RefundBox` (inside a trip card on the results page) still shows two fixed lines, and the
-  second says "50" in the badge and "10%" in the text, in both languages. The review page
-  shows the real rules from the API; this box should use them too.
 - `TicketModel` shows a made-up route and date (Tehran, Rasht), now as texts in `locales/`.
 - "Left out from earlier passengers", login and "my tickets" do not exist.
 

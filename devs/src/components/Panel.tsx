@@ -108,6 +108,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
         </div>
       </div>
       <BusDetails
+        tripID={item.ID}
         showDetails={isOpen}
         setShowDetails={setIsOpen}
         seatMap={seatMap}

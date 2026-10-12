@@ -141,3 +141,49 @@ h1 {
         transform: scale(1.4) translateX(2px);
     }
 }
+
+/* On a phone the bar has two lines: the two cities, then the date and the search button.
+   The headings above the boxes are dropped; each box says what it is by itself.
+   (added 2026-10-12) */
+@media (max-width: 600px) {
+    .container {
+        height: auto;
+        padding-block: 10px;
+        padding-inline: 2.5%;
+    }
+
+    .search-panel .row:first-child {
+        display: none;
+    }
+
+    .search-panel .row {
+        flex-wrap: wrap;
+        height: auto;
+        row-gap: 8px;
+    }
+
+    .search-panel .in {
+        flex: 1 1 40%;
+        height: 33px;
+    }
+
+    .search-panel .row > .custom-gap:not(.fas) {
+        display: none;
+    }
+
+    .search-panel .calendar-div {
+        flex: 1 1 70%;
+        height: 33px;
+        margin-inline-end: 8px;
+    }
+
+    .search-panel .search {
+        flex: 0 0 44px;
+        height: 33px;
+    }
+
+    .calendar-div .expandable-card2-content.calendar {
+        inset-inline: 0 auto;
+        max-width: 95vw;
+    }
+}

@@ -137,6 +137,24 @@ export const parseBirthDate = (lang: Lang, text: string): string | null => {
   return formatDate(date);
 };
 
+// Gregorian "YYYY-MM-DD" -> the way the visitor types a birth date in this language:
+// "1374/01/21" in Persian, "1995-03-21" in English. The opposite of parseBirthDate.
+// (written 2026-10-12)
+export const formatBirthDate = (lang: Lang, isoDate: string): string => {
+  if (lang !== "fa") return isoDate;
+  const [year, month, day] = isoDate.split("-").map(Number);
+  const { jy, jm, jd } = jalaali.toJalaali(year, month, day);
+  return [jy, String(jm).padStart(2, "0"), String(jd).padStart(2, "0")].join("/");
+};
+
+// A birth date typed in one language, written again for the other. The two languages use
+// different calendars, so the text in the box has to follow the page when its language is
+// switched. Text that is not a whole, real date yet is left as it is. (written 2026-10-12)
+export const convertBirthDate = (from: Lang, to: Lang, text: string): string => {
+  const isoDate = parseBirthDate(from, text);
+  return isoDate ? formatBirthDate(to, isoDate) : text;
+};
+
 // ---- names from the API ----
 
 // The API's English names are slugs: "rasht", "abadeh-tashk", "East-Azerbaijan", sometimes

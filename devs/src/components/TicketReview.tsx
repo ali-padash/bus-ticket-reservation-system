@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import s from "../assets/css/booking.module.css";
 import RefundItem from "./RefundItem";
-import { RefundRule, Ticket } from "../util/Models";
-import { fetchRefundRules } from "../util/FetchFunction";
+import { Ticket } from "../util/Models";
+import { useRefundRules } from "../util/useRefundRules";
 import { useLocale } from "../util/useLocale";
 
 interface Props {
@@ -25,26 +24,7 @@ const formatCountdown = (seconds: number) => {
 // Step 4: the last look before paying. The seats are already on hold at this point.
 const TicketReview = ({ ticket, secondsLeft, busy, actionError, onPay, onCancel }: Props) => {
   const { t, num, price } = useLocale();
-  const [refundRules, setRefundRules] = useState<RefundRule[]>([]);
-
-  // The rules arrive ordered from the most notice to the least. Each is read against the one
-  // before it: "up to 1 hour before departure", then "less than 1 hour before departure".
-  const describeRule = (rule: RefundRule, previous: RefundRule | undefined) => {
-    const hours = (count: number) => ({ count, hours: num(count) });
-    if (rule.MinHoursBeforeDeparture > 0) return t("refund.upTo", hours(rule.MinHoursBeforeDeparture));
-    if (previous) return t("refund.lessThan", hours(previous.MinHoursBeforeDeparture));
-    return t("refund.untilDeparture");
-  };
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    fetchRefundRules(ticket.Trip.ID, abortController.signal)
-      .then((rules) => setRefundRules(rules))
-      // The rules are extra information. If they cannot be loaded the box stays empty and
-      // the purchase can still go on.
-      .catch(() => setRefundRules([]));
-    return () => abortController.abort();
-  }, [ticket.Trip.ID]);
+  const refundLines = useRefundRules(ticket.Trip.ID);
 
   return (
     <>
@@ -96,14 +76,14 @@ const TicketReview = ({ ticket, secondsLeft, busy, actionError, onPay, onCancel 
           </div>
         </div>
       </div>
-      {refundRules.length > 0 && (
+      {refundLines.length > 0 && (
         <div className={s.box} style={{ marginTop: "16px" }}>
           <h4>{t("refund.title")}</h4>
           <p>{t("refund.intro")}</p>
           <div style={{ maxWidth: "370px" }}>
-            {refundRules.map((rule, index) => (
-              <RefundItem key={rule.MinHoursBeforeDeparture} title={num(rule.PenaltyPercent)}>
-                {describeRule(rule, refundRules[index - 1])}
+            {refundLines.map((line) => (
+              <RefundItem key={line.key} title={line.percent}>
+                {line.text}
               </RefundItem>
             ))}
           </div>

@@ -310,6 +310,50 @@
   margin: 14px 0 0;
 }
 
+/* Names this browser remembers; one click fills the boxes of a seat. (added 2026-10-12) */
+.savedPassengers {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #777;
+}
+
+.savedPassengers button {
+  padding: 4px 12px;
+  border: 1px solid #3498db;
+  border-radius: 14px;
+  background-color: white;
+  color: #3498db;
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.savedPassengers button:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+}
+
+.remember input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
 /* ---- buttons ---- */
 
 .actions {

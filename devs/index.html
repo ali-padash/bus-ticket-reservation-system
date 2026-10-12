@@ -8,6 +8,17 @@
     <meta name="color-scheme" content="only light" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>Safar724 - Bus tickets</title>
+    <!-- This page is the same file for both languages and is written for English. The few
+         lines below run before anything is drawn, so a Persian address has its language,
+         direction and tab title from the first moment and not only once the app has loaded.
+         The title is the same text as `meta.title` in src/locales/fa.json. (added 2026-10-12) -->
+    <script>
+      if (location.pathname.split("/")[1] === "fa") {
+        document.documentElement.lang = "fa";
+        document.documentElement.dir = "rtl";
+        document.title = "سفر۷۲۴ - خرید بلیط اتوبوس";
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

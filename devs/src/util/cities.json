@@ -885,22 +885,22 @@
   {
     "ID": 2522,
     "Code": "21462000",
-    "Name": "",
+    "Name": "anarak",
     "PersianName": "انارک",
     "ProvinceName": "Isfahan",
     "ProvincePersianName": "اصفهان",
-    "SearchExpressions": ["انارک", "isfahan", "اصفهان", "hkhv;", "hwtihk", "انارك", "آنارک", "آنارك", "آصفهان"],
+    "SearchExpressions": ["anarak", "انارک", "isfahan", "اصفهان", "hkhv;", "hwtihk", "انارك", "آنارک", "آنارك", "آصفهان"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2586,
     "Code": "21430000",
-    "Name": "",
+    "Name": "aran-va-bidgol",
     "PersianName": "آران  وبیدگل",
     "ProvinceName": "Isfahan",
     "ProvincePersianName": "اصفهان",
-    "SearchExpressions": [
+    "SearchExpressions": ["aran-va-bidgol", "aran va bidgol", 
       "آران  وبیدگل",
       "isfahan",
       "اصفهان",
@@ -1121,11 +1121,11 @@
   {
     "ID": 2567,
     "Code": "21362022",
-    "Name": "",
+    "Name": "sardsir",
     "PersianName": "سردسیر",
     "ProvinceName": "Isfahan",
     "ProvincePersianName": "اصفهان",
-    "SearchExpressions": ["سردسیر", "isfahan", "اصفهان", "svnsdv", "hwtihk", "سردسير", "سردسىر", "سردسئر", "آصفهان"],
+    "SearchExpressions": ["sardsir", "سردسیر", "isfahan", "اصفهان", "svnsdv", "hwtihk", "سردسير", "سردسىر", "سردسئر", "آصفهان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -1213,11 +1213,11 @@
   {
     "ID": 2572,
     "Code": "21521005",
-    "Name": "",
+    "Name": "sanaye-foolad",
     "PersianName": "صنایع  فولاد",
     "ProvinceName": "Isfahan",
     "ProvincePersianName": "اصفهان",
-    "SearchExpressions": [
+    "SearchExpressions": ["sanaye-foolad", "sanaye foolad", 
       "صنایع  فولاد",
       "isfahan",
       "اصفهان",
@@ -1377,11 +1377,11 @@
   {
     "ID": 2453,
     "Code": "21521025",
-    "Name": "",
+    "Name": "malvajerd",
     "PersianName": "مالواجرد",
     "ProvinceName": "Isfahan",
     "ProvincePersianName": "اصفهان",
-    "SearchExpressions": ["مالواجرد", "isfahan", "اصفهان", "lhg,h[vn", "hwtihk", "آصفهان"],
+    "SearchExpressions": ["malvajerd", "مالواجرد", "isfahan", "اصفهان", "lhg,h[vn", "hwtihk", "آصفهان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -1581,11 +1581,11 @@
   {
     "ID": 2470,
     "Code": "18312000",
-    "Name": "",
+    "Name": "asara",
     "PersianName": "آسارا",
     "ProvinceName": "Alborz",
     "ProvincePersianName": "البرز",
-    "SearchExpressions": ["آسارا", "alborz", "البرز", "Hshvh", "hgfvc", "اسارا", "آلبرز"],
+    "SearchExpressions": ["asara", "آسارا", "alborz", "البرز", "Hshvh", "hgfvc", "اسارا", "آلبرز"],
     "IsCapital": false,
     "Order": 0
   },
@@ -1638,11 +1638,11 @@
   {
     "ID": 2467,
     "Code": "18311034",
-    "Name": "",
+    "Name": "kordan",
     "PersianName": "کردان",
     "ProvinceName": "Alborz",
     "ProvincePersianName": "البرز",
-    "SearchExpressions": ["کردان", "alborz", "البرز", ";vnhk", "hgfvc", "كردان", "آلبرز"],
+    "SearchExpressions": ["kordan", "کردان", "alborz", "البرز", ";vnhk", "hgfvc", "كردان", "آلبرز"],
     "IsCapital": false,
     "Order": 0
   },
@@ -1821,11 +1821,11 @@
   {
     "ID": 2571,
     "Code": "83332000",
-    "Name": "",
+    "Name": "badreh",
     "PersianName": "بدره",
     "ProvinceName": "Ilam",
     "ProvincePersianName": "ایلام",
-    "SearchExpressions": [
+    "SearchExpressions": ["badreh", 
       "بدره",
       "ilam",
       "ایلام",
@@ -1994,11 +1994,11 @@
   {
     "ID": 2580,
     "Code": "83390000",
-    "Name": "",
+    "Name": "sirvan",
     "PersianName": "سیروان  (ایلام )",
     "ProvinceName": "Ilam",
     "ProvincePersianName": "ایلام",
-    "SearchExpressions": [
+    "SearchExpressions": ["sirvan", 
       "سیروان  (ایلام )",
       "ilam",
       "ایلام",
@@ -2028,11 +2028,11 @@
   {
     "ID": 2534,
     "Code": "83373000",
-    "Name": "",
+    "Name": "salehabad-ilam",
     "PersianName": "صالح  آباد (ایلام )",
     "ProvinceName": "Ilam",
     "ProvincePersianName": "ایلام",
-    "SearchExpressions": [
+    "SearchExpressions": ["salehabad-ilam", "salehabad ilam", 
       "صالح  آباد (ایلام )",
       "ilam",
       "ایلام",
@@ -4517,11 +4517,11 @@
   {
     "ID": 2464,
     "Code": "57411026",
-    "Name": "",
+    "Name": "buralan",
     "PersianName": "بورالان",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["buralan", 
       "بورالان",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -4919,11 +4919,11 @@
   {
     "ID": 2527,
     "Code": "57351033",
-    "Name": "",
+    "Name": "hamzian",
     "PersianName": "حمزیان",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["hamzian", 
       "حمزیان",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5205,11 +5205,11 @@
   {
     "ID": 2592,
     "Code": "57371022",
-    "Name": "",
+    "Name": "silab",
     "PersianName": "سیلاب  (آذربایجان غربی )",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["silab", 
       "سیلاب  (آذربایجان غربی )",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5251,11 +5251,11 @@
   {
     "ID": 2578,
     "Code": "57314000",
-    "Name": "",
+    "Name": "silvaneh",
     "PersianName": "سیلوانه",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["silvaneh", 
       "سیلوانه",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5466,11 +5466,11 @@
   {
     "ID": 2508,
     "Code": "57341024",
-    "Name": "",
+    "Name": "karaftu",
     "PersianName": "کرفتو (آذربایجان  غربی )",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["karaftu", 
       "کرفتو (آذربایجان  غربی )",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5614,11 +5614,11 @@
   {
     "ID": 2475,
     "Code": "57381023",
-    "Name": "",
+    "Name": "mahmudabad-west-azerbaijan",
     "PersianName": "محمودآباد (آذربایجان  غربی )",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["mahmudabad-west-azerbaijan", "mahmudabad west azerbaijan", 
       "محمودآباد (آذربایجان  غربی )",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5902,11 +5902,11 @@
   {
     "ID": 2538,
     "Code": "57312021",
-    "Name": "",
+    "Name": "nushin",
     "PersianName": "نوشین",
     "ProvinceName": "West-Azerbaijan",
     "ProvincePersianName": "آذربایجان غربی",
-    "SearchExpressions": [
+    "SearchExpressions": ["nushin", 
       "نوشین",
       "west-azerbaijan",
       "آذربایجان غربی",
@@ -5937,11 +5937,11 @@
   {
     "ID": 2494,
     "Code": "95382021",
-    "Name": "",
+    "Name": "emam-hasan",
     "PersianName": "امام  حسن",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["امام  حسن", "bushehr", "بوشهر", "امام", "حسن", "hlhl", "psk", "f,aiv", "آمام"],
+    "SearchExpressions": ["emam-hasan", "emam hasan", "امام  حسن", "bushehr", "بوشهر", "امام", "حسن", "hlhl", "psk", "f,aiv", "آمام"],
     "IsCapital": false,
     "Order": 0
   },
@@ -5959,11 +5959,11 @@
   {
     "ID": 2528,
     "Code": "95322025",
-    "Name": "",
+    "Name": "bashi",
     "PersianName": "باشی",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["باشی", "bushehr", "بوشهر", "fhad", "f,aiv", "باشي", "باشى", "باشئ"],
+    "SearchExpressions": ["bashi", "باشی", "bushehr", "بوشهر", "fhad", "f,aiv", "باشي", "باشى", "باشئ"],
     "IsCapital": false,
     "Order": 0
   },
@@ -6068,11 +6068,11 @@
   {
     "ID": 2456,
     "Code": "95341025",
-    "Name": "",
+    "Name": "dalaki",
     "PersianName": "دالکی",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": [
+    "SearchExpressions": ["dalaki", 
       "دالکی",
       "bushehr",
       "بوشهر",
@@ -6114,22 +6114,22 @@
   {
     "ID": 2466,
     "Code": "95331022",
-    "Name": "",
+    "Name": "dorahak",
     "PersianName": "دوراهک",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["دوراهک", "bushehr", "بوشهر", "n,vhi;", "f,aiv", "دوراهك"],
+    "SearchExpressions": ["dorahak", "دوراهک", "bushehr", "بوشهر", "n,vhi;", "f,aiv", "دوراهك"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2507,
     "Code": "95344021",
-    "Name": "",
+    "Name": "dehrud",
     "PersianName": "دهرود",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["دهرود", "bushehr", "بوشهر", "niv,n", "f,aiv"],
+    "SearchExpressions": ["dehrud", "دهرود", "bushehr", "بوشهر", "niv,n", "f,aiv"],
     "IsCapital": false,
     "Order": 0
   },
@@ -6169,22 +6169,22 @@
   {
     "ID": 2555,
     "Code": "95392000",
-    "Name": "",
+    "Name": "riz",
     "PersianName": "ریز",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["ریز", "bushehr", "بوشهر", "vdc", "f,aiv", "ريز", "رىز", "رئز"],
+    "SearchExpressions": ["riz", "ریز", "bushehr", "بوشهر", "vdc", "f,aiv", "ريز", "رىز", "رئز"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2526,
     "Code": "95343000",
-    "Name": "",
+    "Name": "shabankareh",
     "PersianName": "شبانکاره",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": ["شبانکاره", "bushehr", "بوشهر", "afhk;hvi", "f,aiv", "شبانكاره"],
+    "SearchExpressions": ["shabankareh", "شبانکاره", "bushehr", "بوشهر", "afhk;hvi", "f,aiv", "شبانكاره"],
     "IsCapital": false,
     "Order": 0
   },
@@ -6268,11 +6268,11 @@
   {
     "ID": 2541,
     "Code": "95361004",
-    "Name": "",
+    "Name": "pars-special-energy-zone-asaluyeh",
     "PersianName": "منطقه  ویژه انرژی پارس  عسلویه",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": [
+    "SearchExpressions": ["pars-special-energy-zone-asaluyeh", "pars special energy zone asaluyeh", 
       "منطقه  ویژه انرژی پارس  عسلویه",
       "bushehr",
       "بوشهر",
@@ -6307,11 +6307,11 @@
   {
     "ID": 2498,
     "Code": "95412022",
-    "Name": "",
+    "Name": "nayband",
     "PersianName": "نای  بند (بوشهر)",
     "ProvinceName": "Bushehr",
     "ProvincePersianName": "بوشهر",
-    "SearchExpressions": [
+    "SearchExpressions": ["nayband", 
       "نای  بند (بوشهر)",
       "bushehr",
       "بوشهر",
@@ -6668,11 +6668,11 @@
   {
     "ID": 2506,
     "Code": "11432022",
-    "Name": "",
+    "Name": "ab-barik",
     "PersianName": "آب  باریک  (تهران )",
     "ProvinceName": "Tehran",
     "ProvincePersianName": "تهران",
-    "SearchExpressions": [
+    "SearchExpressions": ["ab-barik", "ab barik", 
       "آب  باریک  (تهران )",
       "tehran",
       "تهران",
@@ -6790,22 +6790,22 @@
   {
     "ID": 2516,
     "Code": "11482000",
-    "Name": "",
+    "Name": "jajrud",
     "PersianName": "جاجرود",
     "ProvinceName": "Tehran",
     "ProvincePersianName": "تهران",
-    "SearchExpressions": ["جاجرود", "tehran", "تهران", "[h[v,n", "jivhk"],
+    "SearchExpressions": ["jajrud", "جاجرود", "tehran", "تهران", "[h[v,n", "jivhk"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2479,
     "Code": "11362021",
-    "Name": "",
+    "Name": "hasanabad-tehran",
     "PersianName": "حسن  آباد (تهران )",
     "ProvinceName": "Tehran",
     "ProvincePersianName": "تهران",
-    "SearchExpressions": [
+    "SearchExpressions": ["hasanabad-tehran", "hasanabad tehran", 
       "حسن  آباد (تهران )",
       "tehran",
       "تهران",
@@ -7272,11 +7272,11 @@
   {
     "ID": 2512,
     "Code": "77380000",
-    "Name": "",
+    "Name": "saman",
     "PersianName": "سامان",
     "ProvinceName": "Chaharmahal-and-Bakhtiari ",
     "ProvincePersianName": "چهار محال و بختیاری",
-    "SearchExpressions": [
+    "SearchExpressions": ["saman", 
       "سامان",
       "chaharmahal-and-bakhtiari ",
       "چهار محال و بختیاری",
@@ -7406,11 +7406,11 @@
   {
     "ID": 2497,
     "Code": "77351024",
-    "Name": "",
+    "Name": "kalar",
     "PersianName": "کلار",
     "ProvinceName": "Chaharmahal-and-Bakhtiari ",
     "ProvincePersianName": "چهار محال و بختیاری",
-    "SearchExpressions": [
+    "SearchExpressions": ["kalar", 
       "کلار",
       "chaharmahal-and-bakhtiari ",
       "چهار محال و بختیاری",
@@ -7557,11 +7557,11 @@
   {
     "ID": 2573,
     "Code": "33471028",
-    "Name": "",
+    "Name": "abgarm-ferdows",
     "PersianName": "آبگرم  فردوس",
     "ProvinceName": "South-Khorasan",
     "ProvincePersianName": "خراسان جنوبی",
-    "SearchExpressions": [
+    "SearchExpressions": ["abgarm-ferdows", "abgarm ferdows", 
       "آبگرم  فردوس",
       "south-khorasan",
       "خراسان جنوبی",
@@ -7682,11 +7682,11 @@
   {
     "ID": 2564,
     "Code": "33314026",
-    "Name": "",
+    "Name": "baghdadeh",
     "PersianName": "بغداده",
     "ProvinceName": "South-Khorasan",
     "ProvincePersianName": "خراسان جنوبی",
-    "SearchExpressions": [
+    "SearchExpressions": ["baghdadeh", 
       "بغداده",
       "south-khorasan",
       "خراسان جنوبی",
@@ -8377,11 +8377,11 @@
   {
     "ID": 2465,
     "Code": "31722021",
-    "Name": "",
+    "Name": "eshtin",
     "PersianName": "اشتین",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["eshtin", 
       "اشتین",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -8652,11 +8652,11 @@
   {
     "ID": 2486,
     "Code": "31391023",
-    "Name": "",
+    "Name": "bogh-mech",
     "PersianName": "بق  مچ",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["bogh-mech", "bogh mech", 
       "بق  مچ",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -8972,11 +8972,11 @@
   {
     "ID": 2485,
     "Code": "31691027",
-    "Name": "",
+    "Name": "dafi",
     "PersianName": "دافی",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["dafi", 
       "دافی",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -9078,11 +9078,11 @@
   {
     "ID": 2515,
     "Code": "31424021",
-    "Name": "",
+    "Name": "darungar",
     "PersianName": "درونگر",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["darungar", 
       "درونگر",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -9299,11 +9299,11 @@
   {
     "ID": 2598,
     "Code": "31361028",
-    "Name": "",
+    "Name": "rizeh",
     "PersianName": "ریزه",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["rizeh", 
       "ریزه",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -9984,11 +9984,11 @@
   {
     "ID": 2551,
     "Code": "31361023",
-    "Name": "",
+    "Name": "kariz-taybad",
     "PersianName": "کاریزتایباد",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["kariz-taybad", "kariz taybad", 
       "کاریزتایباد",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -10070,11 +10070,11 @@
   {
     "ID": 2501,
     "Code": "31421023",
-    "Name": "",
+    "Name": "kahu",
     "PersianName": "کاهو",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["kahu", 
       "کاهو",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -10096,11 +10096,11 @@
   {
     "ID": 2452,
     "Code": "31422023",
-    "Name": "",
+    "Name": "kabkan",
     "PersianName": "کبکان",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["kabkan", 
       "کبکان",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -10368,11 +10368,11 @@
   {
     "ID": 2574,
     "Code": "31363021",
-    "Name": "",
+    "Name": "mashhad-rizeh",
     "PersianName": "مشهدریزه",
     "ProvinceName": "Razavi-Khorasan",
     "ProvincePersianName": "خراسان رضوی",
-    "SearchExpressions": [
+    "SearchExpressions": ["mashhad-rizeh", "mashhad rizeh", 
       "مشهدریزه",
       "razavi-khorasan",
       "خراسان رضوی",
@@ -10540,11 +10540,11 @@
   {
     "ID": 2524,
     "Code": "32311031",
-    "Name": "",
+    "Name": "ayyub-bojnurd",
     "PersianName": "ایوب  بجنورد",
     "ProvinceName": "North-Khorasan",
     "ProvincePersianName": "خراسان شمالی",
-    "SearchExpressions": [
+    "SearchExpressions": ["ayyub-bojnurd", "ayyub bojnurd", 
       "ایوب  بجنورد",
       "north-khorasan",
       "خراسان شمالی",
@@ -10982,11 +10982,11 @@
   {
     "ID": 2478,
     "Code": "32321022",
-    "Name": "",
+    "Name": "miandasht",
     "PersianName": "میان  دشت",
     "ProvinceName": "North-Khorasan",
     "ProvincePersianName": "خراسان شمالی",
-    "SearchExpressions": [
+    "SearchExpressions": ["miandasht", 
       "میان  دشت",
       "north-khorasan",
       "خراسان شمالی",
@@ -11396,11 +11396,11 @@
   {
     "ID": 2545,
     "Code": "36411028",
-    "Name": "",
+    "Name": "darkhovin",
     "PersianName": "دارخوین",
     "ProvinceName": "Khuzestan",
     "ProvincePersianName": "خوزستان",
-    "SearchExpressions": ["دارخوین", "khuzestan", "خوزستان", "nhvo,dk", "o,csjhk", "دارخوين", "دارخوىن", "دارخوئن"],
+    "SearchExpressions": ["darkhovin", "دارخوین", "khuzestan", "خوزستان", "nhvo,dk", "o,csjhk", "دارخوين", "دارخوىن", "دارخوئن"],
     "IsCapital": false,
     "Order": 0
   },
@@ -11429,11 +11429,11 @@
   {
     "ID": 2583,
     "Code": "36461030",
-    "Name": "",
+    "Name": "sabzabad",
     "PersianName": "سبزآباد",
     "ProvinceName": "Khuzestan",
     "ProvincePersianName": "خوزستان",
-    "SearchExpressions": ["سبزآباد", "khuzestan", "خوزستان", "sfcHfhn", "o,csjhk", "سبزاباد"],
+    "SearchExpressions": ["sabzabad", "سبزآباد", "khuzestan", "خوزستان", "sfcHfhn", "o,csjhk", "سبزاباد"],
     "IsCapital": false,
     "Order": 0
   },
@@ -11809,11 +11809,11 @@
   {
     "ID": 2523,
     "Code": "67342021",
-    "Name": "",
+    "Name": "dandi",
     "PersianName": "دندی",
     "ProvinceName": "Zanjan",
     "ProvincePersianName": "زنجان",
-    "SearchExpressions": ["دندی", "zanjan", "زنجان", "nknd", "ck[hk", "دندي", "دندى", "دندئ"],
+    "SearchExpressions": ["dandi", "دندی", "zanjan", "زنجان", "nknd", "ck[hk", "دندي", "دندى", "دندئ"],
     "IsCapital": false,
     "Order": 0
   },
@@ -11867,11 +11867,11 @@
   {
     "ID": 2451,
     "Code": "67352000",
-    "Name": "",
+    "Name": "soltaniyeh",
     "PersianName": "سلطانیه",
     "ProvinceName": "Zanjan",
     "ProvincePersianName": "زنجان",
-    "SearchExpressions": ["سلطانیه", "zanjan", "زنجان", "sgxhkdi", "ck[hk", "سلطانيه", "سلطانىه", "سلطانئه"],
+    "SearchExpressions": ["soltaniyeh", "سلطانیه", "zanjan", "زنجان", "sgxhkdi", "ck[hk", "سلطانيه", "سلطانىه", "سلطانئه"],
     "IsCapital": false,
     "Order": 0
   },
@@ -12468,11 +12468,11 @@
   {
     "ID": 2459,
     "Code": "61333034",
-    "Name": "",
+    "Name": "rimdan",
     "PersianName": "ریمدان",
     "ProvinceName": "Sistan-and-Baluchestan ",
     "ProvincePersianName": "سیستان و بلوچستان",
-    "SearchExpressions": [
+    "SearchExpressions": ["rimdan", 
       "ریمدان",
       "sistan-and-baluchestan ",
       "سیستان و بلوچستان",
@@ -12767,11 +12767,11 @@
   {
     "ID": 2514,
     "Code": "61351004",
-    "Name": "",
+    "Name": "zabol-cement-factory",
     "PersianName": "کارخانه  سیمان  زابل",
     "ProvinceName": "Sistan-and-Baluchestan ",
     "ProvincePersianName": "سیستان و بلوچستان",
-    "SearchExpressions": [
+    "SearchExpressions": ["zabol-cement-factory", "zabol cement factory", 
       "کارخانه  سیمان  زابل",
       "sistan-and-baluchestan ",
       "سیستان و بلوچستان",
@@ -12804,11 +12804,11 @@
   {
     "ID": 2463,
     "Code": "61341026",
-    "Name": "",
+    "Name": "karvandar",
     "PersianName": "کارواندر",
     "ProvinceName": "Sistan-and-Baluchestan ",
     "ProvincePersianName": "سیستان و بلوچستان",
-    "SearchExpressions": [
+    "SearchExpressions": ["karvandar", 
       "کارواندر",
       "sistan-and-baluchestan ",
       "سیستان و بلوچستان",
@@ -13193,11 +13193,11 @@
   {
     "ID": 2491,
     "Code": "61470000",
-    "Name": "",
+    "Name": "nimruz",
     "PersianName": "نیمروز",
     "ProvinceName": "Sistan-and-Baluchestan ",
     "ProvincePersianName": "سیستان و بلوچستان",
-    "SearchExpressions": [
+    "SearchExpressions": ["nimruz", 
       "نیمروز",
       "sistan-and-baluchestan ",
       "سیستان و بلوچستان",
@@ -13397,11 +13397,11 @@
   {
     "ID": 2495,
     "Code": "41472021",
-    "Name": "",
+    "Name": "ahel",
     "PersianName": "اهل",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["اهل", "fars", "فارس", "hig", "thvs", "آهل"],
+    "SearchExpressions": ["ahel", "اهل", "fars", "فارس", "hig", "thvs", "آهل"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13497,11 +13497,11 @@
   {
     "ID": 2587,
     "Code": "41342023",
-    "Name": "",
+    "Name": "bagh-safa",
     "PersianName": "باغ  صفا",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["باغ  صفا", "fars", "فارس", "باغ", "صفا", "fhy", "wth", "thvs"],
+    "SearchExpressions": ["bagh-safa", "bagh safa", "باغ  صفا", "fars", "فارس", "باغ", "صفا", "fhy", "wth", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13530,11 +13530,11 @@
   {
     "ID": 2549,
     "Code": "41311007",
-    "Name": "",
+    "Name": "shiraz-petrochemical",
     "PersianName": "پتروشیمی  شیراز",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["shiraz-petrochemical", "shiraz petrochemical", 
       "پتروشیمی  شیراز",
       "fars",
       "فارس",
@@ -13567,33 +13567,33 @@
   {
     "ID": 2517,
     "Code": "41414021",
-    "Name": "",
+    "Name": "jelyan",
     "PersianName": "جلیان",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["جلیان", "fars", "فارس", "[gdhk", "thvs", "جليان", "جلىان", "جلئان"],
+    "SearchExpressions": ["jelyan", "جلیان", "fars", "فارس", "[gdhk", "thvs", "جليان", "جلىان", "جلئان"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2476,
     "Code": "41381021",
-    "Name": "",
+    "Name": "jannat-shahr",
     "PersianName": "جنت  شهر",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["جنت  شهر", "fars", "فارس", "جنت", "شهر", "[kj", "aiv", "thvs"],
+    "SearchExpressions": ["jannat-shahr", "jannat shahr", "جنت  شهر", "fars", "فارس", "جنت", "شهر", "[kj", "aiv", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2521,
     "Code": "41411022",
-    "Name": "",
+    "Name": "jangal-fasa",
     "PersianName": "جنگل  فسا",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["جنگل  فسا", "fars", "فارس", "جنگل", "فسا", "[k\u0027g", "tsh", "thvs"],
+    "SearchExpressions": ["jangal-fasa", "jangal fasa", "جنگل  فسا", "fars", "فارس", "جنگل", "فسا", "[k\u0027g", "tsh", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13632,11 +13632,11 @@
   {
     "ID": 2455,
     "Code": "41510000",
-    "Name": "",
+    "Name": "hajiabad-fars",
     "PersianName": "حاجی  آباد (فارس )",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["hajiabad-fars", "hajiabad fars", 
       "حاجی  آباد (فارس )",
       "fars",
       "فارس",
@@ -13695,44 +13695,44 @@
   {
     "ID": 2532,
     "Code": "41316021",
-    "Name": "",
+    "Name": "kherameh",
     "PersianName": "خرامه",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["خرامه", "fars", "فارس", "ovhli", "thvs"],
+    "SearchExpressions": ["kherameh", "خرامه", "fars", "فارس", "ovhli", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2568,
     "Code": "41331023",
-    "Name": "",
+    "Name": "khorrami",
     "PersianName": "خرمی",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["خرمی", "fars", "فارس", "ovld", "thvs", "خرمي", "خرمى", "خرمئ"],
+    "SearchExpressions": ["khorrami", "خرمی", "fars", "فارس", "ovld", "thvs", "خرمي", "خرمى", "خرمئ"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2525,
     "Code": "41443000",
-    "Name": "",
+    "Name": "khesht",
     "PersianName": "خشت",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["خشت", "fars", "فارس", "oaj", "thvs"],
+    "SearchExpressions": ["khesht", "خشت", "fars", "فارس", "oaj", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2461,
     "Code": "41372000",
-    "Name": "",
+    "Name": "khafr",
     "PersianName": "خفر",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["خفر", "fars", "فارس", "otv", "thvs"],
+    "SearchExpressions": ["khafr", "خفر", "fars", "فارس", "otv", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13761,33 +13761,33 @@
   {
     "ID": 2550,
     "Code": "41483000",
-    "Name": "",
+    "Name": "dorudzan",
     "PersianName": "درودزن",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["درودزن", "fars", "فارس", "nv,nck", "thvs"],
+    "SearchExpressions": ["dorudzan", "درودزن", "fars", "فارس", "nv,nck", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2585,
     "Code": "41383000",
-    "Name": "",
+    "Name": "rostagh",
     "PersianName": "رستاق  (فارس )",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["رستاق  (فارس )", "fars", "فارس", "رستاق", "(فارس", ")", "vsjhr", "(thvs", "thvs"],
+    "SearchExpressions": ["rostagh", "رستاق  (فارس )", "fars", "فارس", "رستاق", "(فارس", ")", "vsjhr", "(thvs", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2454,
     "Code": "41510001",
-    "Name": "",
+    "Name": "zarrin-dasht",
     "PersianName": "زرین دشت (حاجی آباد)",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["zarrin-dasht", "zarrin dasht", 
       "زرین دشت (حاجی آباد)",
       "fars",
       "فارس",
@@ -13814,22 +13814,22 @@
   {
     "ID": 2590,
     "Code": "41390000",
-    "Name": "",
+    "Name": "sepidan",
     "PersianName": "سپیدان",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["سپیدان", "fars", "فارس", "s\\dnhk", "thvs", "سپيدان", "سپىدان", "سپئدان"],
+    "SearchExpressions": ["sepidan", "سپیدان", "fars", "فارس", "s\\dnhk", "thvs", "سپيدان", "سپىدان", "سپئدان"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2546,
     "Code": "41491032",
-    "Name": "",
+    "Name": "sarvan",
     "PersianName": "سروان",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["سروان", "fars", "فارس", "sv,hk", "thvs"],
+    "SearchExpressions": ["sarvan", "سروان", "fars", "فارس", "sv,hk", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13880,11 +13880,11 @@
   {
     "ID": 2520,
     "Code": "41412000",
-    "Name": "",
+    "Name": "sheshdeh",
     "PersianName": "ششده",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["ششده", "fars", "فارس", "aani", "thvs"],
+    "SearchExpressions": ["sheshdeh", "ششده", "fars", "فارس", "aani", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13913,11 +13913,11 @@
   {
     "ID": 2554,
     "Code": "41331021",
-    "Name": "",
+    "Name": "safashahr",
     "PersianName": "صفاشهر",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["صفاشهر", "fars", "فارس", "wthaiv", "thvs"],
+    "SearchExpressions": ["safashahr", "صفاشهر", "fars", "فارس", "wthaiv", "thvs"],
     "IsCapital": false,
     "Order": 0
   },
@@ -13935,11 +13935,11 @@
   {
     "ID": 2589,
     "Code": "41384023",
-    "Name": "",
+    "Name": "fadami",
     "PersianName": "فدامی",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["فدامی", "fars", "فارس", "tnhld", "thvs", "فدامي", "فدامى", "فدامئ"],
+    "SearchExpressions": ["fadami", "فدامی", "fars", "فارس", "tnhld", "thvs", "فدامي", "فدامى", "فدامئ"],
     "IsCapital": false,
     "Order": 0
   },
@@ -14044,11 +14044,11 @@
   {
     "ID": 2519,
     "Code": "41374021",
-    "Name": "",
+    "Name": "qotbabad",
     "PersianName": "قطب  آباد (فارس )",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["qotbabad", 
       "قطب  آباد (فارس )",
       "fars",
       "فارس",
@@ -14115,11 +14115,11 @@
   {
     "ID": 2565,
     "Code": "41485000",
-    "Name": "",
+    "Name": "kamfiruz",
     "PersianName": "کام  فیروز",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["kamfiruz", 
       "کام  فیروز",
       "fars",
       "فارس",
@@ -14168,11 +14168,11 @@
   {
     "ID": 2513,
     "Code": "41443022",
-    "Name": "",
+    "Name": "komarej",
     "PersianName": "کمارج",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["کمارج", "fars", "فارس", ";lhv[", "thvs", "كمارج"],
+    "SearchExpressions": ["komarej", "کمارج", "fars", "فارس", ";lhv[", "thvs", "كمارج"],
     "IsCapital": false,
     "Order": 0
   },
@@ -14190,33 +14190,33 @@
   {
     "ID": 2570,
     "Code": "41610000",
-    "Name": "",
+    "Name": "kavar",
     "PersianName": "کوار",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["کوار", "fars", "فارس", ";,hv", "thvs", "كوار"],
+    "SearchExpressions": ["kavar", "کوار", "fars", "فارس", ";,hv", "thvs", "كوار"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2577,
     "Code": "41453022",
-    "Name": "",
+    "Name": "kushkak",
     "PersianName": "کوشکک  (فارس )",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["کوشکک  (فارس )", "fars", "فارس", "کوشکک", "(فارس", ")", ";,a;;", "(thvs", "thvs", "كوشكك"],
+    "SearchExpressions": ["kushkak", "کوشکک  (فارس )", "fars", "فارس", "کوشکک", "(فارس", ")", ";,a;;", "(thvs", "thvs", "كوشكك"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2547,
     "Code": "41312024",
-    "Name": "",
+    "Name": "kuhmareh-sorkhi",
     "PersianName": "کوهمره  سرخی",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["kuhmareh-sorkhi", "kuhmareh sorkhi", 
       "کوهمره  سرخی",
       "fars",
       "فارس",
@@ -14236,11 +14236,11 @@
   {
     "ID": 2518,
     "Code": "41562000",
-    "Name": "",
+    "Name": "kuhenjan",
     "PersianName": "کوهنجان",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": ["کوهنجان", "fars", "فارس", ";,ik[hk", "thvs", "كوهنجان"],
+    "SearchExpressions": ["kuhenjan", "کوهنجان", "fars", "فارس", ";,ik[hk", "thvs", "كوهنجان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -14356,11 +14356,11 @@
   {
     "ID": 2542,
     "Code": "41432000",
-    "Name": "",
+    "Name": "meymand",
     "PersianName": "میمند (فارس )",
     "ProvinceName": "Fars",
     "ProvincePersianName": "فارس",
-    "SearchExpressions": [
+    "SearchExpressions": ["meymand", 
       "میمند (فارس )",
       "fars",
       "فارس",
@@ -14698,11 +14698,11 @@
   {
     "ID": 2462,
     "Code": "15341021",
-    "Name": "",
+    "Name": "ziaran",
     "PersianName": "زیاران",
     "ProvinceName": "Qazvin",
     "ProvincePersianName": "قزوین",
-    "SearchExpressions": [
+    "SearchExpressions": ["ziaran", 
       "زیاران",
       "qazvin",
       "قزوین",
@@ -14732,11 +14732,11 @@
   {
     "ID": 2499,
     "Code": "15333000",
-    "Name": "",
+    "Name": "ziaabad",
     "PersianName": "ضیاء آباد",
     "ProvinceName": "Qazvin",
     "ProvincePersianName": "قزوین",
-    "SearchExpressions": [
+    "SearchExpressions": ["ziaabad", 
       "ضیاء آباد",
       "qazvin",
       "قزوین",
@@ -14770,11 +14770,11 @@
   {
     "ID": 2544,
     "Code": "15341022",
-    "Name": "",
+    "Name": "kuhpayeh-abyek",
     "PersianName": "کوهپایه  آبیک",
     "ProvinceName": "Qazvin",
     "ProvincePersianName": "قزوین",
-    "SearchExpressions": [
+    "SearchExpressions": ["kuhpayeh-abyek", "kuhpayeh abyek", 
       "کوهپایه  آبیک",
       "qazvin",
       "قزوین",
@@ -14933,11 +14933,11 @@
   {
     "ID": 2575,
     "Code": "14311024",
-    "Name": "",
+    "Name": "qanavat",
     "PersianName": "قنوات",
     "ProvinceName": "Qom",
     "ProvincePersianName": "قم",
-    "SearchExpressions": ["قنوات", "qom", "قم", "rk,hj", "rl"],
+    "SearchExpressions": ["qanavat", "قنوات", "qom", "قم", "rk,hj", "rl"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15375,11 +15375,11 @@
   {
     "ID": 2584,
     "Code": "45316022",
-    "Name": "",
+    "Name": "jupar",
     "PersianName": "جوپار",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["جوپار", "kerman", "کرمان", "[,\\hv", ";vlhk", "كرمان"],
+    "SearchExpressions": ["jupar", "جوپار", "kerman", "کرمان", "[,\\hv", ";vlhk", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15397,33 +15397,33 @@
   {
     "ID": 2480,
     "Code": "45391025",
-    "Name": "",
+    "Name": "chahar-gonbad",
     "PersianName": "چهارگنبد",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["چهارگنبد", "kerman", "کرمان", "]ihv\u0027kfn", ";vlhk", "كرمان"],
+    "SearchExpressions": ["chahar-gonbad", "chahar gonbad", "چهارگنبد", "kerman", "کرمان", "]ihv\u0027kfn", ";vlhk", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2530,
     "Code": "45331022",
-    "Name": "",
+    "Name": "khabr-baft",
     "PersianName": "خبر بافت",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["خبر بافت", "kerman", "کرمان", "خبر", "بافت", "ofv", "fhtj", ";vlhk", "كرمان"],
+    "SearchExpressions": ["khabr-baft", "khabr baft", "خبر بافت", "kerman", "کرمان", "خبر", "بافت", "ofv", "fhtj", ";vlhk", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2595,
     "Code": "45351022",
-    "Name": "",
+    "Name": "dehbakri",
     "PersianName": "دهبکری",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": [
+    "SearchExpressions": ["dehbakri", 
       "دهبکری",
       "kerman",
       "کرمان",
@@ -15488,11 +15488,11 @@
   {
     "ID": 2596,
     "Code": "45511026",
-    "Name": "",
+    "Name": "rahmatabad-bam",
     "PersianName": "رحمت  آباد بم",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": [
+    "SearchExpressions": ["rahmatabad-bam", "rahmatabad bam", 
       "رحمت  آباد بم",
       "kerman",
       "کرمان",
@@ -15572,11 +15572,11 @@
   {
     "ID": 2440,
     "Code": "45442021",
-    "Name": "",
+    "Name": "zehkalut",
     "PersianName": "زهکلوت",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["زهکلوت", "kerman", "کرمان", "ci;g,j", ";vlhk", "زهكلوت", "كرمان"],
+    "SearchExpressions": ["zehkalut", "زهکلوت", "kerman", "کرمان", "ci;g,j", ";vlhk", "زهكلوت", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15629,11 +15629,11 @@
   {
     "ID": 2529,
     "Code": "45314024",
-    "Name": "",
+    "Name": "sirch",
     "PersianName": "سیرچ",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["سیرچ", "kerman", "کرمان", "sdv]", ";vlhk", "سيرچ", "سىرچ", "سئرچ", "كرمان"],
+    "SearchExpressions": ["sirch", "سیرچ", "kerman", "کرمان", "sdv]", ";vlhk", "سيرچ", "سىرچ", "سئرچ", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15707,11 +15707,11 @@
   {
     "ID": 2594,
     "Code": "45510000",
-    "Name": "",
+    "Name": "fahraj-kerman",
     "PersianName": "فهرج  (کرمان )",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": [
+    "SearchExpressions": ["fahraj-kerman", "fahraj kerman", 
       "فهرج  (کرمان )",
       "kerman",
       "کرمان",
@@ -15752,11 +15752,11 @@
   {
     "ID": 2509,
     "Code": "45371031",
-    "Name": "",
+    "Name": "kabutar-khan",
     "PersianName": "کبوترخان",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["کبوترخان", "kerman", "کرمان", ";f,jvohk", ";vlhk", "كبوترخان", "كرمان"],
+    "SearchExpressions": ["kabutar-khan", "kabutar khan", "کبوترخان", "kerman", "کرمان", ";f,jvohk", ";vlhk", "كبوترخان", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15860,11 +15860,11 @@
   {
     "ID": 2593,
     "Code": "45482000",
-    "Name": "",
+    "Name": "gonbaki",
     "PersianName": "گنبکی",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": [
+    "SearchExpressions": ["gonbaki", 
       "گنبکی",
       "kerman",
       "کرمان",
@@ -15885,11 +15885,11 @@
   {
     "ID": 2537,
     "Code": "45341026",
-    "Name": "",
+    "Name": "lalehzar",
     "PersianName": "لاله زار",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": ["لاله زار", "kerman", "کرمان", "لاله", "زار", "ghgi", "chv", ";vlhk", "كرمان"],
+    "SearchExpressions": ["lalehzar", "لاله زار", "kerman", "کرمان", "لاله", "زار", "ghgi", "chv", ";vlhk", "كرمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -15933,11 +15933,11 @@
   {
     "ID": 2460,
     "Code": "45391004",
-    "Name": "",
+    "Name": "gol-gohar-mine",
     "PersianName": "معدن  گل  گهر",
     "ProvinceName": "Kerman",
     "ProvincePersianName": "کرمان",
-    "SearchExpressions": [
+    "SearchExpressions": ["gol-gohar-mine", "gol gohar mine", 
       "معدن  گل  گهر",
       "kerman",
       "کرمان",
@@ -16132,11 +16132,11 @@
   {
     "ID": 2531,
     "Code": "71381029",
-    "Name": "",
+    "Name": "jeyhunabad",
     "PersianName": "جیحون  آباد (کرمانشاه )",
     "ProvinceName": "Kermanshah",
     "ProvincePersianName": "کرمانشاه",
-    "SearchExpressions": [
+    "SearchExpressions": ["jeyhunabad", 
       "جیحون  آباد (کرمانشاه )",
       "kermanshah",
       "کرمانشاه",
@@ -16227,11 +16227,11 @@
   {
     "ID": 2474,
     "Code": "71372000",
-    "Name": "",
+    "Name": "sumar",
     "PersianName": "سومار",
     "ProvinceName": "Kermanshah",
     "ProvincePersianName": "کرمانشاه",
-    "SearchExpressions": ["سومار", "kermanshah", "کرمانشاه", "s,lhv", ";vlhkahi", "كرمانشاه"],
+    "SearchExpressions": ["sumar", "سومار", "kermanshah", "کرمانشاه", "s,lhv", ";vlhkahi", "كرمانشاه"],
     "IsCapital": false,
     "Order": 0
   },
@@ -16397,11 +16397,11 @@
   {
     "ID": 2540,
     "Code": "85370000",
-    "Name": "",
+    "Name": "basht",
     "PersianName": "باشت",
     "ProvinceName": "Kohgiluyeh-and-Boyer-Ahmad",
     "ProvincePersianName": "کهگیلویه و بویراحمد",
-    "SearchExpressions": [
+    "SearchExpressions": ["basht", 
       "باشت",
       "kohgiluyeh-and-boyer-ahmad",
       "کهگیلویه و بویراحمد",
@@ -16598,11 +16598,11 @@
   {
     "ID": 2591,
     "Code": "85341023",
-    "Name": "",
+    "Name": "sisakht",
     "PersianName": "سی  سخت",
     "ProvinceName": "Kohgiluyeh-and-Boyer-Ahmad",
     "ProvincePersianName": "کهگیلویه و بویراحمد",
-    "SearchExpressions": [
+    "SearchExpressions": ["sisakht", 
       "سی  سخت",
       "kohgiluyeh-and-boyer-ahmad",
       "کهگیلویه و بویراحمد",
@@ -16717,11 +16717,11 @@
   {
     "ID": 2468,
     "Code": "85310001",
-    "Name": "",
+    "Name": "yasuj",
     "PersianName": "یاسوج  (بویراحمد)",
     "ProvinceName": "Kohgiluyeh-and-Boyer-Ahmad",
     "ProvincePersianName": "کهگیلویه و بویراحمد",
-    "SearchExpressions": [
+    "SearchExpressions": ["yasuj", 
       "یاسوج  (بویراحمد)",
       "kohgiluyeh-and-boyer-ahmad",
       "کهگیلویه و بویراحمد",
@@ -16877,11 +16877,11 @@
   {
     "ID": 2469,
     "Code": "97320001",
-    "Name": "",
+    "Name": "torkaman-golestan",
     "PersianName": "ترکمن",
     "ProvinceName": "Golestan",
     "ProvincePersianName": "گلستان",
-    "SearchExpressions": ["ترکمن", "golestan", "گلستان", "jv;lk", "\u0027gsjhk", "تركمن"],
+    "SearchExpressions": ["torkaman-golestan", "torkaman golestan", "ترکمن", "golestan", "گلستان", "jv;lk", "\u0027gsjhk", "تركمن"],
     "IsCapital": false,
     "Order": 0
   },
@@ -16912,11 +16912,11 @@
   {
     "ID": 2471,
     "Code": "97411021",
-    "Name": "",
+    "Name": "deland",
     "PersianName": "دلند",
     "ProvinceName": "Golestan",
     "ProvincePersianName": "گلستان",
-    "SearchExpressions": ["دلند", "golestan", "گلستان", "ngkn", "\u0027gsjhk"],
+    "SearchExpressions": ["deland", "دلند", "golestan", "گلستان", "ngkn", "\u0027gsjhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -16969,11 +16969,11 @@
   {
     "ID": 2458,
     "Code": "97313023",
-    "Name": "",
+    "Name": "qoroq",
     "PersianName": "قرق",
     "ProvinceName": "Golestan",
     "ProvincePersianName": "گلستان",
-    "SearchExpressions": ["قرق", "golestan", "گلستان", "rvr", "\u0027gsjhk"],
+    "SearchExpressions": ["qoroq", "قرق", "golestan", "گلستان", "rvr", "\u0027gsjhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18147,11 +18147,11 @@
   {
     "ID": 2511,
     "Code": "81382022",
-    "Name": "",
+    "Name": "chalanchulan",
     "PersianName": "چالانچولان",
     "ProvinceName": "Lorestan",
     "ProvincePersianName": "لرستان",
-    "SearchExpressions": ["چالانچولان", "lorestan", "لرستان", "]hghk],ghk", "gvsjhk"],
+    "SearchExpressions": ["chalanchulan", "چالانچولان", "lorestan", "لرستان", "]hghk],ghk", "gvsjhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18318,11 +18318,11 @@
   {
     "ID": 2445,
     "Code": "16000000",
-    "Name": "",
+    "Name": "mazandaran-province",
     "PersianName": "استان  مازندران",
     "ProvinceName": "Mazandaran",
     "ProvincePersianName": "مازندران",
-    "SearchExpressions": ["استان  مازندران", "mazandaran", "مازندران", "استان", "hsjhk", "lhcknvhk", "آستان"],
+    "SearchExpressions": ["mazandaran-province", "mazandaran province", "استان  مازندران", "mazandaran", "مازندران", "استان", "hsjhk", "lhcknvhk", "آستان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18373,11 +18373,11 @@
   {
     "ID": 2588,
     "Code": "16343000",
-    "Name": "",
+    "Name": "bahnamir",
     "PersianName": "بهنمیر",
     "ProvinceName": "Mazandaran",
     "ProvincePersianName": "مازندران",
-    "SearchExpressions": ["بهنمیر", "mazandaran", "مازندران", "fikldv", "lhcknvhk", "بهنمير", "بهنمىر", "بهنمئر"],
+    "SearchExpressions": ["bahnamir", "بهنمیر", "mazandaran", "مازندران", "fikldv", "lhcknvhk", "بهنمير", "بهنمىر", "بهنمئر"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18438,11 +18438,11 @@
   {
     "ID": 2533,
     "Code": "16321041",
-    "Name": "",
+    "Name": "khorasan-mahalleh",
     "PersianName": "خراسان  محله",
     "ProvinceName": "Mazandaran",
     "ProvincePersianName": "مازندران",
-    "SearchExpressions": ["خراسان  محله", "mazandaran", "مازندران", "خراسان", "محله", "ovhshk", "lpgi", "lhcknvhk"],
+    "SearchExpressions": ["khorasan-mahalleh", "khorasan mahalleh", "خراسان  محله", "mazandaran", "مازندران", "خراسان", "محله", "ovhshk", "lpgi", "lhcknvhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18696,11 +18696,11 @@
   {
     "ID": 2548,
     "Code": "16512022",
-    "Name": "",
+    "Name": "nashtarud",
     "PersianName": "نشتارود",
     "ProvinceName": "Mazandaran",
     "ProvincePersianName": "مازندران",
-    "SearchExpressions": ["نشتارود", "mazandaran", "مازندران", "kajhv,n", "lhcknvhk"],
+    "SearchExpressions": ["nashtarud", "نشتارود", "mazandaran", "مازندران", "kajhv,n", "lhcknvhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -18791,11 +18791,11 @@
   {
     "ID": 2510,
     "Code": "51381022",
-    "Name": "",
+    "Name": "abgarm-mahallat",
     "PersianName": "آبگرم  محلات",
     "ProvinceName": "Markazi",
     "ProvincePersianName": "مرکزی",
-    "SearchExpressions": [
+    "SearchExpressions": ["abgarm-mahallat", "abgarm mahallat", 
       "آبگرم  محلات",
       "markazi",
       "مرکزی",
@@ -19406,11 +19406,11 @@
   {
     "ID": 2484,
     "Code": "51331032",
-    "Name": "",
+    "Name": "kahak-tafresh",
     "PersianName": "کهک  تفرش",
     "ProvinceName": "Markazi",
     "ProvincePersianName": "مرکزی",
-    "SearchExpressions": [
+    "SearchExpressions": ["kahak-tafresh", "kahak tafresh", 
       "کهک  تفرش",
       "markazi",
       "مرکزی",
@@ -19649,11 +19649,11 @@
   {
     "ID": 2536,
     "Code": "51391023",
-    "Name": "",
+    "Name": "vafs",
     "PersianName": "وفس",
     "ProvinceName": "Markazi",
     "ProvincePersianName": "مرکزی",
-    "SearchExpressions": [
+    "SearchExpressions": ["vafs", 
       "وفس",
       "markazi",
       "مرکزی",
@@ -19673,11 +19673,11 @@
   {
     "ID": 2543,
     "Code": "51373000",
-    "Name": "",
+    "Name": "hendudar",
     "PersianName": "هندودر",
     "ProvinceName": "Markazi",
     "ProvincePersianName": "مرکزی",
-    "SearchExpressions": [
+    "SearchExpressions": ["hendudar", 
       "هندودر",
       "markazi",
       "مرکزی",
@@ -19697,22 +19697,22 @@
   {
     "ID": 2446,
     "Code": "64390000",
-    "Name": "",
+    "Name": "bastak",
     "PersianName": "بستک",
     "ProvinceName": "Hormozgan",
     "ProvincePersianName": "هرمزگان",
-    "SearchExpressions": ["بستک", "hormozgan", "هرمزگان", "fsj;", "ivlc\u0027hk", "بستك"],
+    "SearchExpressions": ["bastak", "بستک", "hormozgan", "هرمزگان", "fsj;", "ivlc\u0027hk", "بستك"],
     "IsCapital": false,
     "Order": 0
   },
   {
     "ID": 2477,
     "Code": "64320001",
-    "Name": "",
+    "Name": "bandar-jask",
     "PersianName": "بندرجاسک",
     "ProvinceName": "Hormozgan",
     "ProvincePersianName": "هرمزگان",
-    "SearchExpressions": ["بندرجاسک", "hormozgan", "هرمزگان", "fknv[hs;", "ivlc\u0027hk", "بندرجاسك"],
+    "SearchExpressions": ["bandar-jask", "bandar jask", "بندرجاسک", "hormozgan", "هرمزگان", "fknv[hs;", "ivlc\u0027hk", "بندرجاسك"],
     "IsCapital": false,
     "Order": 0
   },
@@ -19894,11 +19894,11 @@
   {
     "ID": 2576,
     "Code": "64313000",
-    "Name": "",
+    "Name": "fin",
     "PersianName": "فین  (هرمزگان )",
     "ProvinceName": "Hormozgan",
     "ProvincePersianName": "هرمزگان",
-    "SearchExpressions": [
+    "SearchExpressions": ["fin", 
       "فین  (هرمزگان )",
       "hormozgan",
       "هرمزگان",
@@ -20032,11 +20032,11 @@
   {
     "ID": 2581,
     "Code": "75373024",
-    "Name": "",
+    "Name": "avarzaman",
     "PersianName": "اورزمان",
     "ProvinceName": "Hamadan",
     "ProvincePersianName": "همدان",
-    "SearchExpressions": ["اورزمان", "hamadan", "همدان", "h,vclhk", "ilnhk", "آورزمان"],
+    "SearchExpressions": ["avarzaman", "اورزمان", "hamadan", "همدان", "h,vclhk", "ilnhk", "آورزمان"],
     "IsCapital": false,
     "Order": 0
   },
@@ -20237,11 +20237,11 @@
   {
     "ID": 2493,
     "Code": "75312022",
-    "Name": "",
+    "Name": "qahavand",
     "PersianName": "قهاوند",
     "ProvinceName": "Hamadan",
     "ProvincePersianName": "همدان",
-    "SearchExpressions": ["قهاوند", "hamadan", "همدان", "rih,kn", "ilnhk"],
+    "SearchExpressions": ["qahavand", "قهاوند", "hamadan", "همدان", "rih,kn", "ilnhk"],
     "IsCapital": false,
     "Order": 0
   },
@@ -20345,11 +20345,11 @@
   {
     "ID": 2539,
     "Code": "93360001",
-    "Name": "",
+    "Name": "abarghu",
     "PersianName": "ابرقو (ابرکوه )",
     "ProvinceName": "Yazd",
     "ProvincePersianName": "یزد",
-    "SearchExpressions": [
+    "SearchExpressions": ["abarghu", 
       "ابرقو (ابرکوه )",
       "yazd",
       "یزد",
@@ -20478,11 +20478,11 @@
   {
     "ID": 2481,
     "Code": "93351023",
-    "Name": "",
+    "Name": "shirkuh",
     "PersianName": "شیرکوه",
     "ProvinceName": "Yazd",
     "ProvincePersianName": "یزد",
-    "SearchExpressions": [
+    "SearchExpressions": ["shirkuh", 
       "شیرکوه",
       "yazd",
       "یزد",
@@ -20505,11 +20505,11 @@
   {
     "ID": 2597,
     "Code": "93311022",
-    "Name": "",
+    "Name": "fahraj-yazd",
     "PersianName": "فهرج",
     "ProvinceName": "Yazd",
     "ProvincePersianName": "یزد",
-    "SearchExpressions": ["فهرج", "yazd", "یزد", "tiv[", "dcn", "يزد", "ىزد", "ئزد"],
+    "SearchExpressions": ["fahraj-yazd", "fahraj yazd", "فهرج", "yazd", "یزد", "tiv[", "dcn", "يزد", "ىزد", "ئزد"],
     "IsCapital": false,
     "Order": 0
   },

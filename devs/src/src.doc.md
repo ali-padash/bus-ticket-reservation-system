@@ -158,8 +158,8 @@ called per key press.
   There is no retry button; reloading the page tries again.
 - **One list serves both languages** (2026-10-12). Each city carries every spelling a visitor
   might type, Persian and English, so the same typing finds the same cities on either page;
-  only the name and province shown come from the page's language. 120 of the 915 cities have
-  no English name in the data and are shown with their Persian one.
+  only the name and province shown come from the page's language. All 915 cities have an
+  English name since 2026-10-12 (120 were filled in by hand in `util/cities.json`).
 - **The results page does not wait for the list to search.** The address holds city IDs, and
   the trips call needs only those. The list is needed only to write the two city names into
   the boxes, which happens when it arrives.
@@ -217,6 +217,7 @@ sent ("hold, then pay").
 | The two city boxes before "search" is pressed | `SearchPanel` | A draft only this panel cares about. |
 | Chosen seats and the step of the booking page | The address (`BookingPage` reads it) | So refresh and back keep the buyer's place. |
 | What is typed into the passenger form | `BookingPage` | Personal details do not belong in the address; they are gone after a refresh. |
+| Passengers and phone the visitor asked to be remembered | `localStorage` (`util/SavedPassengers.ts`) | Only if the box on the form is ticked. It stays on the device; the API has no accounts to keep it in. |
 | The buyer's phone for one ticket | `sessionStorage`, per tab | Needed to open the ticket after a refresh, but must not be in the address. |
 | The ticket | The server; `TicketPage` holds the last copy it received | The server decides whether a hold is alive, paid or gone. |
 | Which trip's seat map is open | `ServicesDisplay` | The parent of all the cards, so opening one closes the others. |
@@ -262,6 +263,9 @@ Still open:
 
 - The seats-were-just-taken message and the countdown reaching zero were not seen in the
   browser in English; they use the same code as in Persian.
-- A birth date typed before switching language stays as typed and is then read in the other
-  calendar. It is refused as not valid, so nothing wrong is sent, but the visitor has to
-  type it again.
+- Fixed on 2026-10-12: a birth date typed before switching language is now written again in
+  the other calendar by `BookingPage`, so the same day stays in the box.
+- Changed on the Persian pages on 2026-10-12, on purpose: the refund box in a trip card shows
+  the trip's own terms from the API (its two fixed lines said 10% beside a badge of 50); the
+  passenger form has a "remember these passengers" box; and below 1000px wide the results
+  page has its own layout (it used to run its texts into each other).

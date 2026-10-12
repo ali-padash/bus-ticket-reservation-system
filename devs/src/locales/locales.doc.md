@@ -1,6 +1,6 @@
 # devs/src/locales
 
-*Written 2026-10-12.*
+*Written 2026-10-12, updated the same day.*
 
 Every text a visitor can read, once per language. No component has a sentence written into it.
 
@@ -73,7 +73,10 @@ const { t } = useLocale();
   The English is a plain translation of them and adds no claim of its own.
 - `home.dateTooltip` is the English word "date" in the Persian file too. It was like that
   before and was left alone.
-- `refund.sampleLate` says 10% beside a badge that says 50. That is the old, known mistake of
-  the fixed refund box (see `components.doc.md`); both languages repeat it faithfully.
+- The count is still 245 after the second round of 2026-10-12: `refund.sampleEarly` and
+  `refund.sampleLate` (the two fixed lines of the old refund box, one of which said 10%
+  beside a badge of 50) were removed, and `passengers.saved` and `passengers.remember` were
+  added. The trip card now words the real terms with `refund.upTo`, `refund.lessThan` and
+  `refund.untilDeparture`.
 - The support phone number is not a text: it lives in `util/Locale.ts` and is shown in the
   page's digits.

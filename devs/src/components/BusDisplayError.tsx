@@ -5,6 +5,7 @@ import s from "../assets/css/busDetails.module.css";
 import { useLocale } from "../util/useLocale";
 
 interface Props {
+  tripID: number;
   retry: () => void;
 }
 
@@ -17,7 +18,7 @@ const placeholderLayout = [
   [3, 6, 9, 12, 15, 16, 17, 20, 23, 26, 29, 32],
 ];
 
-const BusSchemaError = ({ retry }: Props) => {
+const BusSchemaError = ({ tripID, retry }: Props) => {
   const { t } = useLocale();
   return (
     <div style={{ marginTop: "40px" }}>
@@ -34,7 +35,7 @@ const BusSchemaError = ({ retry }: Props) => {
         <BusSchema layout={placeholderLayout} seats={[]} blur={true} />
         <Legend className={s.legend} />
       </div>
-      <RefundBox />
+      <RefundBox tripID={tripID} />
     </div>
   );
 };
