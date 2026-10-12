@@ -46,6 +46,13 @@ build failed.
 The site expects the Go backend on `http://localhost:8080`. To point it elsewhere, create
 `devs/.env.local` containing `VITE_API_URL=http://localhost:18080` (or whatever address you use).
 
+## Bundle size
+
+*Written 2026-10-12.*
+
+`npm run build` gives one JavaScript file of **219.27 kB (70.96 kB gzipped)**. It was 480.66 kB
+(115.01 kB gzipped) while the city list was bundled in; the list now comes from the API.
+
 ## Packages
 
 *Written 2026-10-12.*

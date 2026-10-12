@@ -24,7 +24,7 @@ All frontend code.
 | `/` | `MainPage` — landing page with the search form |
 | `/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD` | `ServicePage` — search results |
 
-`from` and `to` are city IDs from `util/cities.json`. A link without a usable `date` means
+`from` and `to` are city IDs, the same IDs the API's city list uses. A link without a usable `date` means
 today. A link without two known cities shows the error text and the "please enter" message.
 
 There is no "not found" route.
@@ -37,6 +37,9 @@ There is no "not found" route.
 shared link repeats the same search.
 
 ```
+App
+   │  asks for the city list once (GET /api/v1/cities) and hands it to both pages
+   ▼
 HomeHeader (form on "/")
    │  holds origin, destination (City | null) and the date in its own state
    │  navigate("/services?from=1&to=21&date=2026-10-14")
@@ -53,6 +56,27 @@ ServicePage (on "/services")
 
 Values go down by props and changes come back up through callbacks. There is no shared store.
 
+### The city list
+
+*Written 2026-10-12.*
+
+The 915 cities used to be bundled into the JavaScript. Now `App` fetches them once from
+`GET /api/v1/cities` and passes `cities` and `citiesStatus` (`loading`, `ready` or `error`)
+down to the two forms. Filtering while typing still happens in the browser; the API is never
+called per key press.
+
+- **Why in `App`:** it is the one component that is never removed, so going from the home page
+  to the results page does not fetch again. Repeat visits are covered by the browser's own
+  cache (the server sends `Cache-Control` and an `ETag`).
+- **While loading**, the city boxes are read-only and show "در حال بارگذاری ...".
+- **If the call fails**, they stay read-only and show "خطا در دریافت فهرست شهرها". There is no
+  retry button; reloading the page tries again.
+- **The results page does not wait for the list to search.** The address holds city IDs, and
+  the trips call needs only those. The list is needed only to write the two city names into
+  the boxes, which happens when it arrives.
+- Bundle size: 480.66 kB (115.01 kB gzipped) before, **219.27 kB (70.96 kB gzipped)** after.
+  The list itself travels as 47 kB.
+
 ## Who owns which state
 
 *Written 2026-10-12.*
@@ -60,6 +84,7 @@ Values go down by props and changes come back up through callbacks. There is no 
 | State | Owner | Why there |
 | --- | --- | --- |
 | Origin, destination, date of the search on screen | The address (`ServicePage` reads it) | So the search survives a refresh and can be shared. |
+| The city list and whether it has arrived | `App` | Both pages need it, and `App` outlives both. |
 | Search result, "did the call fail" | `ServicePage` | The page makes the call and three children show the result. |
 | Sort choice, company and terminal filters | `ServicePage` | `FilterSearch` changes them and `ServicesDisplay` uses them; the page is their common parent. |
 | The two city boxes before "search" is pressed | `SearchPanel` | A draft only this panel cares about. |

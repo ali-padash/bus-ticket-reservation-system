@@ -11,6 +11,8 @@ The landing page. It stacks these components top to bottom:
 `WholeNavbar` → `HomeHeader` (search form) → `BlueHeader` (four "how it works" cards) →
 `TwoColumns` (three info cards plus an FAQ) → `PositivePoints` → `BottomNavbar`.
 
+It receives the city list from `App` and passes it on to the form.
+
 It owns two pieces of state: which city box has the focus, and whether the calendar is open.
 They live here because two children need them: the form, and the navbar, which dims while
 either is true. Everything else about the form (the keyboard handling included) is in
@@ -42,10 +44,13 @@ State it owns and hands down:
 
 Details worth knowing:
 
+- The page receives the city list from `App`, but does not wait for it: the trips call uses
+  the city IDs from the address. The list only fills the two city boxes with names.
 - A new search puts the three filters back to "all".
 - A call that is overtaken by a newer one is cancelled with `AbortController`.
-- `SearchPanel` gets a `key` made of the two city IDs. When the cities in the address change
-  (a new search or the back button) React starts the panel afresh, so its two boxes always
+- `SearchPanel` gets a `key` made of the two city IDs and the state of the city list. When
+  the cities in the address change (a new search or the back button), or the list arrives,
+  React starts the panel afresh, so its two boxes always
   begin from the address. That is simpler than copying props into state with an effect.
 - The day strip and the calendar change only the `date` of the search on screen. The city
   boxes take effect when "search" is pressed (or the swap button, which searches at once).

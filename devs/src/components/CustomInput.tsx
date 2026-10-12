@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import CustomAutocomplete from "./CustomAutocomplete";
 import s from "../assets/css/homeHeader.module.css";
-import { City } from "../util/Models";
+import { CitiesStatus, City } from "../util/Models";
 
 interface Props {
   covered: boolean;
   calendarOpen: boolean;
   cities: City[];
+  citiesStatus: CitiesStatus;
   className: string;
   placeholder: string;
   value: City | null;
@@ -25,6 +26,7 @@ const CustomInput = ({
   covered,
   calendarOpen,
   cities,
+  citiesStatus,
   className,
   placeholder,
   value,
@@ -68,6 +70,7 @@ const CustomInput = ({
       <div className="triangle-right"></div>
       <CustomAutocomplete
         cities={cities}
+        citiesStatus={citiesStatus}
         placeholder={placeholder}
         value={value}
         onChange={onChange}

@@ -9,10 +9,10 @@ A mixed bag: types, helper functions, API calls, big data files, and one Python 
 | File | Contents | Used? |
 | --- | --- | --- |
 | `Models.ts` | TypeScript types: `City`, `Service`, `ServiceResponse`, `SeatStatus`, `SeatType`, `SeatArrayType`. They match the API contract in `backend/internal/httpapi/httpapi.doc.md`. | Yes |
-| `FetchFunction.ts` | The three API calls: `fetchServices` (`GET /trips`), `fetchSeats` (`GET /trips/{id}/seats`), `fetchNumberOfAvailableSeats` (`GET /trips/{id}/availability`). | Yes |
+| `FetchFunction.ts` | The four API calls: `fetchCities` (`GET /cities`), `fetchServices` (`GET /trips`), `fetchSeats` (`GET /trips/{id}/seats`), `fetchNumberOfAvailableSeats` (`GET /trips/{id}/availability`). | Yes |
 | `Function.ts` | Small helpers, see below. | Yes |
 | `BusModels.ts` | Seat layouts for four bus types plus one dummy layout. | Yes |
-| `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Yes |
+| `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
 | `addCitiesJsonToDatabase.py` | One-off script that loads `cities.json` into Postgres. | By hand only |
 
 Deleted on 2026-10-12 because nothing used them: `Constant.ts`, `serviceResponse.json`, and
@@ -22,7 +22,7 @@ Deleted on 2026-10-12 because nothing used them: `Constant.ts`, `serviceResponse
 
 *Written 2026-10-12.*
 
-The three calls share one small function, `getJSON`, which builds the address, turns a status
+The four calls share one small function, `getJSON`, which builds the address, turns a status
 outside 200–299 into an error, and parses the JSON. Each call accepts an `AbortSignal`, so a
 call that is no longer wanted can be cancelled.
 
@@ -70,8 +70,8 @@ Any other bus code gives an empty map.
 - **`addCitiesJsonToDatabase.py` contains an old database host, user and password.** That
   database has been deleted, so the password opens nothing. The script is no longer needed:
   `go run ./cmd/api seed` in `backend/` loads the cities. It should be deleted.
-- `cities.json` is bundled into the JavaScript, so every visitor downloads 490 KB before the
-  page works. Better: a `/cities?q=` endpoint, or at least a lazy import.
+- `cities.json` is no longer used by the website but still lives in the website's folder,
+  because the backend seed reads it from here. It would sit better next to the seed.
 - `getFirstWeekday` splits a locale-formatted date string to get the month and year, which
   depends on the browser.
 - File names are vague (`Function.ts`, `Models.ts`) and use capital letters, unlike the usual

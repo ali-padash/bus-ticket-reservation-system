@@ -2,10 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "../assets/css/searchPanel.css";
 import CustomAutocomplete from "./CustomAutocomplete";
 import CalenderInput from "./CalendarInput";
-import cities from "../util/cities.json";
-import { City } from "../util/Models";
+import { CitiesStatus, City } from "../util/Models";
 
 interface Props {
+  cities: City[];
+  citiesStatus: CitiesStatus;
   initialOrigin: City | null;
   initialDestination: City | null;
   selectedDate: Date;
@@ -17,11 +18,21 @@ interface Props {
 // cities of the search on screen and only become the search when the visitor presses the
 // button (or swaps them). The date is not a draft; picking a day searches at once.
 // (updated 2026-10-12)
-const SearchPanel = ({ initialOrigin, initialDestination, selectedDate, onSearch, onSelectDate }: Props) => {
+const SearchPanel = ({
+  cities,
+  citiesStatus,
+  initialOrigin,
+  initialDestination,
+  selectedDate,
+  onSearch,
+  onSelectDate,
+}: Props) => {
   const [origin, setOrigin] = useState(initialOrigin);
   const [destination, setDestination] = useState(initialDestination);
   const [display, setDisplay] = useState(false);
-  const [showMissing, setShowMissing] = useState(!initialOrigin || !initialDestination);
+  // While the city list is still on its way the boxes are empty for that reason alone, so
+  // the "please enter" message waits for the list.
+  const [showMissing, setShowMissing] = useState(citiesStatus === "ready" && (!initialOrigin || !initialDestination));
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
 
@@ -91,6 +102,7 @@ const SearchPanel = ({ initialOrigin, initialDestination, selectedDate, onSearch
             <CustomAutocomplete
               placeholder="مبداء را تایپ نمایید"
               cities={cities}
+              citiesStatus={citiesStatus}
               value={origin}
               onChange={setOrigin}
               onPick={() => destinationRef.current?.focus()}
@@ -104,6 +116,7 @@ const SearchPanel = ({ initialOrigin, initialDestination, selectedDate, onSearch
             <CustomAutocomplete
               placeholder="مقصد را تایپ نمایید"
               cities={cities}
+              citiesStatus={citiesStatus}
               value={destination}
               onChange={setDestination}
               onPick={() => {

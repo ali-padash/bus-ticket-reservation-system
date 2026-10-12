@@ -33,6 +33,9 @@ every change through `onChange`: a city when the text names exactly one suggeste
 otherwise. So the parent always knows the real choice and nothing has to be read off the page.
 Swapping origin and destination is just swapping two state values in the parent.
 
+It also receives the city list and `citiesStatus`. Until the list is `ready` the box is
+read-only and shows a loading or error text in place of its hint (added 2026-10-12).
+
 Other props: `onPick` (called after a choice with Enter or the mouse, so the parent can move
 the focus on), `onFocus`, `onBlur`, and `inputRef` (so the parent can focus or blur the box).
 

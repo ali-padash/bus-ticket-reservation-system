@@ -1,4 +1,4 @@
-import { SeatArrayType, ServiceResponse } from "./Models";
+import { City, SeatArrayType, ServiceResponse } from "./Models";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 
@@ -12,6 +12,10 @@ const getJSON = async <T>(path: string, signal?: AbortSignal): Promise<T> => {
   }
   return response.json();
 };
+
+// The whole city list. It is fetched once per page load and filtered in the browser; the
+// browser's own cache (the server sends Cache-Control and an ETag) covers repeat visits.
+export const fetchCities = (signal?: AbortSignal) => getJSON<City[]>("/cities", signal);
 
 export const fetchServices = (date: string, originID: number, destinationID: number, signal?: AbortSignal) => {
   const query = new URLSearchParams({ from: String(originID), to: String(destinationID), date });

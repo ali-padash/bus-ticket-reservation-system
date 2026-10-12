@@ -1,9 +1,10 @@
 import { useState, ChangeEvent, KeyboardEvent, useEffect, useRef } from "react";
 import "../assets/css/autocomplete.css";
-import { City } from "../util/Models";
+import { CitiesStatus, City } from "../util/Models";
 
 interface Props {
   cities: City[];
+  citiesStatus: CitiesStatus;
   placeholder: string;
   value: City | null;
   onChange: (city: City | null) => void;
@@ -21,6 +22,7 @@ interface Props {
 // parent can move the focus on. (updated 2026-10-12)
 const CustomAutocomplete = ({
   cities,
+  citiesStatus,
   placeholder,
   value,
   onChange,
@@ -39,6 +41,10 @@ const CustomAutocomplete = ({
   const selectedItemRef = useRef<HTMLLIElement>(null);
 
   const inputValue = draft ?? value?.PersianName ?? "";
+
+  // Until the city list has arrived there is nothing to suggest, so the box cannot be typed
+  // in and says why in place of its usual hint.
+  const statusMessage = { loading: "در حال بارگذاری ...", error: "خطا در دریافت فهرست شهرها", ready: null }[citiesStatus];
 
   // Keep the highlighted suggestion in view while moving through the list with the arrow keys.
   useEffect(() => {
@@ -106,7 +112,8 @@ const CustomAutocomplete = ({
       <input
         ref={inputRef}
         type="text"
-        placeholder={String(placeholder)}
+        placeholder={statusMessage ?? placeholder}
+        readOnly={citiesStatus !== "ready"}
         value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}

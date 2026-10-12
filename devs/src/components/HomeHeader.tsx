@@ -3,9 +3,8 @@ import CustomInput from "./CustomInput";
 import DateDiv from "./DateDiv";
 import DateBox from "./DateBox";
 import styles from "../assets/css/homeHeader.module.css";
-import citiesJSON from "../util/cities.json";
 import { useNavigate } from "react-router-dom";
-import { City } from "../util/Models";
+import { CitiesStatus, City } from "../util/Models";
 import { formatDate } from "../util/Function";
 
 export type FocusedField = "origin" | "destination" | null;
@@ -13,13 +12,15 @@ export type FocusedField = "origin" | "destination" | null;
 // Which city box has the focus, and whether the calendar is open, live in the page, because
 // the navbar dims itself with the same two facts. Everything else about the form lives here.
 interface Props {
+  cities: City[];
+  citiesStatus: CitiesStatus;
   focusedField: FocusedField;
   setFocusedField: (field: FocusedField) => void;
   calendarOpen: boolean;
   setCalendarOpen: (open: boolean) => void;
 }
 
-const HomeHeader = ({ focusedField, setFocusedField, calendarOpen, setCalendarOpen }: Props) => {
+const HomeHeader = ({ cities, citiesStatus, focusedField, setFocusedField, calendarOpen, setCalendarOpen }: Props) => {
   const navigate = useNavigate();
   const [origin, setOrigin] = useState<City | null>(null);
   const [destination, setDestination] = useState<City | null>(null);
@@ -90,7 +91,8 @@ const HomeHeader = ({ focusedField, setFocusedField, calendarOpen, setCalendarOp
             className={`${styles.in} from`}
             covered={focusedField === "destination" || calendarOpen}
             calendarOpen={calendarOpen}
-            cities={citiesJSON}
+            cities={cities}
+            citiesStatus={citiesStatus}
             value={origin}
             onChange={setOrigin}
             onPick={() => destinationRef.current?.focus()}
@@ -105,7 +107,8 @@ const HomeHeader = ({ focusedField, setFocusedField, calendarOpen, setCalendarOp
             className={`${styles.in} to`}
             covered={focusedField === "origin" || calendarOpen}
             calendarOpen={calendarOpen}
-            cities={citiesJSON}
+            cities={cities}
+            citiesStatus={citiesStatus}
             value={destination}
             onChange={setDestination}
             onPick={() => {

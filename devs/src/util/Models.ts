@@ -10,6 +10,9 @@ export interface City {
   SearchExpressions: string[];
  }
 
+// Where the city list from the API stands: on its way, arrived, or failed.
+export type CitiesStatus = "loading" | "ready" | "error";
+
 export interface Service {
   ID: number;
   IsVip: boolean;
