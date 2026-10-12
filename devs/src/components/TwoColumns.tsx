@@ -1,4 +1,3 @@
-import React from 'react'
 import '../assets/css/twoColumns.css'
 import CardWithIcon from './CardWithIcon'
 import ExpandableCard from './ExpandableCard'

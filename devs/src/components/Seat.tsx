@@ -1,4 +1,3 @@
-import React from "react";
 import { toPersianNum } from "../util/Function";
 import { SeatType } from "../util/Models";
 

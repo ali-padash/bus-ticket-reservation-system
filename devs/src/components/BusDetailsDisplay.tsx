@@ -1,4 +1,3 @@
-import React from 'react'
 import RefundBox from './RefundBox'
 import BusSchema from './BusSchema'
 import Legend from './Legend'

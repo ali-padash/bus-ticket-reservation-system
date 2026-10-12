@@ -1,51 +1,27 @@
 import { SeatArrayType, ServiceResponse } from "./Models";
 
-export const fetchSeats = async (serviceID: number, signal?: AbortSignal): Promise<SeatArrayType[]> => {
-  const url = new URL("http://localhost:8080/api/v1/getseats");
-  url.searchParams.append("ServiceID", serviceID.toString());
-  try {
-    const response = await fetch(url.toString(), { signal });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    throw error;
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
+
+// Every call goes through here, so the address, the error check and the JSON parsing are
+// written once. A status outside 200-299 becomes an Error; an aborted call rejects with an
+// AbortError, which the callers ignore. (updated 2026-10-12)
+const getJSON = async <T>(path: string, signal?: AbortSignal): Promise<T> => {
+  const response = await fetch(`${API_URL}/api/v1${path}`, { signal });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+  return response.json();
 };
 
-export const fetchNumberOfAvailableSeats = (serviceID: number, signal?: AbortSignal) => {
-  const url = new URL("http://localhost:8080/api/v1/getnumberofavailableseat");
-  url.searchParams.append("ServiceID", serviceID.toString());
-
-  return fetch(url.toString(), { signal })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      console.error("Failed to fetch number of available seats:", err);
-      throw err;
-    });
+export const fetchServices = (date: string, originID: number, destinationID: number, signal?: AbortSignal) => {
+  const query = new URLSearchParams({ from: String(originID), to: String(destinationID), date });
+  return getJSON<ServiceResponse>(`/trips?${query}`, signal);
 };
 
-export const fetchServices = async (date: string, originID: number, destinationID: number, signal?: AbortSignal): Promise<ServiceResponse> => {
-  const url = new URL("http://localhost:8080/api/v1/getservices");
-  url.searchParams.append("Date", date);
-  url.searchParams.append("OriginID", originID.toString());
-  url.searchParams.append("DestinationID", destinationID.toString());
+export const fetchSeats = (serviceID: number, signal?: AbortSignal) =>
+  getJSON<SeatArrayType[]>(`/trips/${serviceID}/seats`, signal);
 
-  try {
-    const response = await fetch(url.toString(), {signal});
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: ServiceResponse = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching services:", error);
-    throw error;
-  }
+export const fetchNumberOfAvailableSeats = async (serviceID: number, signal?: AbortSignal) => {
+  const data = await getJSON<{ AvailableSeatCount: number }>(`/trips/${serviceID}/availability`, signal);
+  return data.AvailableSeatCount;
 };

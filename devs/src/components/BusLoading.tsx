@@ -1,4 +1,3 @@
-import React from "react";
 import transparentLogo from "../assets/images/logo-transparent.png";
 import s from "../assets/css/busLoading.module.css";
 

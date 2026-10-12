@@ -19,7 +19,12 @@ const AlertBox = ({ children, title, showCondition, setShowCondition }: Props) =
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [setShowCondition]);
   useEffect(() => {
-    setTimeout(() => setRender(showCondition), 50);
+    // This timer is for a CSS animation: the box fades and slides in through transitions on
+    // the `show` class (alertBox.module.css). The class is added a moment after the box is
+    // first drawn, because a transition only plays when the browser has drawn the starting
+    // look first. (updated 2026-10-12)
+    const timer = setTimeout(() => setRender(showCondition), 50);
+    return () => clearTimeout(timer);
   }, [showCondition]);
   return (
     <div className={s.blackCover + (render ? " " + s.show : "")}>

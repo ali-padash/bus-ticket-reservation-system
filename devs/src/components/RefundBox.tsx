@@ -13,8 +13,15 @@ const RefundBox = () => {
   }, []);
 
   useEffect(() => {
-    if(!showCondition) setTimeout(() => setRender(false), 600);
-    else setRender(true);
+    if (showCondition) {
+      setRender(true);
+      return;
+    }
+    // This timer waits for a CSS animation: the popup takes 0.5s to fade out
+    // (opacity in alertBox.module.css). It is removed from the page only after that.
+    // (updated 2026-10-12)
+    const timer = setTimeout(() => setRender(false), 600);
+    return () => clearTimeout(timer);
   }, [showCondition])
 
   return screenWidth < 1024 ? (
