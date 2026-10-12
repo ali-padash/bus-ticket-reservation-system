@@ -53,9 +53,11 @@ function BookingPage() {
   const [takenSeats, setTakenSeats] = useState<number[]>([]);
 
   // What this browser was asked to remember from an earlier purchase: read once, when the
-  // page opens. The phone box starts with the remembered number. (added 2026-10-12)
+  // page opens. The phone box starts with the remembered number. Remembering starts switched
+  // on, so earlier entries are offered next time without the buyer doing anything; unticking
+  // the box forgets them. (updated 2026-10-13)
   const [saved] = useState(readSavedDetails);
-  const [remember, setRemember] = useState(saved.passengers.length > 0);
+  const [remember, setRemember] = useState(true);
   const [contactPhone, setContactPhone] = useState(saved.phone);
   const [passengers, setPassengers] = useState<{ [seatNumber: number]: PassengerDraft }>({});
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -228,6 +230,7 @@ function BookingPage() {
               setContactPhone={setContactPhone}
               passengers={passengers}
               setPassenger={(seatNumber, passenger) => setPassengers({ ...passengers, [seatNumber]: passenger })}
+              savedPhone={saved.phone}
               savedPassengers={saved.passengers}
               fillPassenger={fillPassenger}
               remember={remember}

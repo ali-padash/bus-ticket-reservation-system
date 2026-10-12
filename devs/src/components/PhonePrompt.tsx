@@ -33,7 +33,7 @@ const PhonePrompt = ({ notFound, onSubmit }: Props) => {
       <h2>{t("phonePrompt.title")}</h2>
       <p>{t("phonePrompt.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${invalid ? s.invalid : ""}`} style={{ margin: "14px auto 0" }}>
-        <DigitInput type="tel" label={t("passengers.phone")} value={phone} onChange={setPhone} />
+        <DigitInput type="tel" name="tel" autoComplete="tel-national" label={t("passengers.phone")} value={phone} onChange={setPhone} />
         {invalid && <p className={s.fieldError}>{t("errors.fields.ContactPhone")}</p>}
       </div>
       {notFound && !invalid && (

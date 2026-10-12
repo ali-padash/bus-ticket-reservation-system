@@ -1,8 +1,9 @@
-// Passengers the visitor asked this browser to remember, in localStorage, so the form can be
-// filled with one click next time.
+// Passengers this browser remembers, in localStorage, so the form offers them next time: under
+// each box as the buyer types, and as one-click names.
 //
-// - It is opt-in: nothing is kept unless the visitor ticks the box on the form. Sending the
-//   form with the box unticked forgets everything kept before.
+// - The box on the form starts ticked, as a browser's own form history is on by default.
+//   Sending the form with the box unticked keeps nothing and forgets everything kept before.
+//   (updated 2026-10-13)
 // - It stays on this device. Nothing here is sent anywhere; the API has no accounts.
 // - The birth date is kept as Gregorian YYYY-MM-DD, the form the API takes, and is written in
 //   the page's calendar when it is put back into the form.

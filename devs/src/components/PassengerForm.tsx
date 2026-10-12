@@ -1,6 +1,7 @@
 import s from "../assets/css/booking.module.css";
 import DigitInput from "./DigitInput";
 import { useLocale } from "../util/useLocale";
+import { formatBirthDate } from "../util/Locale";
 import { FieldErrors, PassengerDraft, emptyPassenger } from "../util/Validation";
 import { SavedPassenger } from "../util/SavedPassengers";
 
@@ -11,8 +12,10 @@ interface Props {
   // What has been typed so far, by seat number.
   passengers: { [seatNumber: number]: PassengerDraft };
   setPassenger: (seatNumber: number, passenger: PassengerDraft) => void;
-  // Passengers this browser remembers from an earlier purchase. One click on a name fills
-  // the boxes of a seat. (added 2026-10-12)
+  // The phone and the passengers this browser remembers from an earlier purchase. They are
+  // offered under each box as the buyer types, and one click on a name fills the boxes of a
+  // seat. (updated 2026-10-13)
+  savedPhone: string;
   savedPassengers: SavedPassenger[];
   fillPassenger: (seatNumber: number, passenger: SavedPassenger) => void;
   // Whether the visitor wants this browser to remember the passengers after this purchase.
@@ -35,6 +38,7 @@ const PassengerForm = ({
   setContactPhone,
   passengers,
   setPassenger,
+  savedPhone,
   savedPassengers,
   fillPassenger,
   remember,
@@ -45,9 +49,25 @@ const PassengerForm = ({
   onSubmit,
   onBack,
 }: Props) => {
-  const { t, num } = useLocale();
+  const { t, num, lang } = useLocale();
   // The sentence for the fault in one field, in the language of the page.
   const message = (field: string) => (fieldErrors[field] ? t(`errors.fields.${fieldErrors[field]}`) : undefined);
+  // Earlier entries, offered under each box the way a browser offers its own form history.
+  // A <datalist> is used so the list, its filtering as the buyer types and its keyboard keys
+  // are the browser's own. Each entry is written as its box shows it (the page's digits and
+  // calendar) and carries the passenger's full name as a hint. (added 2026-10-13)
+  const fullName = (saved: SavedPassenger) => `${saved.FirstName} ${saved.LastName}`;
+  const suggestions = {
+    FirstName: savedPassengers.map((saved) => ({ value: saved.FirstName, hint: fullName(saved) })),
+    LastName: savedPassengers.map((saved) => ({ value: saved.LastName, hint: fullName(saved) })),
+    NationalCode: savedPassengers.map((saved) => ({ value: num(saved.NationalCode), hint: fullName(saved) })),
+    BirthDate: savedPassengers.map((saved) => ({
+      value: num(formatBirthDate(lang, saved.BirthDate)),
+      hint: fullName(saved),
+    })),
+  };
+  type SuggestedField = keyof typeof suggestions;
+  const suggestedFields: SuggestedField[] = ["FirstName", "LastName", "NationalCode", "BirthDate"];
   return (
     <form
       noValidate
@@ -55,6 +75,23 @@ const PassengerForm = ({
         e.preventDefault();
         onSubmit();
       }}>
+      {savedPhone && (
+        <datalist id="saved-tel">
+          <option value={num(savedPhone)} />
+        </datalist>
+      )}
+      {suggestedFields.map((field) => (
+        <datalist id={`saved-${field}`} key={field}>
+          {suggestions[field]
+            // A value two passengers share (a family name) is offered once.
+            .filter((entry, index, all) => all.findIndex((other) => other.value === entry.value) === index)
+            .map((entry) => (
+              <option value={entry.value} key={entry.value}>
+                {entry.hint}
+              </option>
+            ))}
+        </datalist>
+      ))}
       <h2>{t("passengers.title")}</h2>
       <p className={s.intro}>{t("passengers.intro")}</p>
       <div className={`${s.field} ${s.phoneField} ${fieldErrors.ContactPhone ? s.invalid : ""}`}>
@@ -62,6 +99,7 @@ const PassengerForm = ({
           type="tel"
           name="tel"
           autoComplete="tel-national"
+          list="saved-tel"
           label={t("passengers.phone")}
           value={contactPhone}
           onChange={setContactPhone}
@@ -91,15 +129,23 @@ const PassengerForm = ({
               <DigitInput
                 name={`${name}-${seatNumber}`}
                 autoComplete={autofill[name]}
+                list={`saved-${name}`}
                 label={label}
                 value={passenger[name]}
-                onChange={(text) => setPassenger(seatNumber, { ...passenger, [name]: text })}
+                onChange={(text) => {
+                  // A national ID names one person, so once a remembered one is in the box
+                  // the rest of that passenger is filled in too. (added 2026-10-13)
+                  const known = name === "NationalCode" && savedPassengers.find((saved) => saved.NationalCode === text);
+                  if (known) fillPassenger(seatNumber, known);
+                  else setPassenger(seatNumber, { ...passenger, [name]: text });
+                }}
               />
             ) : (
               <input
                 type="text"
                 name={`${name}-${seatNumber}`}
                 autoComplete={autofill[name]}
+                list={`saved-${name}`}
                 placeholder={label}
                 aria-label={label}
                 value={passenger[name]}

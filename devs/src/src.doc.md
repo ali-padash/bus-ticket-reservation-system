@@ -217,7 +217,7 @@ sent ("hold, then pay").
 | The two city boxes before "search" is pressed | `SearchPanel` | A draft only this panel cares about. |
 | Chosen seats and the step of the booking page | The address (`BookingPage` reads it) | So refresh and back keep the buyer's place. |
 | What is typed into the passenger form | `BookingPage` | Personal details do not belong in the address; they are gone after a refresh. |
-| Passengers and phone the visitor asked to be remembered | `localStorage` (`util/SavedPassengers.ts`) | Only if the box on the form is ticked. It stays on the device; the API has no accounts to keep it in. |
+| Passengers and phone the visitor asked to be remembered | `localStorage` (`util/SavedPassengers.ts`) | Unless the box on the form is unticked (it starts ticked since 2026-10-13). It stays on the device; the API has no accounts to keep it in. |
 | The buyer's phone for one ticket | `sessionStorage`, per tab | Needed to open the ticket after a refresh, but must not be in the address. |
 | The ticket | The server; `TicketPage` holds the last copy it received | The server decides whether a hold is alive, paid or gone. |
 | Which trip's seat map is open | `ServicesDisplay` | The parent of all the cards, so opening one closes the others. |
