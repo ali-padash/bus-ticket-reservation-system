@@ -19,8 +19,8 @@ declared in this file; in the real program it is `store.Store`, in the tests it 
 Errors are wrapped with what was being attempted (`origin city 999: city not found`), so the
 server log says where it failed, while `errors.Is` still recognises the original error.
 
-`SeatMap(tripID)` and `RefundRules(tripID)` were added on 2026-10-12: the bus floor plan with
-the state of every seat, and what cancelling costs.
+`Trip(tripID)`, `SeatMap(tripID)` and `RefundRules(tripID)` were added on 2026-10-12: one trip
+with its two cities, the bus floor plan with the state of every seat, and what cancelling costs.
 
 ## `Bookings`
 
@@ -38,10 +38,16 @@ Created with `NewBookings(store, holdFor, now)`. `holdFor` is how long seats sta
 | `ExpireHolds()` | Ends holds that ran out of time. Called once a minute by `cmd/api`. |
 
 **What `Hold` checks itself**, before touching the database: the phone is 11 digits starting
-with `09`; 1 to 4 passengers; no seat or national code twice; names are 1 to 50 letters; gender
+with `09`; 1 to 4 passengers; no seat or national code twice; names are 1 to 50 characters and
+letters only, in any alphabet, so Persian and English names both pass and "Ali2" does not
+(spaces, a hyphen, an apostrophe and the Persian half-space are allowed); gender
 is `M` or `F`; the birth date is real and not in the future; and each national code passes the
 Iranian check-digit rule (`ValidNationalCode`). It collects **all** faults and returns them
 together, so a form can mark every wrong box at once.
+
+**Persian digits are accepted** (2026-10-12). A phone number, national code or ticket code
+typed in Persian or Arabic digits is turned into `0-9` before it is checked or stored, so the
+database only ever holds Latin digits.
 
 **What it leaves to the store:** whether the seats are still free. That is only true while the
 seat rows are locked, so it is checked inside the store's transaction.
@@ -84,12 +90,13 @@ buried in SQL.
 
 ## Tests
 
-18 tests, no database. Nine are for booking: the national code rule against 4 valid and 8
+21 tests, no database. Eleven are for booking: 8 names that must pass and 8 that must not;
+Persian and Arabic digits stored as Latin; the national code rule against 4 valid and 8
 invalid codes; a clean request reaches the store trimmed; 14 kinds of bad request are each
 refused without touching the store; all faults are reported at once; a repeated ticket code is
 retried and given up after 3; a taken seat is not retried; pay and cancel errors are passed
 up; and 1,000 ticket codes are all different. Five are for the city cache: one read inside the lifetime, a new read
 after it, a new read after `Invalidate`, recovery after a failed read, and one read for 100
-visitors at once. Four are for trips: search returns cities and trips; an unknown origin or destination gives
+visitors at once. Five are for trips: one trip with its cities; search returns cities and trips; an unknown origin or destination gives
 `ErrCityNotFound` without running the search; a store failure is passed up; seats and
 availability work and report an unknown trip.

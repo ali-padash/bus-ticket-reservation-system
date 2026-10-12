@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 	"unicode/utf8"
 
 	"github.com/ali-padash/bus-ticket-reservation-system/backend/internal/domain"
@@ -22,6 +23,14 @@ type BookingStore interface {
 	CancelHold(ctx context.Context, code string, phone string) error
 	ExpireHolds(ctx context.Context) (int, error)
 }
+
+const (
+	// The zero-width non-joiner, typed as a "half-space" inside Persian words.
+	halfSpace = '\u200c'
+	// The first digit of the Persian and of the Arabic set; the other nine follow in order.
+	persianZero = '\u06f0'
+	arabicZero  = '\u0660'
+)
 
 const (
 	ticketCodeDigits = 12
@@ -81,7 +90,7 @@ func (s *Bookings) Hold(ctx context.Context, request domain.HoldRequest) (domain
 
 // Ticket returns a ticket to whoever knows both its code and its phone number.
 func (s *Bookings) Ticket(ctx context.Context, code string, phone string) (domain.Ticket, error) {
-	ticket, err := s.store.Ticket(ctx, strings.TrimSpace(code), strings.TrimSpace(phone))
+	ticket, err := s.store.Ticket(ctx, tidy(code), tidy(phone))
 	if err != nil {
 		return domain.Ticket{}, fmt.Errorf("ticket %s: %w", code, err)
 	}
@@ -90,7 +99,7 @@ func (s *Bookings) Ticket(ctx context.Context, code string, phone string) (domai
 
 // Pay turns a hold into a paid ticket and returns it.
 func (s *Bookings) Pay(ctx context.Context, code string, phone string) (domain.Ticket, error) {
-	if err := s.store.PayHold(ctx, strings.TrimSpace(code), strings.TrimSpace(phone)); err != nil {
+	if err := s.store.PayHold(ctx, tidy(code), tidy(phone)); err != nil {
 		return domain.Ticket{}, fmt.Errorf("pay ticket %s: %w", code, err)
 	}
 	return s.Ticket(ctx, code, phone)
@@ -98,7 +107,7 @@ func (s *Bookings) Pay(ctx context.Context, code string, phone string) (domain.T
 
 // Cancel gives up a hold, frees its seats, and returns the ticket.
 func (s *Bookings) Cancel(ctx context.Context, code string, phone string) (domain.Ticket, error) {
-	if err := s.store.CancelHold(ctx, strings.TrimSpace(code), strings.TrimSpace(phone)); err != nil {
+	if err := s.store.CancelHold(ctx, tidy(code), tidy(phone)); err != nil {
 		return domain.Ticket{}, fmt.Errorf("cancel ticket %s: %w", code, err)
 	}
 	return s.Ticket(ctx, code, phone)
@@ -109,13 +118,27 @@ func (s *Bookings) ExpireHolds(ctx context.Context) (int, error) {
 	return s.store.ExpireHolds(ctx)
 }
 
+// latinDigits turns Persian and Arabic digits into 0-9, so a phone number or national
+// code typed on a Persian keyboard is read as the same number.
+func latinDigits(text string) string {
+	return strings.Map(func(r rune) rune {
+		switch {
+		case r >= persianZero && r <= persianZero+9:
+			return '0' + (r - persianZero)
+		case r >= arabicZero && r <= arabicZero+9:
+			return '0' + (r - arabicZero)
+		}
+		return r
+	}, text)
+}
+
 func cleaned(request domain.HoldRequest) domain.HoldRequest {
-	request.ContactPhone = strings.TrimSpace(request.ContactPhone)
+	request.ContactPhone = latinDigits(strings.TrimSpace(request.ContactPhone))
 	passengers := make([]domain.PassengerInput, len(request.Passengers))
 	for i, p := range request.Passengers {
 		p.FirstName = strings.TrimSpace(p.FirstName)
 		p.LastName = strings.TrimSpace(p.LastName)
-		p.NationalCode = strings.TrimSpace(p.NationalCode)
+		p.NationalCode = latinDigits(strings.TrimSpace(p.NationalCode))
 		passengers[i] = p
 	}
 	request.Passengers = passengers
@@ -179,12 +202,34 @@ func (s *Bookings) problems(request domain.HoldRequest) map[string]string {
 	return fields
 }
 
+// tidy prepares a ticket code or phone number that a person typed: no spaces around
+// it, and Latin digits.
+func tidy(text string) string {
+	return latinDigits(strings.TrimSpace(text))
+}
+
+// nameProblem accepts a name written in any alphabet, Persian or English included.
+// Besides letters it allows what real names contain: spaces, a hyphen, an apostrophe,
+// and the half-space used inside Persian words. Digits and other signs are refused.
 func nameProblem(name string) string {
 	switch length := utf8.RuneCountInString(name); {
 	case length == 0:
 		return "is required"
 	case length > maxNameLength:
 		return fmt.Sprintf("is longer than %d letters", maxNameLength)
+	}
+	hasLetter := false
+	for _, r := range name {
+		switch {
+		case unicode.IsLetter(r):
+			hasLetter = true
+		case unicode.IsMark(r), r == ' ', r == '-', r == '\'', r == halfSpace:
+		default:
+			return "may only contain letters"
+		}
+	}
+	if !hasLetter {
+		return "may only contain letters"
 	}
 	return ""
 }

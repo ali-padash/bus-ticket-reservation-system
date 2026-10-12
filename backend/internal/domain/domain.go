@@ -84,6 +84,13 @@ type Seat struct {
 	Gender  *string
 }
 
+// TripDetails is one trip together with the two cities it runs between.
+type TripDetails struct {
+	Trip
+	OriginCity      City
+	DestinationCity City
+}
+
 type TripSearch struct {
 	OriginCityID      uint
 	DestinationCityID uint

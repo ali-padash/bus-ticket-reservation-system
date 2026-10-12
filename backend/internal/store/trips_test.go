@@ -217,3 +217,27 @@ func TestCity(t *testing.T) {
 		t.Errorf("City() = %+v, %v; want %+v", city, err, want)
 	}
 }
+
+func TestTrip(t *testing.T) {
+	s := openTestStore(t)
+	tripID := insertTrip(t, s.db)
+
+	trip, err := s.Trip(context.Background(), tripID)
+
+	if err != nil {
+		t.Fatalf("Trip() error: %v", err)
+	}
+	wantOrigin := domain.City{ID: 900001, Code: "TST-A", Name: "Testville", PersianName: "تست"}
+	wantDestination := domain.City{ID: 900002, Code: "TST-B", Name: "Checkton", PersianName: "چک"}
+	if trip.OriginCity != wantOrigin || trip.DestinationCity != wantDestination {
+		t.Errorf("cities = %+v -> %+v, want %+v -> %+v", trip.OriginCity, trip.DestinationCity, wantOrigin, wantDestination)
+	}
+	if trip.ID != tripID || trip.BusCode != "TST_4_1" || trip.Price != 2_500_000 || trip.AvailableSeats != 2 ||
+		trip.DestinationCityCode != "TST-B" || trip.Origin.Code != "TST-A-T1" {
+		t.Errorf("trip = %+v, want the test trip with 2 free seats", trip.Trip)
+	}
+
+	if _, err := s.Trip(context.Background(), 987654321); !errors.Is(err, domain.ErrTripNotFound) {
+		t.Errorf("Trip() of an unknown trip = %v, want ErrTripNotFound", err)
+	}
+}

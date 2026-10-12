@@ -88,8 +88,10 @@ type TicketTrip struct {
 	ID                             uint
 	CompanyPersianName             string
 	BusName                        string
+	OriginCityID                   uint
 	OriginCityPersianName          string
 	OriginTerminalPersianName      string
+	DestinationCityID              uint
 	DestinationCityPersianName     string
 	DestinationTerminalPersianName string
 	DepartureDate                  string // YYYY-MM-DD

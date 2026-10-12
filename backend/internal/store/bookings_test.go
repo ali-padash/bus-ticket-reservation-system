@@ -93,8 +93,8 @@ func TestCreateHold(t *testing.T) {
 	}
 	wantTrip := domain.TicketTrip{
 		ID: tripID, CompanyPersianName: "خط تست", BusName: "Test Bus",
-		OriginCityPersianName: "تست", OriginTerminalPersianName: "غرب",
-		DestinationCityPersianName: "چک", DestinationTerminalPersianName: "مرکزی",
+		OriginCityID: 900001, OriginCityPersianName: "تست", OriginTerminalPersianName: "غرب",
+		DestinationCityID: 900002, DestinationCityPersianName: "چک", DestinationTerminalPersianName: "مرکزی",
 		DepartureDate: tomorrow(), DepartureTime: "08:30",
 	}
 	if ticket.Trip != wantTrip {

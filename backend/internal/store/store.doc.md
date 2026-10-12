@@ -10,7 +10,7 @@ nothing above it sees SQL or GORM.
 | File | Job |
 | --- | --- |
 | `store.go` | `Open`, `Migrate`, `Close`. |
-| `trips.go` | The read queries for trips: search, seats, free seat count, layout, refund rules. |
+| `trips.go` | The read queries for trips: search, one trip, seats, free seat count, layout, refund rules. |
 | `bookings.go` | Holding seats, paying, cancelling, expiring, and reading a ticket. |
 | `cities.go` | The query for the full city list. |
 | `trips_test.go`, `cities_test.go`, `bookings_test.go` | Tests that run those queries against a real database. |
@@ -30,6 +30,7 @@ nothing above it sees SQL or GORM.
 | --- | --- |
 | `City(id)` | One city, or `ErrCityNotFound`. |
 | `TripsBetween(originCityID, destinationCityID, date)` | The search. Trips on that day whose origin terminal is in the first city and whose destination terminal is in the second, ordered by departure time. One query with five joins. |
+| `Trip(tripID)` | One trip with its two cities, or `ErrTripNotFound`. Shares its SQL (`tripSelect`) with the search, so the two cannot drift apart. |
 | `Seats(tripID)` | Every seat of a trip with the passenger's gender if it is taken, or `ErrTripNotFound`. |
 | `FreeSeatCount(tripID)` | Free seat count for one trip, or `ErrTripNotFound`. |
 
@@ -106,7 +107,7 @@ move it to the day before.
 
 ## Tests
 
-19 tests against a real PostgreSQL. They are **skipped** when `DATABASE_URL` is not set or the
+20 tests against a real PostgreSQL. They are **skipped** when `DATABASE_URL` is not set or the
 database cannot be reached.
 
 Each test opens a transaction, inserts its own small trip (two test cities with ids 900001 and

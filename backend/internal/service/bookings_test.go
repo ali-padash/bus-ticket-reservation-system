@@ -243,3 +243,35 @@ func TestTicketCodesDiffer(t *testing.T) {
 		seen[code] = true
 	}
 }
+
+func TestNames(t *testing.T) {
+	accepted := []string{"سارا", "علی‌رضا", "Ali", "Mary-Jane", "O'Brien", "سید علی", "Zoë", "مُحَمَّد"}
+	refused := []string{"علی2", "Ali3", "علی۲", "Ali_Reza", "<b>Ali</b>", "---", "Ali@home", "a.b"}
+	for _, name := range accepted {
+		if problem := nameProblem(name); problem != "" {
+			t.Errorf("nameProblem(%q) = %q, want it accepted", name, problem)
+		}
+	}
+	for _, name := range refused {
+		if nameProblem(name) == "" {
+			t.Errorf("nameProblem(%q) accepted it, want it refused", name)
+		}
+	}
+}
+
+func TestPersianAndArabicDigitsAreRead(t *testing.T) {
+	store := &fakeBookingStore{}
+	request := goodRequest()
+	request.ContactPhone = "۰۹۱۲۱۲۳۴۵۶۷"              // Persian digits
+	request.Passengers[0].NationalCode = "٠٤٩٩٣٧٠٨٩٩" // Arabic digits
+	request.Passengers[1].NationalCode = "۱۲۳۴۵۶۷۸۹۱" // Persian digits
+
+	if _, err := newBookings(store).Hold(context.Background(), request); err != nil {
+		t.Fatalf("Hold() error: %v", err)
+	}
+	hold := store.created[0]
+	if hold.ContactPhone != "09121234567" || hold.Passengers[0].NationalCode != codeA || hold.Passengers[1].NationalCode != codeB {
+		t.Errorf("stored phone %q and codes %q, %q; want them in Latin digits",
+			hold.ContactPhone, hold.Passengers[0].NationalCode, hold.Passengers[1].NationalCode)
+	}
+}

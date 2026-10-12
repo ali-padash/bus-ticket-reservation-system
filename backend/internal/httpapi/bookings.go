@@ -54,8 +54,10 @@ type ticketTripResponse struct {
 	ID                             uint   `json:"ID"`
 	CompanyPersianName             string `json:"CompanyPersianName"`
 	BusType                        string `json:"BusType"`
+	OriginCityID                   uint   `json:"OriginCityID"`
 	OriginPersianName              string `json:"OriginPersianName"`
 	OriginTerminalPersianName      string `json:"OriginTerminalPersianName"`
+	DestinationCityID              uint   `json:"DestinationCityID"`
 	DestinationPersianName         string `json:"DestinationPersianName"`
 	DestinationTerminalPersianName string `json:"DestinationTerminalPersianName"`
 	DepartureDate                  string `json:"DepartureDate"`
@@ -103,8 +105,10 @@ func newTicketResponse(t domain.Ticket) ticketResponse {
 			ID:                             t.Trip.ID,
 			CompanyPersianName:             t.Trip.CompanyPersianName,
 			BusType:                        t.Trip.BusName,
+			OriginCityID:                   t.Trip.OriginCityID,
 			OriginPersianName:              t.Trip.OriginCityPersianName,
 			OriginTerminalPersianName:      t.Trip.OriginTerminalPersianName,
+			DestinationCityID:              t.Trip.DestinationCityID,
 			DestinationPersianName:         t.Trip.DestinationCityPersianName,
 			DestinationTerminalPersianName: t.Trip.DestinationTerminalPersianName,
 			DepartureDate:                  t.Trip.DepartureDate,

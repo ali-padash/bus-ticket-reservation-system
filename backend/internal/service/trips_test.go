@@ -44,6 +44,13 @@ func (f *fakeStore) FreeSeatCount(_ context.Context, tripID uint) (int, error) {
 	return 12, nil
 }
 
+func (f *fakeStore) Trip(_ context.Context, tripID uint) (domain.TripDetails, error) {
+	if tripID != 7 {
+		return domain.TripDetails{}, domain.ErrTripNotFound
+	}
+	return domain.TripDetails{Trip: domain.Trip{ID: 7}, OriginCity: f.cities[1], DestinationCity: f.cities[21]}, nil
+}
+
 func (f *fakeStore) Layout(_ context.Context, tripID uint) ([][]uint, error) {
 	if tripID != 7 {
 		return nil, domain.ErrTripNotFound
@@ -140,5 +147,17 @@ func TestSeatsAndAvailability(t *testing.T) {
 	}
 	if _, err := trips.Availability(context.Background(), 8); !errors.Is(err, domain.ErrTripNotFound) {
 		t.Errorf("Availability(8) error = %v, want ErrTripNotFound", err)
+	}
+}
+
+func TestTrip(t *testing.T) {
+	trips := NewTrips(newFakeStore())
+
+	trip, err := trips.Trip(context.Background(), 7)
+	if err != nil || trip.ID != 7 || trip.OriginCity.Code != "THR" || trip.DestinationCity.Code != "MHD" {
+		t.Errorf("Trip(7) = %+v, %v; want trip 7 from THR to MHD", trip, err)
+	}
+	if _, err := trips.Trip(context.Background(), 8); !errors.Is(err, domain.ErrTripNotFound) {
+		t.Errorf("Trip(8) error = %v, want ErrTripNotFound", err)
 	}
 }

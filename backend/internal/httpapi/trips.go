@@ -61,6 +61,18 @@ type tripResponse struct {
 	Status                         int     `json:"Status"`
 }
 
+// One trip on its own: everything a search item has, plus the two cities, so a page
+// that only knows a trip id can show it and link back to its search.
+type tripDetailsResponse struct {
+	tripResponse
+	OriginCityID           uint   `json:"OriginCityID"`
+	OriginPersianName      string `json:"OriginPersianName"`
+	OriginEnglishName      string `json:"OriginEnglishName"`
+	DestinationCityID      uint   `json:"DestinationCityID"`
+	DestinationPersianName string `json:"DestinationPersianName"`
+	DestinationEnglishName string `json:"DestinationEnglishName"`
+}
+
 type seatResponse struct {
 	SeatNumber uint    `json:"SeatNumber"`
 	Accessible bool    `json:"Accessible"`
@@ -144,6 +156,28 @@ func (a *api) searchTrips(c *gin.Context) {
 		DestinationEnglishName: result.Destination.Name,
 		DestinationCode:        result.Destination.Code,
 		Items:                  items,
+	})
+}
+
+// GET /trips/:id
+func (a *api) getTrip(c *gin.Context) {
+	tripID, ok := tripIDParam(c)
+	if !ok {
+		return
+	}
+	trip, err := a.trips.Trip(c.Request.Context(), tripID)
+	if err != nil {
+		a.fail(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, tripDetailsResponse{
+		tripResponse:           newTripResponse(trip.Trip),
+		OriginCityID:           trip.OriginCity.ID,
+		OriginPersianName:      trip.OriginCity.PersianName,
+		OriginEnglishName:      trip.OriginCity.Name,
+		DestinationCityID:      trip.DestinationCity.ID,
+		DestinationPersianName: trip.DestinationCity.PersianName,
+		DestinationEnglishName: trip.DestinationCity.Name,
 	})
 }
 

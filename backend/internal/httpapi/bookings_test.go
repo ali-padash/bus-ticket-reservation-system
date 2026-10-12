@@ -33,8 +33,8 @@ func sampleTicket(status string) domain.Ticket {
 		ContactPhone: "09121234567",
 		Trip: domain.TicketTrip{
 			ID: 7, CompanyPersianName: "همراه سفر", BusName: "Scania VIP 25",
-			OriginCityPersianName: "رشت", OriginTerminalPersianName: "مرکزی",
-			DestinationCityPersianName: "تهران", DestinationTerminalPersianName: "غرب",
+			OriginCityID: 132, OriginCityPersianName: "رشت", OriginTerminalPersianName: "مرکزی",
+			DestinationCityID: 1, DestinationCityPersianName: "تهران", DestinationTerminalPersianName: "غرب",
 			DepartureDate: "2026-10-22", DepartureTime: "00:15",
 		},
 		Passengers: []domain.Passenger{{SeatNumber: 18, FirstName: "سارا", LastName: "احمدی",
@@ -127,8 +127,9 @@ func TestTicketResponseShape(t *testing.T) {
 		t.Errorf("a ticket has %d fields, want 11", len(ticket))
 	}
 	trip, _ := ticket["Trip"].(map[string]any)
-	if len(trip) != 9 || trip["OriginPersianName"] != "رشت" || trip["DepartureTime"] != "00:15" || trip["BusType"] != "Scania VIP 25" {
-		t.Errorf("Trip = %v, want 9 fields with the sample values", trip)
+	if len(trip) != 11 || trip["OriginPersianName"] != "رشت" || trip["DepartureTime"] != "00:15" ||
+		trip["BusType"] != "Scania VIP 25" || trip["OriginCityID"] != 132.0 || trip["DestinationCityID"] != 1.0 {
+		t.Errorf("Trip = %v, want 11 fields with the sample values", trip)
 	}
 	passengers, _ := ticket["Passengers"].([]any)
 	if len(passengers) != 1 {

@@ -19,6 +19,7 @@ type TripService interface {
 	Search(ctx context.Context, q domain.TripSearch) (domain.SearchResult, error)
 	Seats(ctx context.Context, tripID uint) ([]domain.Seat, error)
 	Availability(ctx context.Context, tripID uint) (int, error)
+	Trip(ctx context.Context, tripID uint) (domain.TripDetails, error)
 	SeatMap(ctx context.Context, tripID uint) (domain.SeatMap, error)
 	RefundRules(ctx context.Context, tripID uint) ([]domain.RefundRule, error)
 }
@@ -55,6 +56,7 @@ func NewHandler(trips TripService, cities CityService, bookings BookingService, 
 	v1 := router.Group("/api/v1")
 	v1.GET("/cities", a.listCities)
 	v1.GET("/trips", a.searchTrips)
+	v1.GET("/trips/:id", a.getTrip)
 	v1.GET("/trips/:id/seats", a.tripSeats)
 	v1.GET("/trips/:id/availability", a.tripAvailability)
 	v1.GET("/trips/:id/seat-map", a.tripSeatMap)

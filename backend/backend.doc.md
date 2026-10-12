@@ -77,16 +77,16 @@ go vet ./...
 go test ./...
 ```
 
-60 tests in 6 packages (2026-10-12):
+65 tests in 6 packages (2026-10-12):
 
 | Package | Tests | Needs a database? |
 | --- | --- | --- |
 | `internal/config` | 2 | No |
 | `internal/domain` | 1 | No |
 | `internal/seed` | 2 | No |
-| `internal/service` | 18 | No, uses a fake store |
-| `internal/httpapi` | 18 | No, uses a fake service |
-| `internal/store` | 19 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
+| `internal/service` | 21 | No, uses a fake store |
+| `internal/httpapi` | 19 | No, uses a fake service |
+| `internal/store` | 20 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
 
 The store tests run inside a transaction that is rolled back, so they are safe to run against
 the local demo database. Two of them (20 buyers racing for one seat, and overlapping purchases)

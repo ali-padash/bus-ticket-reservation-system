@@ -60,6 +60,17 @@ func (f *fakeTrips) Seats(_ context.Context, tripID uint) ([]domain.Seat, error)
 	return nil, domain.ErrTripNotFound
 }
 
+func (f *fakeTrips) Trip(_ context.Context, tripID uint) (domain.TripDetails, error) {
+	if tripID != 7 {
+		return domain.TripDetails{}, domain.ErrTripNotFound
+	}
+	return domain.TripDetails{
+		Trip:            domain.Trip{ID: 7, Price: 2_500_000, DepartureDate: "2026-10-14", AvailableSeats: 12},
+		OriginCity:      domain.City{ID: 132, Name: "rasht", PersianName: "رشت"},
+		DestinationCity: domain.City{ID: 1, Name: "tehran", PersianName: "تهران"},
+	}, nil
+}
+
 func (f *fakeTrips) SeatMap(_ context.Context, tripID uint) (domain.SeatMap, error) {
 	if tripID != 7 {
 		return domain.SeatMap{}, domain.ErrTripNotFound
@@ -225,5 +236,37 @@ func TestCORSAllowsOnlyTheWebsite(t *testing.T) {
 		if got := recorder.Header().Get("Access-Control-Allow-Origin"); got != want {
 			t.Errorf("origin %s: Access-Control-Allow-Origin = %q, want %q", origin, got, want)
 		}
+	}
+}
+
+func TestOneTrip(t *testing.T) {
+	status, body := get(t, &fakeTrips{}, "/api/v1/trips/7")
+	if status != 200 {
+		t.Fatalf("status = %d, want 200 (body: %s)", status, body)
+	}
+	var trip map[string]any
+	if err := json.Unmarshal([]byte(body), &trip); err != nil {
+		t.Fatalf("the response is not a JSON object: %v", err)
+	}
+	// The 30 fields of a search item plus 6 for the two cities.
+	if len(trip) != 36 {
+		t.Errorf("the trip has %d fields, want 36", len(trip))
+	}
+	want := map[string]any{
+		"ID": 7.0, "Price": 2_500_000.0, "DepartureDate": "2026-10-14", "AvailableSeatCount": 12.0,
+		"OriginCityID": 132.0, "OriginPersianName": "رشت", "OriginEnglishName": "rasht",
+		"DestinationCityID": 1.0, "DestinationPersianName": "تهران", "DestinationEnglishName": "tehran",
+	}
+	for key, value := range want {
+		if trip[key] != value {
+			t.Errorf("%s = %v, want %v", key, trip[key], value)
+		}
+	}
+
+	if status, body := get(t, &fakeTrips{}, "/api/v1/trips/8"); status != 404 || body != `{"error":"Trip not found","code":"trip_not_found"}` {
+		t.Errorf("unknown trip: status %d, body %s", status, body)
+	}
+	if status, _ := get(t, &fakeTrips{}, "/api/v1/trips/abc"); status != 400 {
+		t.Errorf("a word as trip id: status %d, want 400", status)
 	}
 }

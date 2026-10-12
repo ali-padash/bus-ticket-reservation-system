@@ -99,6 +99,25 @@ Returns `200`:
 `Items` is an empty list when there are no trips. The full list of the 30 `Items` fields is
 the `tripResponse` struct in `trips.go`.
 
+### `GET /api/v1/trips/{id}`
+
+*Added 2026-10-12.*
+
+One trip on its own, for a page that only knows a trip id. Returns `200` with the 30 fields of
+a search item plus 6 for the two cities (36 in all):
+
+```json
+{
+  "ID": 1721, "Price": 4580000, "DepartureDate": "2026-10-14", "DepartureTime": "05:30",
+  "AvailableSeatCount": 8, "...": "the other search-item fields",
+  "OriginCityID": 132, "OriginPersianName": "...", "OriginEnglishName": "rasht",
+  "DestinationCityID": 1, "DestinationPersianName": "...", "DestinationEnglishName": "tehran"
+}
+```
+
+The two city IDs and `DepartureDate` are what a link back to the search needs:
+`/services?from=132&to=1&date=2026-10-14`. An unknown id gives `404 trip_not_found`.
+
 ### `GET /api/v1/trips/{id}/seats`
 
 *Older route, kept working. New code should use `/seat-map`, which also carries the layout.*
@@ -125,8 +144,12 @@ passengers; the seats are then set aside for **10 minutes**; paying inside that 
 ticket. A ticket is opened with two things together: its 12-digit `Code` and the buyer's mobile
 number. The phone number always travels in the request body, never in the address.
 
-All `POST` bodies are JSON with `Content-Type: application/json`. Digits must be Latin
-(`0-9`), not Persian. Dates are Gregorian `YYYY-MM-DD`. A field the API does not know is refused.
+All `POST` bodies are JSON with `Content-Type: application/json`. Dates are Gregorian
+`YYYY-MM-DD`. A field the API does not know is refused.
+
+*Updated 2026-10-12:* a phone number, national code or ticket code may be sent in Persian or
+Arabic digits; the API reads them as the same number and always answers in Latin digits
+(`0-9`). `SeatNumber` and dates are still plain JSON numbers and Latin-digit text.
 
 ### `GET /api/v1/trips/{id}/seat-map`
 
@@ -187,8 +210,8 @@ Returned by the route above and by the three routes below.
   "ContactPhone": "09121234567",
   "Trip": {
     "ID": 1721, "CompanyPersianName": "...", "BusType": "...",
-    "OriginPersianName": "...", "OriginTerminalPersianName": "...",
-    "DestinationPersianName": "...", "DestinationTerminalPersianName": "...",
+    "OriginCityID": 132, "OriginPersianName": "...", "OriginTerminalPersianName": "...",
+    "DestinationCityID": 1, "DestinationPersianName": "...", "DestinationTerminalPersianName": "...",
     "DepartureDate": "2026-10-14", "DepartureTime": "05:30"
   },
   "Passengers": [
@@ -210,7 +233,8 @@ Returned by the route above and by the three routes below.
   countdown; do not compare `ExpiresAt` with the visitor's own clock, which may be wrong.
   It is 0 for any status other than `reserved`.
 - `PricePerSeat` already includes the trip's discount. `TotalPrice` is that times the seats.
-- `Passengers` are ordered by seat number. `Trip` has 9 fields, a passenger 6, the ticket 11.
+- `Passengers` are ordered by seat number. `Trip` has 11 fields (the two city IDs were added on
+  2026-10-12), a passenger 6, the ticket 11.
 
 ### `POST /api/v1/tickets/{code}/lookup`
 
@@ -254,7 +278,9 @@ Test `code` in the website, not the sentence. Two codes carry one more field.
 | `500` | `internal_error` | Something failed on the server. The sentence is always `Internal server error`; the real cause is written to the server log only. |
 
 What `validation_failed` checks: `ContactPhone` is 11 digits starting with `09`; 1 to 4
-passengers; no seat and no national code listed twice; names are 1 to 50 letters; `Gender` is
+passengers; no seat and no national code listed twice; names are 1 to 50 characters and made
+of letters only, in any alphabet (Persian and English both pass), with spaces, a hyphen, an
+apostrophe and the Persian half-space allowed, and digits refused; `Gender` is
 `M` or `F`; `NationalCode` is 10 digits with a correct check digit; `BirthDate` is a real date,
 not in the future and not before 1900.
 
@@ -262,7 +288,8 @@ not in the future and not before 1900.
 
 *Written 2026-10-12.*
 
-18 tests, no database. Six are for booking: the request reaches the service intact, the ticket
+19 tests, no database. One is for the single-trip route (its 36 fields, 404 and 400). Six are
+for booking: the request reaches the service intact, the ticket
 has its 11 fields, each of the 9 error kinds gives its status and exact body, 5 kinds of bad
 body never reach the service, the three ticket routes pass code and phone on, and the seat map
 and refund rules have their exact JSON. Five are for the city list: the exact JSON and headers, gzip only when

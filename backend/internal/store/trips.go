@@ -70,7 +70,14 @@ type tripRow struct {
 	DestinationTerminalName        string
 	DestinationTerminalPersianName string
 	DestinationTerminalCode        string
+	OriginCityID                   uint
+	OriginCityCode                 string
+	OriginCityName                 string
+	OriginCityPersianName          string
+	DestinationCityID              uint
 	DestinationCityCode            string
+	DestinationCityName            string
+	DestinationCityPersianName     string
 }
 
 func (r tripRow) toDomain() domain.Trip {
@@ -108,42 +115,54 @@ func (r tripRow) toDomain() domain.Trip {
 	}
 }
 
+// tripSelect is the part every trip query shares: one row per trip with its company,
+// both terminals, both cities and the free seat count. (updated 2026-10-12)
+const tripSelect = `
+	SELECT
+		services.id,
+		bus_types.is_vip,
+		bus_types.code AS bus_code,
+		services.bus_name,
+		services.price,
+		to_char(services.departure_time, 'HH24:MI') AS departure_time,
+		to_char(services.departure_date, 'YYYY-MM-DD') AS departure_date,
+		services.description,
+		services.brief_description,
+		services.discount_percentage,
+		` + freeSeatCount + ` AS available_seat_count,
+		companies.id AS company_id,
+		companies.code AS company_code,
+		companies.name AS company_name,
+		companies.persian_name AS company_persian_name,
+		companies.logo AS company_logo,
+		companies.url AS company_url,
+		origin.name AS origin_terminal_name,
+		origin.persian_name AS origin_terminal_persian_name,
+		origin.code AS origin_terminal_code,
+		destination.name AS destination_terminal_name,
+		destination.persian_name AS destination_terminal_persian_name,
+		destination.code AS destination_terminal_code,
+		origin_city.id AS origin_city_id,
+		origin_city.code AS origin_city_code,
+		origin_city.name AS origin_city_name,
+		origin_city.persian_name AS origin_city_persian_name,
+		destination_city.id AS destination_city_id,
+		destination_city.code AS destination_city_code,
+		destination_city.name AS destination_city_name,
+		destination_city.persian_name AS destination_city_persian_name
+	FROM services
+	JOIN bus_types ON bus_types.id = services.bus_type_id
+	JOIN companies ON companies.id = services.company_id
+	JOIN terminals AS origin ON origin.id = services.origin_terminal_id
+	JOIN terminals AS destination ON destination.id = services.destination_terminal_id
+	JOIN cities AS origin_city ON origin_city.id = origin.city_id
+	JOIN cities AS destination_city ON destination_city.id = destination.city_id`
+
 // TripsBetween returns the trips on one day whose terminals are in the two cities,
 // ordered by departure time.
 func (s *Store) TripsBetween(ctx context.Context, originCityID uint, destinationCityID uint, date time.Time) ([]domain.Trip, error) {
 	var rows []tripRow
-	err := s.db.WithContext(ctx).Raw(`
-		SELECT
-			services.id,
-			bus_types.is_vip,
-			bus_types.code AS bus_code,
-			services.bus_name,
-			services.price,
-			to_char(services.departure_time, 'HH24:MI') AS departure_time,
-			to_char(services.departure_date, 'YYYY-MM-DD') AS departure_date,
-			services.description,
-			services.brief_description,
-			services.discount_percentage,
-			`+freeSeatCount+` AS available_seat_count,
-			companies.id AS company_id,
-			companies.code AS company_code,
-			companies.name AS company_name,
-			companies.persian_name AS company_persian_name,
-			companies.logo AS company_logo,
-			companies.url AS company_url,
-			origin.name AS origin_terminal_name,
-			origin.persian_name AS origin_terminal_persian_name,
-			origin.code AS origin_terminal_code,
-			destination.name AS destination_terminal_name,
-			destination.persian_name AS destination_terminal_persian_name,
-			destination.code AS destination_terminal_code,
-			destination_city.code AS destination_city_code
-		FROM services
-		JOIN bus_types ON bus_types.id = services.bus_type_id
-		JOIN companies ON companies.id = services.company_id
-		JOIN terminals AS origin ON origin.id = services.origin_terminal_id
-		JOIN terminals AS destination ON destination.id = services.destination_terminal_id
-		JOIN cities AS destination_city ON destination_city.id = destination.city_id
+	err := s.db.WithContext(ctx).Raw(tripSelect+`
 		WHERE services.departure_date = ?
 		  AND origin.city_id = ?
 		  AND destination.city_id = ?
@@ -158,6 +177,28 @@ func (s *Store) TripsBetween(ctx context.Context, originCityID uint, destination
 		trips[i] = row.toDomain()
 	}
 	return trips, nil
+}
+
+// Trip returns one trip with its two cities, or domain.ErrTripNotFound.
+func (s *Store) Trip(ctx context.Context, tripID uint) (domain.TripDetails, error) {
+	var rows []tripRow
+	err := s.db.WithContext(ctx).Raw(tripSelect+` WHERE services.id = ?`, tripID).Scan(&rows).Error
+	if err != nil {
+		return domain.TripDetails{}, err
+	}
+	if len(rows) == 0 {
+		return domain.TripDetails{}, domain.ErrTripNotFound
+	}
+	row := rows[0]
+	return domain.TripDetails{
+		Trip: row.toDomain(),
+		OriginCity: domain.City{
+			ID: row.OriginCityID, Code: row.OriginCityCode, Name: row.OriginCityName, PersianName: row.OriginCityPersianName,
+		},
+		DestinationCity: domain.City{
+			ID: row.DestinationCityID, Code: row.DestinationCityCode, Name: row.DestinationCityName, PersianName: row.DestinationCityPersianName,
+		},
+	}, nil
 }
 
 type seatRow struct {

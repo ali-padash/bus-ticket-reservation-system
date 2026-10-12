@@ -16,6 +16,7 @@ type TripStore interface {
 	TripsBetween(ctx context.Context, originCityID uint, destinationCityID uint, date time.Time) ([]domain.Trip, error)
 	Seats(ctx context.Context, tripID uint) ([]domain.Seat, error)
 	FreeSeatCount(ctx context.Context, tripID uint) (int, error)
+	Trip(ctx context.Context, tripID uint) (domain.TripDetails, error)
 	Layout(ctx context.Context, tripID uint) ([][]uint, error)
 	RefundRules(ctx context.Context, tripID uint) ([]domain.RefundRule, error)
 }
@@ -44,6 +45,15 @@ func (s *Trips) Search(ctx context.Context, q domain.TripSearch) (domain.SearchR
 		return domain.SearchResult{}, fmt.Errorf("search trips: %w", err)
 	}
 	return domain.SearchResult{Date: q.Date, Origin: origin, Destination: destination, Trips: trips}, nil
+}
+
+// Trip returns one trip with the two cities it runs between.
+func (s *Trips) Trip(ctx context.Context, tripID uint) (domain.TripDetails, error) {
+	trip, err := s.store.Trip(ctx, tripID)
+	if err != nil {
+		return domain.TripDetails{}, fmt.Errorf("trip %d: %w", tripID, err)
+	}
+	return trip, nil
 }
 
 // Seats returns every seat of a trip, ordered by seat number.
