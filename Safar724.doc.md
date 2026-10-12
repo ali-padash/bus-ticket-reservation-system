@@ -38,8 +38,8 @@ next 14 days from when the seed was run.
 
 ## How a search works, end to end
 
-1. The home page (`/`) shows a form. The city boxes autocomplete from a 915-city list that is
-   bundled into the website itself (`devs/src/util/cities.json`).
+1. The home page (`/`) shows a form. The website fetches the 915-city list once from
+   `GET /api/v1/cities` and the city boxes autocomplete from it in the browser.
 2. On submit, the site moves to `/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD`. The search
    lives in the address, so refresh, back/forward and a shared link all repeat it.
 3. The services page calls `GET /api/v1/trips?from=…&to=…&date=…`.
@@ -94,8 +94,6 @@ name can stay. The issue is narrower: some of their actual property is committed
 
 ### Code quality (short version; details are in each folder's doc)
 
-- The city list exists twice: in the database (served by `GET /api/v1/cities`) and as a file
-  inside the website. The website should fetch it from the API and drop its copy.
 - Many spelling mistakes in names: `MainChoces`, `CardWithIconVerticall`, `setDistinationState`,
   `alertMassage`, `calender`.
 
@@ -119,7 +117,7 @@ Suggested order. Each step leaves the project in a better, working state.
    Still open: consider TanStack Query.
 6. **Clean the backend.** *Done 2026-10-12:* split into web / service / store layers, one config
    package, one error shape, 30 tests. The API now serves the city list from the database,
-   cached in memory. Still to do: the website fetching it instead of carrying its own copy.
+   cached in memory, and the website loads it from there (its script went from 481 KB to 219 KB).
 7. **Finish one real feature: booking a seat.** This is the piece that makes the project
    interesting, because two people must not be able to book the same seat. A database
    transaction plus a test that proves it is worth more on a CV than any amount of tidying.
