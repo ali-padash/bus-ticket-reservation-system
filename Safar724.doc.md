@@ -1,0 +1,126 @@
+# Safar724 — project overview
+
+A bus ticket search site, built as a learning project. It copies the look and flow of the
+Iranian site Safar724. You pick an origin city, a destination city and a date, and you get a list
+of bus trips. You can open a trip and see which seats are taken.
+
+This doc describes the project **as it is today**, including what is broken. It was written in
+October 2026 from a full read of the code.
+
+## The two halves
+
+| Folder | What it is | Doc |
+| --- | --- | --- |
+| `backend/` | Go API in three layers (web, rules, SQL). Gin, GORM, PostgreSQL in Docker. | [backend.doc.md](backend/backend.doc.md) |
+| `devs/` | The website. React 18, TypeScript, Vite, React Router, Jotai. | [devs.doc.md](devs/devs.doc.md) |
+
+Other root files:
+
+- `README.md` — the public description. Several claims in it are not true (see below).
+- `Safar724.drawio.png` — the **old** database diagram. The schema has since changed; see
+  [migrations.doc.md](backend/migrations/migrations.doc.md).
+- `docker-compose.yml` — starts the local PostgreSQL database.
+- `.env.example` — the settings to copy into `.env`.
+
+## Run it
+
+```bash
+cp .env.example .env
+docker compose up -d db
+cd backend && go run ./cmd/api seed    # tables + demo data
+go run ./cmd/api                       # API on http://localhost:8080
+```
+
+Then in another terminal: `cd devs && npm install && npm run dev`.
+
+Demo trips exist between Tehran, Mashhad, Esfahan, Shiraz, Tabriz, Rasht, Ahvaz and Yazd, for the
+next 14 days from when the seed was run.
+
+## How a search works, end to end
+
+1. The home page (`/`) shows a form. The city boxes autocomplete from a 915-city list that is
+   bundled into the website itself (`devs/src/util/cities.json`).
+2. On submit, the site moves to `/services` and carries the form values along in router state.
+3. The services page calls `GET /api/v1/trips?from=…&to=…&date=…`.
+4. In the Go server the request passes through three layers: the web layer checks the input,
+   the service checks that both cities exist, and the store runs one SQL query that joins
+   services, companies, bus types and terminals and works out how many seats are free.
+5. The page lists the trips. You can sort by time or price, and filter by company or terminal.
+6. Clicking "view and buy" on a trip calls `/trips/{id}/seats` and `/trips/{id}/availability`,
+   then draws the bus seat map.
+
+That is where it stops. **There is no booking.** The "buy" buttons do nothing. There is no login,
+no payment, and the API has no write endpoints at all.
+
+## What works and what does not
+
+Checked by actually running the tools:
+
+| Check | Result |
+| --- | --- |
+| `go vet ./...` (backend) | Clean. |
+| `go test ./...` (backend) | 19 tests pass (2026-10-12). 6 of them need the database running. |
+| `npx tsc --noEmit` (frontend) | **13 errors.** So `npm run build` fails. `npm run dev` still works because Vite skips type checks. |
+| `npm run lint` (frontend) | 29 errors, 16 warnings. |
+| Frontend tests | None. |
+| Can someone else run it? | The backend, yes: Docker database, migrations and seed all work. The frontend runs in dev mode only. |
+
+## Problems to know about
+
+### Old secrets in git history
+
+- Database passwords for two old Vercel/Neon databases are in the git history
+  (`addCitiesJsonToDatabase.py`, an old `.env` file, old versions of `db.go`). **Those databases
+  have been deleted**, so the passwords open nothing. The Python script is still in the tree and
+  should be removed; the Go seed replaces it.
+
+### The README says things that are not true
+
+- It lists **Tailwind CSS**. Tailwind is not installed. Styling is 30 hand-written CSS files.
+- It lists "searching by date" and a normalized database as features, which is fair, but the
+  feature list reads as if booking exists. It does not.
+- The frontend folder tree in the README is missing the `src/` level.
+
+### It uses Safar724's own files
+
+Mimicking Safar724 is the purpose of the project, and that is fine. The design, the flow and the
+name can stay. The issue is narrower: some of their actual property is committed to a public repo.
+
+- Safar724's logos, marketing text, phone number and "11,332,785 customers" line are copied in.
+- The IRANSans font files are a paid font.
+- If the site is ever deployed, it could be mistaken for the real one.
+
+### Code quality (short version; details are in each folder's doc)
+
+- Frontend components talk to each other by reading the page with `document.querySelector`
+  (16 places) and by waiting with `setTimeout` (22 places), instead of using React state.
+- Refreshing `/services` loses the search and shows an error.
+- Many spelling mistakes in names: `MainChoces`, `CardWithIconVerticall`, `setDistinationState`,
+  `alertMassage`, `calender`.
+
+## Refactor plan
+
+Suggested order. Each step leaves the project in a better, working state.
+
+1. **Make it safe and honest.** Rotate the database password. Remove the Python script's
+   credentials. Fix the README so it only claims what exists.
+2. **Make it run for a stranger.** *Done for the backend:* `.env.example`, Docker Compose with
+   Postgres, migrations, and a working seed. Still to do: the frontend build, and a README that
+   explains the steps.
+3. **Make it build.** Fix the 13 type errors and the lint errors. Add CI that runs
+   `go vet`, `go test`, `tsc` and `eslint`.
+4. **Swap out the borrowed files.** Keep the design and the name. Replace the logo, use a free
+   font (for example Vazirmatn), and rewrite the copied marketing text and phone number.
+   Keep "inspired by Safar724" in the README, and add a "demo project, not affiliated" banner
+   if it is deployed.
+5. **Clean the frontend data flow.** Put the search in the URL (`/services?from=1&to=2&date=…`).
+   Remove the `querySelector` and `setTimeout` tricks. One API client file. Consider TanStack Query.
+6. **Clean the backend.** *Done 2026-10-12:* split into web / service / store layers, one config
+   package, one error shape, 19 tests. Still to do: serve the city list from the API instead of
+   shipping 490 KB of JSON to the browser.
+7. **Finish one real feature: booking a seat.** This is the piece that makes the project
+   interesting, because two people must not be able to book the same seat. A database
+   transaction plus a test that proves it is worth more on a CV than any amount of tidying.
+8. **Add tests and deploy it.** A live link and a green CI badge at the top of the README.
+
+Steps 1 to 4 are small and give most of the benefit. Step 7 is the one worth talking about in an interview.
