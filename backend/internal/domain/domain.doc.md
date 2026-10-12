@@ -10,6 +10,7 @@ and has no JSON tags and no database tags.
 | Type | Meaning |
 | --- | --- |
 | `City` | A city: id, code, English and Persian name. |
+| `CityEntry` | A `City` plus what the search box needs: province, rank, and every spelling a visitor might type. |
 | `Terminal` | A bus station. |
 | `Company` | A bus company. |
 | `Trip` | One bus on one day, with its company, both terminals, price and free seat count. |

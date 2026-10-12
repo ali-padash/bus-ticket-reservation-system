@@ -21,19 +21,28 @@ type TripService interface {
 	Availability(ctx context.Context, tripID uint) (int, error)
 }
 
+// CityService is what the city route needs. The real one is service.Cities.
+// loadedAt says when the list was read from the database; it changes only when the list does.
+type CityService interface {
+	List(ctx context.Context) (cities []domain.CityEntry, loadedAt time.Time, err error)
+}
+
 type api struct {
-	trips TripService
-	log   *slog.Logger
+	trips    TripService
+	cities   CityService
+	cityBody cityBodyCache
+	log      *slog.Logger
 }
 
 // NewHandler builds the whole API. corsOrigin is the one website address allowed to call it.
-func NewHandler(trips TripService, log *slog.Logger, corsOrigin string) http.Handler {
-	a := &api{trips: trips, log: log}
+func NewHandler(trips TripService, cities CityService, log *slog.Logger, corsOrigin string) http.Handler {
+	a := &api{trips: trips, cities: cities, log: log}
 
 	router := gin.New()
 	router.Use(gin.Recovery(), a.logRequests)
 
 	v1 := router.Group("/api/v1")
+	v1.GET("/cities", a.listCities)
 	v1.GET("/trips", a.searchTrips)
 	v1.GET("/trips/:id/seats", a.tripSeats)
 	v1.GET("/trips/:id/availability", a.tripAvailability)

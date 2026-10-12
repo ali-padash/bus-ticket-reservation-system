@@ -2,7 +2,8 @@
 
 *Rewritten 2026-10-12 after the restructure into layers.*
 
-The Go API. It only reads from the database; nothing here writes bookings yet.
+The Go API. It only reads from the database; nothing here writes bookings yet. It serves trip
+search, seat maps, and the city list for the search boxes.
 
 ## The layers
 
@@ -76,14 +77,14 @@ go vet ./...
 go test ./...
 ```
 
-19 tests in 4 packages (2026-10-12):
+30 tests in 4 packages (2026-10-12):
 
 | Package | Tests | Needs a database? |
 | --- | --- | --- |
 | `internal/config` | 2 | No |
-| `internal/service` | 4 | No, uses a fake store |
-| `internal/httpapi` | 7 (one of them runs 15 request cases) | No, uses a fake service |
-| `internal/store` | 6 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
+| `internal/service` | 9 | No, uses a fake store |
+| `internal/httpapi` | 12 (one of them runs 15 request cases) | No, uses a fake service |
+| `internal/store` | 7 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
 
 The store tests run inside a transaction that is rolled back, so they are safe to run against
 the local demo database.
@@ -126,7 +127,9 @@ inside the project start with that path.
 ## Things still to improve
 
 - No booking yet. The schema is ready for buying without an account (migration 2).
-- The city list is still shipped inside the website instead of served by the API.
+- The API serves the city list (`GET /api/v1/cities`), but the website still uses its own copy
+  until the frontend switches over.
+- Go's race detector was not run: it needs a C compiler, which this PC does not have.
 - No OpenAPI file.
 - No CI yet, so the tests only run when someone runs them.
 - Clean shutdown on Ctrl+C is written but was not tried by hand on Windows.

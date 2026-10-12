@@ -5,14 +5,14 @@ Iranian site Safar724. You pick an origin city, a destination city and a date, a
 of bus trips. You can open a trip and see which seats are taken.
 
 This doc describes the project **as it is today**, including what is broken. It was written in
-October 2026 from a full read of the code.
+October 2026 from a full read of the code, and last updated on 2026-10-12.
 
 ## The two halves
 
 | Folder | What it is | Doc |
 | --- | --- | --- |
 | `backend/` | Go API in three layers (web, rules, SQL). Gin, GORM, PostgreSQL in Docker. | [backend.doc.md](backend/backend.doc.md) |
-| `devs/` | The website. React 18, TypeScript, Vite, React Router, Jotai. | [devs.doc.md](devs/devs.doc.md) |
+| `devs/` | The website. React 18, TypeScript, Vite, React Router. | [devs.doc.md](devs/devs.doc.md) |
 
 Other root files:
 
@@ -40,7 +40,8 @@ next 14 days from when the seed was run.
 
 1. The home page (`/`) shows a form. The city boxes autocomplete from a 915-city list that is
    bundled into the website itself (`devs/src/util/cities.json`).
-2. On submit, the site moves to `/services` and carries the form values along in router state.
+2. On submit, the site moves to `/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD`. The search
+   lives in the address, so refresh, back/forward and a shared link all repeat it.
 3. The services page calls `GET /api/v1/trips?from=…&to=…&date=…`.
 4. In the Go server the request passes through three layers: the web layer checks the input,
    the service checks that both cities exist, and the store runs one SQL query that joins
@@ -59,11 +60,12 @@ Checked by actually running the tools:
 | Check | Result |
 | --- | --- |
 | `go vet ./...` (backend) | Clean. |
-| `go test ./...` (backend) | 19 tests pass (2026-10-12). 6 of them need the database running. |
-| `npx tsc --noEmit` (frontend) | **13 errors.** So `npm run build` fails. `npm run dev` still works because Vite skips type checks. |
-| `npm run lint` (frontend) | 29 errors, 16 warnings. |
+| `go test ./...` (backend) | 30 tests pass (2026-10-12). 7 of them need the database running. |
+| `npx tsc --noEmit` (frontend) | Clean (was 13 errors). |
+| `npm run lint` (frontend) | Clean (was 29 errors, 16 warnings). |
+| `npm run build` (frontend) | Passes. |
 | Frontend tests | None. |
-| Can someone else run it? | The backend, yes: Docker database, migrations and seed all work. The frontend runs in dev mode only. |
+| Can someone else run it? | Yes: Docker database, migrations, seed, API and website all start from the steps above. |
 
 ## Problems to know about
 
@@ -92,9 +94,8 @@ name can stay. The issue is narrower: some of their actual property is committed
 
 ### Code quality (short version; details are in each folder's doc)
 
-- Frontend components talk to each other by reading the page with `document.querySelector`
-  (16 places) and by waiting with `setTimeout` (22 places), instead of using React state.
-- Refreshing `/services` loses the search and shows an error.
+- The city list exists twice: in the database (served by `GET /api/v1/cities`) and as a file
+  inside the website. The website should fetch it from the API and drop its copy.
 - Many spelling mistakes in names: `MainChoces`, `CardWithIconVerticall`, `setDistinationState`,
   `alertMassage`, `calender`.
 
@@ -107,17 +108,18 @@ Suggested order. Each step leaves the project in a better, working state.
 2. **Make it run for a stranger.** *Done for the backend:* `.env.example`, Docker Compose with
    Postgres, migrations, and a working seed. Still to do: the frontend build, and a README that
    explains the steps.
-3. **Make it build.** Fix the 13 type errors and the lint errors. Add CI that runs
-   `go vet`, `go test`, `tsc` and `eslint`.
+3. **Make it build.** *Done 2026-10-12:* 13 type errors and 29 lint errors fixed, the build
+   passes. Still to do: CI that runs `go vet`, `go test`, `tsc` and `eslint`.
 4. **Swap out the borrowed files.** Keep the design and the name. Replace the logo, use a free
    font (for example Vazirmatn), and rewrite the copied marketing text and phone number.
    Keep "inspired by Safar724" in the README, and add a "demo project, not affiliated" banner
    if it is deployed.
-5. **Clean the frontend data flow.** Put the search in the URL (`/services?from=1&to=2&date=…`).
-   Remove the `querySelector` and `setTimeout` tricks. One API client file. Consider TanStack Query.
+5. **Clean the frontend data flow.** *Done 2026-10-12:* the search is in the URL, the 18
+   `querySelector` calls are gone, and `setTimeout` went from 22 to 5 (animation waits only).
+   Still open: consider TanStack Query.
 6. **Clean the backend.** *Done 2026-10-12:* split into web / service / store layers, one config
-   package, one error shape, 19 tests. Still to do: serve the city list from the API instead of
-   shipping 490 KB of JSON to the browser.
+   package, one error shape, 30 tests. The API now serves the city list from the database,
+   cached in memory. Still to do: the website fetching it instead of carrying its own copy.
 7. **Finish one real feature: booking a seat.** This is the piece that makes the project
    interesting, because two people must not be able to book the same seat. A database
    transaction plus a test that proves it is worth more on a CV than any amount of tidying.

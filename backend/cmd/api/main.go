@@ -32,6 +32,9 @@ const usage = `usage: go run ./cmd/api [command]
 // How long requests that are already running get to finish after Ctrl+C.
 const shutdownTimeout = 10 * time.Second
 
+// How long the city list is kept in memory before it is read from the database again.
+const cityListLifetime = time.Hour
+
 func main() {
 	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
 	if err := run(os.Args[1:], log); err != nil {
@@ -79,9 +82,10 @@ func run(args []string, log *slog.Logger) error {
 func serve(cfg config.Config, db *store.Store, log *slog.Logger) error {
 	gin.SetMode(gin.ReleaseMode)
 	trips := service.NewTrips(db)
+	cities := service.NewCities(db, cityListLifetime, time.Now)
 	server := &http.Server{
 		Addr:              cfg.APIAddr,
-		Handler:           httpapi.NewHandler(trips, log, cfg.CORSOrigin),
+		Handler:           httpapi.NewHandler(trips, cities, log, cfg.CORSOrigin),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 

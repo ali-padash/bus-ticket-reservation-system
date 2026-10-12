@@ -11,14 +11,15 @@ build the parts and connect them.
 2. Loads the settings (`internal/config`).
 3. Opens the database and runs pending migrations (`internal/store`).
 4. `seed`: loads the demo data and exits. `migrate`: exits.
-5. `serve`: creates the trip service on top of the store, creates the web layer on top of the
-   service, and starts the HTTP server.
+5. `serve`: creates the trip and city services on top of the store, creates the web layer on
+   top of the services, and starts the HTTP server.
 
 Step 5 is the only place where the layers meet:
 
 ```go
 trips := service.NewTrips(db)
-handler := httpapi.NewHandler(trips, log, cfg.CORSOrigin)
+cities := service.NewCities(db, cityListLifetime, time.Now)
+handler := httpapi.NewHandler(trips, cities, log, cfg.CORSOrigin)
 ```
 
 This is called **dependency injection by constructor**: each part receives what it needs as an

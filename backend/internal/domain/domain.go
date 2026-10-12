@@ -29,6 +29,18 @@ type City struct {
 	PersianName string
 }
 
+// CityEntry is a city as the search box needs it: with its province and every
+// spelling a visitor might type for it.
+type CityEntry struct {
+	City
+	ProvinceName        string
+	ProvincePersianName string
+	IsCapital           bool
+	// SortOrder ranks suggestions: a higher number is shown first.
+	SortOrder         int
+	SearchExpressions []string
+}
+
 // Terminal is a bus station. One city can have several.
 type Terminal struct {
 	Code        string

@@ -73,7 +73,7 @@ func (f *fakeTrips) Availability(_ context.Context, tripID uint) (int, error) {
 func get(t *testing.T, service TripService, path string) (int, string) {
 	t.Helper()
 	gin.SetMode(gin.TestMode)
-	handler := NewHandler(service, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
+	handler := NewHandler(service, &fakeCities{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
 	recorder := httptest.NewRecorder()
 	handler.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, path, nil))
 	return recorder.Code, recorder.Body.String()
@@ -192,7 +192,7 @@ func TestNoTripsIsAnEmptyList(t *testing.T) {
 
 func TestCORSAllowsOnlyTheWebsite(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	handler := NewHandler(&fakeTrips{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
+	handler := NewHandler(&fakeTrips{}, &fakeCities{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
 
 	for origin, want := range map[string]string{
 		"http://localhost:5173": "http://localhost:5173",

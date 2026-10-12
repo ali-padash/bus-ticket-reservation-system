@@ -10,8 +10,9 @@ nothing above it sees SQL or GORM.
 | File | Job |
 | --- | --- |
 | `store.go` | `Open`, `Migrate`, `Close`. |
-| `trips.go` | The four read queries. |
-| `trips_test.go` | Tests that run those queries against a real database. |
+| `trips.go` | The four read queries for trips. |
+| `cities.go` | The query for the full city list. |
+| `trips_test.go`, `cities_test.go` | Tests that run those queries against a real database. |
 
 ## `store.go`
 
@@ -33,6 +34,15 @@ nothing above it sees SQL or GORM.
 
 Every method takes a `context`, so a request the browser has abandoned stops its query.
 
+## `cities.go`
+
+*Written 2026-10-12.*
+
+`Cities()` returns all 915 cities, each with its list of spellings, best-ranked first. It runs
+two plain queries (cities, then spellings) and joins them in Go. That is simpler than one query
+that packs the spellings into arrays, and it runs at most once an hour because the service
+keeps the result in memory.
+
 ### How "free seats" is calculated
 
 A seat is free when `for_sale` is true **and** no row in `passengers` points at it. The SQL for
@@ -47,7 +57,7 @@ move it to the day before.
 
 ## Tests
 
-6 tests against a real PostgreSQL. They are **skipped** when `DATABASE_URL` is not set or the
+7 tests against a real PostgreSQL. They are **skipped** when `DATABASE_URL` is not set or the
 database cannot be reached.
 
 Each test opens a transaction, inserts its own small trip (two test cities with ids 900001 and
