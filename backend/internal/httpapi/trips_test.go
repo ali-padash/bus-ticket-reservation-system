@@ -36,14 +36,16 @@ func (f *fakeTrips) Search(_ context.Context, q domain.TripSearch) (domain.Searc
 	}
 	if q.DestinationCityID == 21 {
 		result.Trips = []domain.Trip{{
-			ID:             7,
-			Company:        domain.Company{ID: 3, Code: "C03", PersianName: "آسمان آبی"},
-			Origin:         domain.Terminal{Code: "THR-T1", PersianName: "غرب"},
-			BusCode:        "VIP_25_1",
-			VIP:            true,
-			Price:          2_500_000,
-			DepartureTime:  "08:30",
-			AvailableSeats: 12,
+			ID:                 7,
+			Company:            domain.Company{ID: 3, Code: "C03", PersianName: "آسمان آبی"},
+			Origin:             domain.Terminal{Code: "THR-T1", PersianName: "غرب"},
+			BusCode:            "VIP_25_1",
+			BusNameEnglish:     "Volvo VIP, 25 seats",
+			DescriptionEnglish: "Aseman Abi",
+			VIP:                true,
+			Price:              2_500_000,
+			DepartureTime:      "08:30",
+			AvailableSeats:     12,
 		}}
 	}
 	return result, nil
@@ -197,13 +199,14 @@ func TestSearchResponseShape(t *testing.T) {
 		t.Fatalf("Items = %s, want a list with one trip", response["Items"])
 	}
 	item := items[0]
-	if len(item) != 30 {
-		t.Errorf("a trip has %d fields, want 30", len(item))
+	if len(item) != 32 {
+		t.Errorf("a trip has %d fields, want 32", len(item))
 	}
 	want := map[string]any{
 		"ID": 7.0, "IsVip": true, "BusCode": "VIP_25_1", "Price": 2_500_000.0, "DepartureTime": "08:30",
 		"AvailableSeatCount": 12.0, "CompanyId": 3.0, "CompanyCode": "C03", "CompanyPersianName": "آسمان آبی",
 		"OriginTerminalCode": "THR-T1", "OriginTerminalPersianName": "غرب", "BriefDescription": nil,
+		"BusTypeEnglish": "Volvo VIP, 25 seats", "DescriptionEnglish": "Aseman Abi",
 	}
 	for key, value := range want {
 		if item[key] != value {
@@ -248,9 +251,9 @@ func TestOneTrip(t *testing.T) {
 	if err := json.Unmarshal([]byte(body), &trip); err != nil {
 		t.Fatalf("the response is not a JSON object: %v", err)
 	}
-	// The 30 fields of a search item plus 6 for the two cities.
-	if len(trip) != 36 {
-		t.Errorf("the trip has %d fields, want 36", len(trip))
+	// The 32 fields of a search item plus 6 for the two cities. (updated 2026-10-12)
+	if len(trip) != 38 {
+		t.Errorf("the trip has %d fields, want 38", len(trip))
 	}
 	want := map[string]any{
 		"ID": 7.0, "Price": 2_500_000.0, "DepartureDate": "2026-10-14", "AvailableSeatCount": 12.0,

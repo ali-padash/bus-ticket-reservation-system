@@ -73,6 +73,17 @@ What buying a ticket needs.
   ticket sets its passengers to not active; the rows stay as history.
 - An index on unpaid holds by deadline, for the clean-up job.
 
+### `00004_english_trip_text.sql`
+
+*Written 2026-10-12.*
+
+The website gained an English version. Cities, companies and terminals already had an English
+name column; a trip's two free-text columns did not. This adds `services.bus_name_en` and
+`services.description_en`, both `NOT NULL DEFAULT ''`, so rows that existed before stay valid.
+
+Two columns were chosen over a separate translations table because there are two languages and
+two texts: a table of (row, language, text) would cost a join on every search for no gain yet.
+
 ### Rules the database enforces by itself
 
 - At most one **active** passenger per seat: **a seat cannot be sold twice.** (Since migration 3;

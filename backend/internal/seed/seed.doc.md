@@ -17,10 +17,12 @@ Fills the database with demo data. Run it with `go run ./cmd/api seed` from `bac
 It runs inside one transaction, so it either fully works or changes nothing.
 
 1. Empties every table.
-2. Loads the 915 cities and their 12,242 search spellings from `cities.json`.
+2. Loads the 915 cities and their 12,242 search spellings from `cities.json`. English city and
+   province names are trimmed: 50 cities have one that ends in a stray space in the file (2026-10-12).
 3. Creates 4 bus types with their floor plans, 6 made-up companies, and 12 terminals in 8 big cities
    (Tehran has three, Mashhad and Esfahan two, the rest one).
 4. Creates 2 to 5 trips per day, for the next 14 days, between every pair of those 8 cities.
+   Each trip gets its bus name and description in Persian and in English (2026-10-12).
 5. Creates one seat row per seat for each trip, and two refund rules per trip.
 6. Creates 20 demo users.
 7. Sells a random share of seats on about three quarters of the trips, and marks one seat as
@@ -51,7 +53,8 @@ floor. They used to be written out inside the website. Moving them fixed a mista
 website's 25-seat plan showed seats 18 and 21 twice and had no seats 19 and 22.
 
 A test checks that every plan holds each seat number from 1 to its seat count exactly once,
-which is the check that would have caught that mistake.
+which is the check that would have caught that mistake. A second test (2026-10-12) checks the
+helper that turns a stored name such as "hamrah-safar" into "Hamrah Safar".
 
 ## Things still to improve
 

@@ -60,8 +60,15 @@ type ticketTripResponse struct {
 	DestinationCityID              uint   `json:"DestinationCityID"`
 	DestinationPersianName         string `json:"DestinationPersianName"`
 	DestinationTerminalPersianName string `json:"DestinationTerminalPersianName"`
-	DepartureDate                  string `json:"DepartureDate"`
-	DepartureTime                  string `json:"DepartureTime"`
+	// The same names in English, for the English website.
+	CompanyName             string `json:"CompanyName"`
+	BusTypeEnglish          string `json:"BusTypeEnglish"`
+	OriginEnglishName       string `json:"OriginEnglishName"`
+	OriginTerminalName      string `json:"OriginTerminalName"`
+	DestinationEnglishName  string `json:"DestinationEnglishName"`
+	DestinationTerminalName string `json:"DestinationTerminalName"`
+	DepartureDate           string `json:"DepartureDate"`
+	DepartureTime           string `json:"DepartureTime"`
 }
 
 type passengerResponse struct {
@@ -111,6 +118,12 @@ func newTicketResponse(t domain.Ticket) ticketResponse {
 			DestinationCityID:              t.Trip.DestinationCityID,
 			DestinationPersianName:         t.Trip.DestinationCityPersianName,
 			DestinationTerminalPersianName: t.Trip.DestinationTerminalPersianName,
+			CompanyName:                    t.Trip.CompanyName,
+			BusTypeEnglish:                 t.Trip.BusNameEnglish,
+			OriginEnglishName:              t.Trip.OriginCityName,
+			OriginTerminalName:             t.Trip.OriginTerminalName,
+			DestinationEnglishName:         t.Trip.DestinationCityName,
+			DestinationTerminalName:        t.Trip.DestinationTerminalName,
 			DepartureDate:                  t.Trip.DepartureDate,
 			DepartureTime:                  t.Trip.DepartureTime,
 		},

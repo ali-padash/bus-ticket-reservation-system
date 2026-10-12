@@ -54,11 +54,13 @@ type Service struct {
 	OriginTerminalID      uint
 	DestinationTerminalID uint
 	BusName               string
+	BusNameEn             string
 	Price                 uint
 	DiscountPercentage    float64
 	DepartureDate         time.Time `gorm:"type:date"`
 	DepartureTime         string    `gorm:"type:time"`
 	Description           string
+	DescriptionEn         string
 }
 
 type Seat struct {

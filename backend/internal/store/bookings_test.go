@@ -95,6 +95,9 @@ func TestCreateHold(t *testing.T) {
 		ID: tripID, CompanyPersianName: "خط تست", BusName: "Test Bus",
 		OriginCityID: 900001, OriginCityPersianName: "تست", OriginTerminalPersianName: "غرب",
 		DestinationCityID: 900002, DestinationCityPersianName: "چک", DestinationTerminalPersianName: "مرکزی",
+		CompanyName: "test-lines", BusNameEnglish: "Test Bus, 4 seats",
+		OriginCityName: "Testville", OriginTerminalName: "west",
+		DestinationCityName: "Checkton", DestinationTerminalName: "central",
 		DepartureDate: tomorrow(), DepartureTime: "08:30",
 	}
 	if ticket.Trip != wantTrip {

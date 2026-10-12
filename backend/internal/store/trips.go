@@ -51,6 +51,8 @@ type tripRow struct {
 	IsVip                          bool
 	BusCode                        string
 	BusName                        string
+	BusNameEn                      string
+	DescriptionEn                  string
 	Price                          int64
 	DepartureTime                  string
 	DepartureDate                  string
@@ -103,6 +105,8 @@ func (r tripRow) toDomain() domain.Trip {
 		},
 		DestinationCityCode: r.DestinationCityCode,
 		BusName:             r.BusName,
+		BusNameEnglish:      r.BusNameEn,
+		DescriptionEnglish:  r.DescriptionEn,
 		BusCode:             r.BusCode,
 		VIP:                 r.IsVip,
 		Price:               r.Price,
@@ -123,6 +127,8 @@ const tripSelect = `
 		bus_types.is_vip,
 		bus_types.code AS bus_code,
 		services.bus_name,
+		services.bus_name_en,
+		services.description_en,
 		services.price,
 		to_char(services.departure_time, 'HH24:MI') AS departure_time,
 		to_char(services.departure_date, 'YYYY-MM-DD') AS departure_date,

@@ -75,8 +75,8 @@ func insertTripOn(t *testing.T, db *gorm.DB, day string) uint {
 	busType := insert(t, db, `INSERT INTO bus_types (code, seat_count, is_vip, layout)
 		VALUES ('TST_4_1', 4, true, '[[1,2],[null,null],[3,4]]')`)
 	trip := insert(t, db, `INSERT INTO services
-		(company_id, bus_type_id, origin_terminal_id, destination_terminal_id, bus_name, price, discount_percentage, departure_date, departure_time)
-		VALUES (?, ?, ?, ?, 'Test Bus', 2500000, 10, ?, '08:30')`, company, busType, from, to, day)
+		(company_id, bus_type_id, origin_terminal_id, destination_terminal_id, bus_name, bus_name_en, description_en, price, discount_percentage, departure_date, departure_time)
+		VALUES (?, ?, ?, ?, 'Test Bus', 'Test Bus, 4 seats', 'Test Lines', 2500000, 10, ?, '08:30')`, company, busType, from, to, day)
 	insert(t, db, `INSERT INTO refund_rules (service_id, min_hours_before_departure, penalty_percent) VALUES (?, 0, 50)`, trip)
 	insert(t, db, `INSERT INTO refund_rules (service_id, min_hours_before_departure, penalty_percent) VALUES (?, 1, 10)`, trip)
 
@@ -113,6 +113,8 @@ func TestTripsBetween(t *testing.T) {
 		Destination:         domain.Terminal{Code: "TST-B-T1", Name: "central", PersianName: "مرکزی"},
 		DestinationCityCode: "TST-B",
 		BusName:             "Test Bus",
+		BusNameEnglish:      "Test Bus, 4 seats",
+		DescriptionEnglish:  "Test Lines",
 		BusCode:             "TST_4_1",
 		VIP:                 true,
 		Price:               2_500_000,

@@ -44,3 +44,17 @@ func TestLayoutJSONUsesNullForFloor(t *testing.T) {
 		t.Errorf("layoutJSON = %s, want %s", got, want)
 	}
 }
+
+func TestDisplayName(t *testing.T) {
+	cases := map[string]string{
+		"hamrah-safar": "Hamrah Safar",
+		"central":      "Central",
+		" rudan ":      "Rudan",
+		"":             "",
+	}
+	for slug, want := range cases {
+		if got := displayName(slug); got != want {
+			t.Errorf("displayName(%q) = %q, want %q", slug, got, want)
+		}
+	}
+}

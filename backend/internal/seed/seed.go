@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/ali-padash/bus-ticket-reservation-system/backend/internal/domain"
@@ -102,9 +103,9 @@ func seedCities(tx *gorm.DB, source []cityJSON) (map[uint]City, error) {
 		city := City{
 			ID:                  c.ID,
 			Code:                c.Code,
-			Name:                c.Name,
+			Name:                strings.TrimSpace(c.Name),
 			PersianName:         c.PersianName,
-			ProvinceName:        c.ProvinceName,
+			ProvinceName:        strings.TrimSpace(c.ProvinceName),
 			ProvincePersianName: c.ProvincePersianName,
 			IsCapital:           c.IsCapital,
 			SortOrder:           c.Order,
@@ -194,17 +195,20 @@ func seedServices(tx *gorm.DB, busTypes []BusType, companies []Company, terminal
 					if rand.Intn(5) == 0 {
 						discount = float64(5 * (1 + rand.Intn(4)))
 					}
+					brand := brands[rand.Intn(len(brands))]
 					services = append(services, Service{
 						CompanyID:             company.ID,
 						BusTypeID:             busType.ID,
 						OriginTerminalID:      origin.ID,
 						DestinationTerminalID: destination.ID,
-						BusName:               fmt.Sprintf("%s VIP %d نفره", brands[rand.Intn(len(brands))], busType.SeatCount),
+						BusName:               fmt.Sprintf("%s VIP %d نفره", brand, busType.SeatCount),
+						BusNameEn:             fmt.Sprintf("%s VIP, %d seats", brand, busType.SeatCount),
 						Price:                 uint(basePrice + rand.Intn(50)*10_000),
 						DiscountPercentage:    discount,
 						DepartureDate:         today.AddDate(0, 0, day),
 						DepartureTime:         fmt.Sprintf("%02d:%02d", 5+rand.Intn(19), 30*rand.Intn(2)),
 						Description:           company.PersianName,
+						DescriptionEn:         displayName(company.Name),
 					})
 				}
 			}
@@ -378,4 +382,13 @@ func randomFirstName() (name string, gender string) {
 
 func randomBirthDate() time.Time {
 	return time.Date(1960+rand.Intn(45), time.Month(1+rand.Intn(12)), 1+rand.Intn(28), 0, 0, 0, 0, time.UTC)
+}
+
+// displayName turns a stored name such as "hamrah-safar" into "Hamrah Safar".
+func displayName(slug string) string {
+	words := strings.Fields(strings.ReplaceAll(slug, "-", " "))
+	for i, word := range words {
+		words[i] = strings.ToUpper(word[:1]) + word[1:]
+	}
+	return strings.Join(words, " ")
 }

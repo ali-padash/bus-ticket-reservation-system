@@ -77,13 +77,13 @@ go vet ./...
 go test ./...
 ```
 
-65 tests in 6 packages (2026-10-12):
+66 tests in 6 packages (2026-10-12):
 
 | Package | Tests | Needs a database? |
 | --- | --- | --- |
 | `internal/config` | 2 | No |
 | `internal/domain` | 1 | No |
-| `internal/seed` | 2 | No |
+| `internal/seed` | 3 | No |
 | `internal/service` | 21 | No, uses a fake store |
 | `internal/httpapi` | 19 | No, uses a fake service |
 | `internal/store` | 20 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |

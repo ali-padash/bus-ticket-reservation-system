@@ -293,6 +293,12 @@ type ticketRow struct {
 	DestinationCityID              uint
 	DestinationCityPersianName     string
 	DestinationTerminalPersianName string
+	CompanyName                    string
+	BusNameEn                      string
+	OriginCityName                 string
+	OriginTerminalName             string
+	DestinationCityName            string
+	DestinationTerminalName        string
 	DepartureDate                  string
 	DepartureTime                  string
 }
@@ -325,6 +331,12 @@ func (s *Store) Ticket(ctx context.Context, code string, phone string) (domain.T
 			destination_city.id AS destination_city_id,
 			destination_city.persian_name AS destination_city_persian_name,
 			destination.persian_name AS destination_terminal_persian_name,
+			companies.name AS company_name,
+			services.bus_name_en,
+			origin_city.name AS origin_city_name,
+			origin.name AS origin_terminal_name,
+			destination_city.name AS destination_city_name,
+			destination.name AS destination_terminal_name,
 			to_char(services.departure_date, 'YYYY-MM-DD') AS departure_date,
 			to_char(services.departure_time, 'HH24:MI') AS departure_time
 		FROM tickets
@@ -368,6 +380,12 @@ func (s *Store) Ticket(ctx context.Context, code string, phone string) (domain.T
 			DestinationCityID:              row.DestinationCityID,
 			DestinationCityPersianName:     row.DestinationCityPersianName,
 			DestinationTerminalPersianName: row.DestinationTerminalPersianName,
+			CompanyName:                    row.CompanyName,
+			BusNameEnglish:                 row.BusNameEn,
+			OriginCityName:                 row.OriginCityName,
+			OriginTerminalName:             row.OriginTerminalName,
+			DestinationCityName:            row.DestinationCityName,
+			DestinationTerminalName:        row.DestinationTerminalName,
 			DepartureDate:                  row.DepartureDate,
 			DepartureTime:                  row.DepartureTime,
 		},

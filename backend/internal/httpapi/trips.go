@@ -32,6 +32,7 @@ type tripResponse struct {
 	ID                             uint    `json:"ID"`
 	IsVip                          bool    `json:"IsVip"`
 	BusType                        string  `json:"BusType"`
+	BusTypeEnglish                 string  `json:"BusTypeEnglish"`
 	BusCode                        string  `json:"BusCode"`
 	Price                          int64   `json:"Price"`
 	MidwayCity                     string  `json:"MidwayCity"`
@@ -49,6 +50,7 @@ type tripResponse struct {
 	DepartureTime                  string  `json:"DepartureTime"`
 	DepartureDate                  string  `json:"DepartureDate"`
 	Description                    string  `json:"Description"`
+	DescriptionEnglish             string  `json:"DescriptionEnglish"`
 	BriefDescription               *string `json:"BriefDescription"`
 	DestinationCode                string  `json:"DestinationCode"`
 	AvailableSeatCount             int     `json:"AvailableSeatCount"`
@@ -90,6 +92,7 @@ func newTripResponse(t domain.Trip) tripResponse {
 		ID:                             t.ID,
 		IsVip:                          t.VIP,
 		BusType:                        t.BusName,
+		BusTypeEnglish:                 t.BusNameEnglish,
 		BusCode:                        t.BusCode,
 		Price:                          t.Price,
 		CompanyCode:                    t.Company.Code,
@@ -104,6 +107,7 @@ func newTripResponse(t domain.Trip) tripResponse {
 		DepartureTime:                  t.DepartureTime,
 		DepartureDate:                  t.DepartureDate,
 		Description:                    t.Description,
+		DescriptionEnglish:             t.DescriptionEnglish,
 		BriefDescription:               t.BriefDescription,
 		DestinationCode:                t.DestinationCityCode,
 		AvailableSeatCount:             t.AvailableSeats,

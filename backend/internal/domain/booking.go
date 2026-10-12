@@ -94,8 +94,15 @@ type TicketTrip struct {
 	DestinationCityID              uint
 	DestinationCityPersianName     string
 	DestinationTerminalPersianName string
-	DepartureDate                  string // YYYY-MM-DD
-	DepartureTime                  string // HH:MM
+	// The same names in English, for the English website.
+	CompanyName             string
+	BusNameEnglish          string
+	OriginCityName          string
+	OriginTerminalName      string
+	DestinationCityName     string
+	DestinationTerminalName string
+	DepartureDate           string // YYYY-MM-DD
+	DepartureTime           string // HH:MM
 }
 
 // Ticket is one purchase: one trip, one buyer's phone, one or more passengers.

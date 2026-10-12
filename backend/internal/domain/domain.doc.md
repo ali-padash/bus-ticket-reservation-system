@@ -14,7 +14,7 @@ and has no JSON tags and no database tags.
 | `CityEntry` | A `City` plus what the search box needs: province, rank, and every spelling a visitor might type. |
 | `Terminal` | A bus station. |
 | `Company` | A bus company. |
-| `Trip` | One bus on one day, with its company, both terminals, price and free seat count. |
+| `Trip` | One bus on one day, with its company, both terminals, price and free seat count. Its bus name and description exist in Persian and English (2026-10-12). |
 | `Seat` | One seat of a trip. `Gender` is nil while it is empty. |
 | `TripSearch` | The question: from which city, to which city, on which day. |
 | `SearchResult` | The answer: both cities and the list of trips. |

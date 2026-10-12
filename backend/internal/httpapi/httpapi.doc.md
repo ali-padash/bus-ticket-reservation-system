@@ -96,15 +96,35 @@ Returns `200`:
 }
 ```
 
-`Items` is an empty list when there are no trips. The full list of the 30 `Items` fields is
+`Items` is an empty list when there are no trips. The full list of the 32 `Items` fields is
 the `tripResponse` struct in `trips.go`.
+
+#### English text
+
+*Added 2026-10-12.*
+
+The website has an English and a Persian version. The API does not know which one is asking:
+it sends both languages in every answer and the website picks. That keeps answers the same for
+everyone, so they stay easy to cache and to test.
+
+| Thing | Persian field | English field |
+| --- | --- | --- |
+| Bus | `BusType` ("Volvo VIP 25 ...") | `BusTypeEnglish` ("Volvo VIP, 25 seats") |
+| Description | `Description` | `DescriptionEnglish` |
+| Company | `CompanyPersianName` | `CompanyName` ("sepid-rah") |
+| Terminals | `OriginTerminalPersianName`, `DestinationTerminalPersianName` | `OriginTerminalName`, `DestinationTerminalName` ("central") |
+| Cities | `OriginPersianName`, `DestinationPersianName` | `OriginEnglishName`, `DestinationEnglishName` ("rasht") |
+
+`BusTypeEnglish` and `DescriptionEnglish` are finished text. The English **names** are lowercase
+and may have a hyphen ("abadeh-tashk", "hamrah-safar"); the website turns them into display
+names (hyphen to space, capital first letters).
 
 ### `GET /api/v1/trips/{id}`
 
 *Added 2026-10-12.*
 
-One trip on its own, for a page that only knows a trip id. Returns `200` with the 30 fields of
-a search item plus 6 for the two cities (36 in all):
+One trip on its own, for a page that only knows a trip id. Returns `200` with the 32 fields of
+a search item plus 6 for the two cities (38 in all):
 
 ```json
 {
@@ -212,6 +232,9 @@ Returned by the route above and by the three routes below.
     "ID": 1721, "CompanyPersianName": "...", "BusType": "...",
     "OriginCityID": 132, "OriginPersianName": "...", "OriginTerminalPersianName": "...",
     "DestinationCityID": 1, "DestinationPersianName": "...", "DestinationTerminalPersianName": "...",
+    "CompanyName": "sepid-rah", "BusTypeEnglish": "Volvo VIP, 26 seats",
+    "OriginEnglishName": "rasht", "OriginTerminalName": "central",
+    "DestinationEnglishName": "tehran", "DestinationTerminalName": "west",
     "DepartureDate": "2026-10-14", "DepartureTime": "05:30"
   },
   "Passengers": [
@@ -233,8 +256,8 @@ Returned by the route above and by the three routes below.
   countdown; do not compare `ExpiresAt` with the visitor's own clock, which may be wrong.
   It is 0 for any status other than `reserved`.
 - `PricePerSeat` already includes the trip's discount. `TotalPrice` is that times the seats.
-- `Passengers` are ordered by seat number. `Trip` has 11 fields (the two city IDs were added on
-  2026-10-12), a passenger 6, the ticket 11.
+- `Passengers` are ordered by seat number. `Trip` has 17 fields (the two city IDs and the six
+  English names were added on 2026-10-12), a passenger 6, the ticket 11.
 
 ### `POST /api/v1/tickets/{code}/lookup`
 
@@ -288,7 +311,7 @@ not in the future and not before 1900.
 
 *Written 2026-10-12.*
 
-19 tests, no database. One is for the single-trip route (its 36 fields, 404 and 400). Six are
+19 tests, no database. One is for the single-trip route (its 38 fields, 404 and 400). Six are
 for booking: the request reaches the service intact, the ticket
 has its 11 fields, each of the 9 error kinds gives its status and exact body, 5 kinds of bad
 body never reach the service, the three ticket routes pass code and phone on, and the seat map

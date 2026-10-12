@@ -65,6 +65,9 @@ type Trip struct {
 	Destination         Terminal
 	DestinationCityCode string
 	BusName             string
+	// BusNameEnglish and DescriptionEnglish are the same text for the English website.
+	BusNameEnglish     string
+	DescriptionEnglish string
 	// BusCode names the seat layout the website draws, for example VIP_25_1.
 	BusCode            string
 	VIP                bool
