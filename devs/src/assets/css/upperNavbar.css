@@ -26,8 +26,7 @@
     color: white;
 }
 
-.upper-top-bar .two img {
-    height: 26px;
+.upper-top-bar .two .site-logo {
     margin-inline-start: 15px;
 }
 

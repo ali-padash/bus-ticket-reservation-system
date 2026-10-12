@@ -1,6 +1,7 @@
 {
   "meta": {
-    "title": "Safar724 - Bus tickets"
+    "title": "Rahi - Bus tickets",
+    "name": "Rahi"
   },
   "common": {
     "loading": "Loading ...",
@@ -21,7 +22,6 @@
     "openMenu": "Open the menu",
     "closeMenu": "Close the menu",
     "slogan": "The easiest way to book and buy bus tickets",
-    "logoAlt": "Safar724 logo",
     "otherLanguage": "فارسی",
     "guide": "Help",
     "agency": "Agency panel",
@@ -71,9 +71,9 @@
     "seatTitle": "Choose your seat",
     "seatText": "Buying online lets you pick your own seat. Look at the seat map of the bus, choose the seat you like and enjoy your trip.",
     "busTitle": "Choose the ticket that suits you",
-    "busText": "We work with all bus companies. Their tickets are shown with price, departure time, terminal and bus type, so you can choose the one that suits you.",
+    "busText": "Tickets from the bus companies are shown with price, departure time, terminal and bus type, so you can choose the one that suits you.",
     "routeTitle": "Enter the origin and destination",
-    "routeText": "Buying a bus ticket on Safar724 is simple and needs no sign-up. Enter the origin and destination to see the best, most trusted and cheapest bus tickets."
+    "routeText": "Buying a bus ticket on Rahi is simple and needs no sign-up. Enter the origin and destination to see the best, most trusted and cheapest bus tickets."
   },
   "info": {
     "printTitle": "Print or view your ticket",
@@ -87,33 +87,33 @@
     "heading": "Bus tickets: frequently asked questions",
     "more": "More...",
     "toggle": "Show or hide the answer",
-    "extraCostQuestion": "Does buying a bus ticket on Safar724 cost extra?",
-    "extraCostAnswer": "No. Buying on Safar724 adds no extra cost for the passenger: the online price is the same as the price at the terminal. Buying online also lets you see discounted tickets on different routes and buy at the best price.",
-    "pricesQuestion": "Does Safar724 set the ticket prices?",
-    "pricesAnswer": "No. Safar724 has no part in setting ticket prices. All prices are set by the bus companies and shown to passengers on the Safar724 website.",
+    "extraCostQuestion": "Does buying a bus ticket on Rahi cost extra?",
+    "extraCostAnswer": "No. Buying on Rahi adds no extra cost for the passenger: the online price is the same as the price at the terminal. Buying online also lets you see discounted tickets on different routes and buy at the best price.",
+    "pricesQuestion": "Does Rahi set the ticket prices?",
+    "pricesAnswer": "No. Rahi has no part in setting ticket prices. All prices are set by the bus companies and shown to passengers on the Rahi website.",
     "vipQuestion": "What is the difference between a VIP and a regular bus ticket?",
     "vipAnswer": "A VIP ticket is for a bus with fewer seats, seats that recline further, and extras such as a charger and a seat-back screen. Travelling on a VIP bus is more comfortable, and a VIP ticket costs more.",
     "childrenQuestion": "Do children under 2 need a ticket?",
     "childrenAnswer": "Yes. Everyone who sits in a seat of their own needs a ticket, so a seat must be booked for them. This also applies to online booking.",
     "petsQuestion": "Can I take a pet on the bus?",
-    "petsAnswer": "Carrying animals on intercity buses is against road transport rules. For details, see the article about pets on intercity buses on the Safar724 website.",
+    "petsAnswer": "Carrying animals on intercity buses is against road transport rules.",
     "cancelQuestion": "Can a bus ticket be cancelled online?",
-    "cancelAnswer": "If the ticket was bought online on Safar724, it can be cancelled online. Go to the refund section and enter the 12-digit ticket number. A ticket bought at a terminal or on another website cannot be cancelled on Safar724.",
+    "cancelAnswer": "If the ticket was bought online on Rahi, it can be cancelled online. Go to the refund section and enter the 12-digit ticket number. A ticket bought at a terminal or on another website cannot be cancelled on Rahi.",
     "printQuestion": "Do I need to print my ticket after buying online?",
     "printAnswer": "No. The ticket number sent to you by text message is enough for your trip."
   },
   "trust": {
-    "headingLine1": "Why 11,332,785 people",
-    "headingLine2": "have trusted us to buy their bus tickets?",
-    "text": "Safar724 lists a wide range of trips and lets you buy bus tickets from bus companies and cooperatives right away, with no need to sign up. Seeing the bus type and its photos, and choosing the seat you want, lets you plan a trip to anywhere in the country with confidence.",
+    "headingLine1": "Why choose Rahi",
+    "headingLine2": "to buy your bus tickets?",
+    "text": "Rahi lists a wide range of trips and lets you buy bus tickets from bus companies and cooperatives right away, with no need to sign up. Seeing the bus type and its photos, and choosing the seat you want, lets you plan a trip to anywhere in the country with confidence.",
     "supportTitle": "Friendly support",
     "supportText": "Do not worry about any problem. Whether it is the departure time, a text message that did not arrive or anything else, our support team is ready to help you by phone or online.",
     "companiesTitle": "Trusted companies and Iran's terminals in one place",
-    "companiesText": "From Seir-o-Safar and Mihan Noor to Adl and Royal Safar; from Volvo to Scania and MAN; from VIP and reclining seats to single and regular seats: all of them are here for you to book and buy, online or by phone.",
+    "companiesText": "From Volvo to Scania and MAN; from VIP and reclining seats to single and regular seats: all of them are here for you to book and buy online.",
     "discountsTitle": "Discounts and special prices",
-    "discountsText": "With Safar724 you can compare the prices and discounts of the bus companies, and easily choose and book cheap, good-quality tickets at the times and on the routes you want.",
-    "buyingTitle": "Several ways to buy",
-    "buyingText": "Safar724 lets you book and buy bus tickets online on the website and in the app, and also by phone, from terminals across the country."
+    "discountsText": "With Rahi you can compare the prices and discounts of the bus companies, and easily choose and book cheap, good-quality tickets at the times and on the routes you want.",
+    "buyingTitle": "Easy online buying",
+    "buyingText": "Rahi lets you book and buy bus tickets online on the website, with no need to sign up."
   },
   "search": {
     "origin": "Origin",

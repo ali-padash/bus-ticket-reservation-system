@@ -26,6 +26,7 @@ that language, so someone who cannot read the page they landed on can still find
 | `WholeNavbar` | Combines the three below. Tracks scroll position and whether the menu is open. |
 | `UpperNavbar` | Thin top bar: sign up, log in, contact, phone number. |
 | `LowerNavbar` | Logo bar. Shrinks when the page is scrolled. |
+| `Logo` | The site's logo: an own mark drawn as one SVG shape, then the name as real text ("Rahi" or "راهی", from `meta.name`). Props: `variant` (blue, or white for the blue bar), `size` in pixels, `markOnly`. Used by `LowerNavbar`, `UpperNavbar`, `Sidebar` and, mark only, `BusLoading`. The name is text and not a picture so that it follows the language and the font of the page, stays sharp at any size, and can be read by screen readers and search engines. (written 2026-10-13) |
 | `Sidebar` | Slide-in menu for small screens. |
 | `MainChoces` | The six menu links, shared by `LowerNavbar` and `Sidebar`. |
 | `BottomNavbar` | Footer links. |

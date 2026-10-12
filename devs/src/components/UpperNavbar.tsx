@@ -1,6 +1,6 @@
 import React from "react";
 import "../assets/css/upperNavbar.css";
-import logo from "../assets/images/logoWhite.282e17b9.svg";
+import Logo from "./Logo";
 import LanguageSwitch from "./LanguageSwitch";
 import { PHONE_AREA, PHONE_NUMBER } from "../util/Locale";
 import { useLocale } from "../util/useLocale";
@@ -46,7 +46,7 @@ const UpperNavbar = ({ scrolled, style, isFocused, setBringList }: Props) => {
         </p>
       </div>
       <div className="two">
-        <img src={logo} alt={t("nav.logoAlt")} />
+        <Logo variant="white" size={26} />
         <div className="call-us">
           <h6>{t("nav.support")}</h6>
           <span>{num(PHONE_AREA)}</span>

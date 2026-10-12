@@ -51,7 +51,8 @@ place, and a third language would be added in one file.
 Also here: `toLatinDigits` (Persian and Arabic digits to 0-9, used on everything that is
 checked, sent to the API or put in an address), `displayName` (`"abadeh-tashk"` to
 `"Abadeh Tashk"`, `"Chaharmahal-and-Bakhtiari"` to `"Chaharmahal and Bakhtiari"`), `directionOf`,
-and the two halves of the support phone number.
+and the two halves of the support phone number (a placeholder, 021 00000, since 2026-10-13:
+the site has no support line and must not show the real company's number).
 
 - Weekday and month names come from the browser (`Intl`, with `fa-IR` or `en-GB`), so none
   is written in the text files.

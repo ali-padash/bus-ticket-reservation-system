@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/images/logo.png";
+import Logo from "./Logo";
 import "../assets/css/lowerNavbar.css";
 import MainChoces from "./MainChoces";
 import { useLocale } from "../util/useLocale";
@@ -40,14 +40,7 @@ const LowerNavbar = ({ scrolled, bringList, setBringList, menuListRef, iconListR
         {t("nav.slogan")}
       </a>
       <a href="#" className="actual-logo">
-        <img
-          src={logo}
-          alt={t("nav.logoAlt")}
-          style={{
-            width: scrolled ? "90px" : "110px",
-            transition: "all 0.2s ease-in-out",
-          }}
-        />
+        <Logo size={scrolled ? 30 : 36} />
       </a>
     </div>
   );

@@ -26,7 +26,7 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 | Path | Contents | Doc |
 | --- | --- | --- |
 | `src/` | All application code. Start with "Two languages" in its doc. | [src.doc.md](src/src.doc.md) |
-| `public/` | Only `vite.svg`, the default Vite icon. | — |
+| `public/` | Only `favicon.svg`, the tab icon: the mark of the Rahi logo (since 2026-10-13). | — |
 | `index.html` | The single HTML page. It declares the site light-only (`color-scheme`), see [assets.doc.md](src/assets/assets.doc.md). Its `lang`, `dir` and `<title>` are the English ones; the page sets the real ones as soon as it knows the language. | — |
 | `package.json` | Scripts and dependencies. | — |
 | `tsconfig*.json`, `vite.config.ts`, `.eslintrc.cjs` | Tool settings, all Vite defaults. | — |
@@ -50,6 +50,14 @@ build failed.
 The site expects the Go backend on `http://localhost:8080`. To point it elsewhere, create
 `devs/.env.local` containing `VITE_API_URL=http://localhost:18080` (or whatever address you use).
 
+## The name
+
+*Written 2026-10-13.*
+
+The website is called **Rahi** (Persian: راهی, "on one's way"). It is modelled on the real
+site Safar724, whose design it copies on purpose; it no longer carries that site's name, logo,
+phone number or company claims. The repository folder and `Safar724.doc.md` keep their names.
+
 ## Bundle size
 
 *Updated 2026-10-12.*
@@ -65,6 +73,7 @@ the remembered passengers were added.
 | Booking pages added | 243.52 kB | 78.79 kB |
 | Two languages (2026-10-12) | 331.66 kB | 108.19 kB |
 | Real refund terms on the card, remembered passengers (2026-10-12) | 334.01 kB | 109.05 kB |
+| Own name and logo (2026-10-13) | 333.77 kB | 108.94 kB |
 
 The two-languages step cost 88 kB (29 kB gzipped): the `i18next` and `react-i18next` libraries, and the
 two text files, about 15 kB each. Both text files travel to every visitor. Loading only the

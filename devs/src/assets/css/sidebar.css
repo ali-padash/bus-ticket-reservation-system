@@ -64,11 +64,10 @@
     border-radius: 1000px;
 }
 
-.sidebar-blueheader img {
+.sidebar-blueheader .site-logo {
     position: absolute;
     inset-inline-start: 30px;
-    transform: translateY(-8px);
-    width: 80px;
+    transform: translateY(-4px);
 }
 
 .sidebar-blueheader p {

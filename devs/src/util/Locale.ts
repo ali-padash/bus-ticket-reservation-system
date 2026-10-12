@@ -16,8 +16,10 @@ export const directionOf = (lang: Lang): "rtl" | "ltr" => (lang === "fa" ? "rtl"
 const intlLocale = { en: "en-GB", fa: "fa-IR" };
 
 // The two halves of the support phone number, as data. They are shown in the page's digits.
+// The site has no support line, so this is a placeholder that is plainly not a real number.
+// (updated 2026-10-13)
 export const PHONE_AREA = "021";
-export const PHONE_NUMBER = "53826";
+export const PHONE_NUMBER = "00000";
 
 // ---- digits ----
 

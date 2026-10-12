@@ -72,9 +72,15 @@
     align-content: center;
 }
 
-.lower-top-bar .actual-logo img {
-    width: 110px;
-    height: auto;
+/* The logo is text and a drawing now, so the link around it must not look like a link.
+   (updated 2026-10-13) */
+.lower-top-bar .actual-logo,
+.lower-top-bar .actual-logo:hover {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    /* The slogan beside it is pulled 12px towards the logo; this keeps the two apart. */
+    padding-inline-end: 16px;
 }
 
 .lower-top-bar .before-logo {

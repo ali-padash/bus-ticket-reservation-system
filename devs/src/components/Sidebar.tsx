@@ -1,6 +1,6 @@
 import React from 'react'
 import "../assets/css/sidebar.css"
-import log from "../assets/images/logoWhite.282e17b9.svg"
+import Logo from './Logo';
 import MainChoces from './MainChoces';
 import LanguageSwitch from './LanguageSwitch';
 import { PHONE_AREA, PHONE_NUMBER } from '../util/Locale';
@@ -20,7 +20,7 @@ const Sidebar = ({ bringList, setBringList, sidebarRef} : Props) => {
     <div className={`sidebar${(bringList) ? " show" : ""}`} ref={sidebarRef}>
       <div className='sidebar-blueheader'>
         <i role="button" aria-label={t("nav.closeMenu")} onClick={() => setBringList(false)}>×</i>
-        <img src={log} alt={t("nav.logoAlt")} />
+        <Logo variant="white" size={28} />
         <p><br/>{t("nav.slogan")}</p>
         <span>{t("nav.support")}</span>
         <div className='phone-number' dir="ltr"><span>{num(PHONE_AREA)}</span><span>{num(PHONE_NUMBER)}</span></div>

@@ -1,6 +1,6 @@
 # devs/src/locales
 
-*Written 2026-10-12, updated the same day.*
+*Written 2026-10-12, updated 2026-10-13.*
 
 Every text a visitor can read, once per language. No component has a sentence written into it.
 
@@ -69,8 +69,18 @@ const { t } = useLocale();
 ## Things to know
 
 - The marketing texts on the home page (the four steps, the three info cards, the questions,
-  "why ... people trust us") were copied from the real Safar724 site and are to be replaced.
-  The English is a plain translation of them and adds no claim of its own.
+  the "why choose" block) began as the texts of the real Safar724 site, which this project is
+  modelled on. On 2026-10-13 the site got its own name, Rahi, and 16 keys changed in both
+  files. Nine only had the name replaced. Seven were rewritten because they made claims that
+  belonged to the real company: `trust.headingLine1` and `trust.headingLine2` (a customer
+  count), `trust.companiesText` (names of real bus companies, buying by phone),
+  `trust.buyingTitle` and `trust.buyingText` (an app, buying by phone), `faq.petsAnswer` (an
+  article that does not exist here) and `steps.busText` ("we work with all bus companies").
+  The new sentences claim nothing that the site does not do. `nav.logoAlt` was removed and
+  `meta.name` added (the name shown beside the logo), so the count is still 245.
+- Still describing things the site does not do, left as they were: the texts that say a
+  ticket number arrives by text message (`steps.smsTitle`, `steps.smsText`, `info.printText`,
+  `faq.printAnswer`) and `trust.supportText` (a support team reachable by phone or online).
 - `home.dateTooltip` is the English word "date" in the Persian file too. It was like that
   before and was left alone.
 - The count is still 245 after the second round of 2026-10-12: `refund.sampleEarly` and

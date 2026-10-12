@@ -1,4 +1,4 @@
-import transparentLogo from "../assets/images/logo-transparent.png";
+import Logo from "./Logo";
 import s from "../assets/css/busLoading.module.css";
 
 const BusLoading = () => {
@@ -7,7 +7,7 @@ const BusLoading = () => {
       <div className={s.quarterCircle} style={{ margin: "10px" }}></div>
       <div className={s.quarterCircle} style={{ padding: "5px", margin: "5px", animationDuration: "2s" }}></div>
       <div className={s.quarterCircle} style={{ padding: "10px", animationDuration: "2.5s" }}></div>
-      <img src={transparentLogo} alt="" className={s.logo} />
+      <Logo markOnly size={80} className={s.logo} />
     </>
   );
 };

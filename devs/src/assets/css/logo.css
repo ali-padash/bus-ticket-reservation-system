@@ -1,0 +1,35 @@
+/* The site's logo: a mark and the name beside it. Its size comes from one number, the
+   font-size set by the component, so the mark and the name grow and shrink together.
+   (written 2026-10-13) */
+.site-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.22em;
+    color: #3498db;
+    line-height: 1;
+    white-space: nowrap;
+    transition: font-size 0.2s ease-in-out;
+}
+
+.site-logo.white {
+    color: white;
+}
+
+.site-logo-mark {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    fill: currentColor;
+}
+
+.site-logo-name {
+    font-family: var(--font);
+    font-size: 0.8em;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+/* Persian letters join, so they must not be pulled together or apart. */
+:root[dir="rtl"] .site-logo-name {
+    letter-spacing: 0;
+}

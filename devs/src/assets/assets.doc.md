@@ -123,22 +123,32 @@ Font Awesome is not here; it is loaded from a CDN in `index.html`.
 
 | File | Used by |
 | --- | --- |
-| `logo.png` | `LowerNavbar` |
-| `logoWhite.282e17b9.svg` | `UpperNavbar`, `Sidebar` |
-| `logo-transparent.png` | `BusLoading` |
 | `header.png` | landing page background (from CSS) |
 | `BusFront.png` | `BusSchema` |
 | `CompanyDefaultLogo.png` | `Panel`, when a company logo fails to load |
 | `reserve.svg`, `bus_dash.svg`, `calender.svg`, `volume.svg` | `TicketModel` |
 
+### The logo
+
+*Written 2026-10-13.*
+
+There is no logo picture any more. The three Safar724 logo files (`logo.png`,
+`logoWhite.282e17b9.svg`, `logo-transparent.png`) were deleted on 2026-10-13, and so was
+`public/vite.svg`. The logo is now drawn by the `Logo` component: an own mark (a map pin with
+a road through it) as one SVG shape, and the name as real text. `css/logo.css` styles it. The
+same shape is the tab icon, `public/favicon.svg`; it is written in both places, so a change
+to the mark has to be made twice.
+
 ## Problems
 
-*Updated 2026-10-12.*
+*Updated 2026-10-13.*
 
-- **Licensing.** The logos and most images belong to Safar724; the hash in
-  `logoWhite.282e17b9.svg` shows it was saved from their built site. IRANSans is a paid font.
-  Copying the site's look is the point of the project and is fine; these specific files are the
-  part to replace, with an own logo and a free font such as Vazirmatn.
+- **Still borrowed from Safar724**, to be replaced in a later step: `header.png` and the other
+  illustrations (`BusFront.png`, `reserve.svg`, `bus_dash.svg`, `calender.svg`, `volume.svg`,
+  `CompanyDefaultLogo.png`), the IRANSans font files (a paid font; a free one such as
+  Vazirmatn would do), and the two icon fonts in `icons/`. Copying the site's look is the
+  point of the project and is fine; these files are the part that is not ours. The name, the
+  logo, the phone number and the company's own claims are no longer used.
 - Global plain-CSS class names can clash. Generic names like `.container`, `.row`, `.grid`,
   `.selected` and `.show` are used in several files.
 - Colours are repeated as raw hex values everywhere. There are no CSS variables.
