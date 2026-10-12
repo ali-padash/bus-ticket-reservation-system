@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Service } from "../util/Models";
+import { useNavigate } from "react-router-dom";
+import { SeatMap, Service } from "../util/Models";
 import { TbClockHour9 } from "react-icons/tb";
 import s from "../assets/css/panel.module.css";
 import defaultImg from "../assets/images/CompanyDefaultLogo.png";
 import { toPersianNum, putComma } from "../util/Function";
 import BusDetails from "./BusDetails";
-import { fetchNumberOfAvailableSeats } from "../util/FetchFunction";
+import { fetchSeatMap } from "../util/FetchFunction";
 
 interface Props {
   item: Service;
@@ -14,13 +15,20 @@ interface Props {
   // Whether this card shows its seat map. The list owns it, so only one card is open.
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  searchQuery: string;
   index?: number;
 }
 
-const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0 }: Props) => {
-  // The count from the search can be a little old. Opening the card asks for a fresh one.
-  const [freshSeatCount, setFreshSeatCount] = useState<number | null>(null);
+const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, searchQuery, index = 0 }: Props) => {
+  const navigate = useNavigate();
+  // The seat map is loaded each time the card is opened. One call gives both the drawing and
+  // a fresh count of free seats; the count from the search can be a little old.
+  // (updated 2026-10-12)
+  const [seatMap, setSeatMap] = useState<SeatMap | null>(null);
+  const [errorFetching, setErrorFetching] = useState(false);
   const [loadingSeatCount, setLoadingSeatCount] = useState(false);
+  // Goes up by one for each press of "try again", which makes the effect below run again.
+  const [retryCount, setRetryCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,14 +44,17 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
       window.scrollTo({ top: y, behavior: "smooth" });
     }, 350);
     setLoadingSeatCount(true);
-    fetchNumberOfAvailableSeats(item.ID, abortController.signal)
+    setErrorFetching(false);
+    fetchSeatMap(item.ID, abortController.signal)
       .then((result) => {
-        setFreshSeatCount(result);
+        setSeatMap(result);
         setLoadingSeatCount(false);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;
         console.error("Error fetching details:", err);
+        setSeatMap(null);
+        setErrorFetching(true);
         setLoadingSeatCount(false);
       });
     return () => {
@@ -51,7 +62,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
       abortController.abort();
       setLoadingSeatCount(false);
     };
-  }, [isOpen, item.ID]);
+  }, [isOpen, item.ID, retryCount]);
 
   return (
     <div className={s.panel} ref={ref} style={{ animationDuration: `${Math.min(index * 0.05 + 0.3, 0.6)}s` }}>
@@ -81,7 +92,7 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
                 تعداد صندلی های خالی:
                 <span className={s.availableSeatCount}>
                   {!loadingSeatCount ? (
-                    toPersianNum(freshSeatCount ?? item.AvailableSeatCount)
+                    toPersianNum(seatMap?.AvailableSeatCount ?? item.AvailableSeatCount)
                   ) : (
                     <i className="fas fa-spinner"></i>
                   )}
@@ -94,7 +105,14 @@ const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0
           {!item.Description && <div style={{ height: "30px" }}></div>}
         </div>
       </div>
-      <BusDetails serviceID={item.ID} busCode={item.BusCode} showDetails={isOpen} setShowDetails={setIsOpen} />
+      <BusDetails
+        showDetails={isOpen}
+        setShowDetails={setIsOpen}
+        seatMap={seatMap}
+        errorFetching={errorFetching}
+        retry={() => setRetryCount((count) => count + 1)}
+        onBuy={() => navigate(`/booking/${item.ID}?${searchQuery}`)}
+      />
     </div>
   );
 };

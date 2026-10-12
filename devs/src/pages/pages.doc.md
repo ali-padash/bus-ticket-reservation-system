@@ -55,6 +55,54 @@ Details worth knowing:
 - The day strip and the calendar change only the `date` of the search on screen. The city
   boxes take effect when "search" is pressed (or the swap button, which searches at once).
 
+## `BookingPage.tsx` — route `/booking/<tripId>`
+
+*Written 2026-10-12.*
+
+Steps 2 and 3 of buying. The frame is `BookingFrame`; beside the main card sits `TripSummary`.
+The main card shows `BookingSteps` and then either `SeatPicker` or `PassengerForm`.
+
+What is in the address, and why:
+
+| Part | Meaning |
+| --- | --- |
+| `from`, `to`, `date` | The search the buyer came from. The page repeats it to find its trip (the API has no "one trip" route), and uses it for "back to the results". |
+| `seats=18,19` | The chosen seats. A seat click replaces the history entry, so "back" does not replay every click. |
+| `step=passengers` | Present on the form step. Changing step adds a history entry, so "back" returns to the seats. |
+
+What is ordinary state: the seat map, the phone and passenger details being typed (kept by seat
+number, so going back to the seats and returning does not lose them), the messages per field.
+
+On submit: browser checks, then `POST /trips/<id>/tickets`.
+
+- `201`: the phone and the search are saved for this tab and the page moves to `/tickets/<code>`.
+- `validation_failed`: a message under each field the server names.
+- `seats_unavailable`: back to the seat step, the lost seats dropped from the choice, the seat
+  map loaded again, and a message naming them.
+- `trip_departed`, or anything else: a message above the buttons.
+
+## `TicketPage.tsx` — routes `/tickets/<code>` and `/tickets/<code>/payment`
+
+*Written 2026-10-12.*
+
+Steps 4 and 5. Every time it opens it calls `POST /tickets/<code>/lookup` with the phone from
+`sessionStorage`, and then shows one of these:
+
+| Situation | Shown |
+| --- | --- |
+| No phone in this tab, or the phone does not open the ticket | `PhonePrompt` |
+| `reserved`, on `/tickets/<code>` | `TicketReview`: passengers, prices, refund rules, countdown |
+| `reserved`, on `/tickets/<code>/payment` | `FakeBank`: the demo bank page with "pay" and "cancel" |
+| `paid` | `TicketIssued`: the 12-digit code, trip, passengers and seats |
+| `cancelled`, `expired`, or the countdown at zero | `TicketFailed`: says the seats were released |
+
+"Pay" and "cancel" call the API, show the ticket that comes back, and return to
+`/tickets/<code>`. If the server says the ticket was already settled (`hold_expired`,
+`ticket_cancelled`, `ticket_already_paid`), the page reads the ticket again and shows the truth.
+
+The review has no "edit" button: the seats are already on hold, so changing the details means
+cancelling and starting again.
+
 ## Problems
 
 *Updated 2026-10-12.*
@@ -62,5 +110,7 @@ Details worth knowing:
 - `TicketModel` (a "no service on this route" notice) is always shown on the results page, with
   Tehran, Rasht and a date typed in by hand.
 - There is no "not found" route.
+- A refresh on the passenger form keeps the seats but loses what was typed.
+- There is no page to find a ticket by typing its code; a ticket opens only from its address.
 - Pressing "search" twice without changing anything adds a second, identical entry to the
   browser history.

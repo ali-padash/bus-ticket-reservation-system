@@ -50,10 +50,11 @@ The site expects the Go backend on `http://localhost:8080`. To point it elsewher
 
 ## Bundle size
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
-`npm run build` gives one JavaScript file of **219.27 kB (70.96 kB gzipped)**. It was 480.66 kB
-(115.01 kB gzipped) while the city list was bundled in; the list now comes from the API.
+`npm run build` gives one JavaScript file of **243.23 kB (78.68 kB gzipped)**, measured after
+the booking pages were added. Before them it was 219.27 kB (70.96 kB gzipped), and 480.66 kB
+(115.01 kB gzipped) while the city list was still bundled in.
 
 ## Packages
 

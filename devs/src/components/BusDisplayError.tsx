@@ -1,12 +1,20 @@
 import RefundBox from "./RefundBox";
 import BusSchema from "./BusSchema";
 import Legend from "./Legend";
-import { seatsArray_DUMMY } from "../util/BusModels";
 import s from "../assets/css/busDetails.module.css";
 
 interface Props {
   retry: () => void;
 }
+
+// A made-up bus drawn blurred behind the error message, so the box does not look empty.
+const placeholderLayout = [
+  [1, 4, 7, 10, 13, null, null, 18, 21, 24, 27, 30],
+  [2, 5, 8, 11, 14, null, null, 19, 22, 25, 28, 31],
+  [null, null, null, null, null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, null, null, null, null, null, null, null],
+  [3, 6, 9, 12, 15, 16, 17, 20, 23, 26, 29, 32],
+];
 
 const BusSchemaError = ({ retry }: Props) => {
   return (
@@ -21,7 +29,7 @@ const BusSchemaError = ({ retry }: Props) => {
         </button>
       </div>
       <div className={s.busInformation}>
-        <BusSchema convertedSeatsArray={seatsArray_DUMMY} blur={true} column={12} />
+        <BusSchema layout={placeholderLayout} seats={[]} blur={true} />
         <Legend className={s.legend} />
       </div>
       <RefundBox />

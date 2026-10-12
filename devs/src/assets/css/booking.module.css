@@ -1,0 +1,511 @@
+/* Shared by the booking pages (/booking/... and /tickets/...): the frame with the trip
+   summary beside the main card, the step line, forms, buttons and the small result pages.
+   Colours follow the rest of the site: #3498db / #2980b9 blue, #2ecc71 green, #e74c3c red. */
+
+.page {
+  direction: rtl;
+  background-color: #f0f0f0;
+  padding: 25px 0 60px;
+  min-height: 420px;
+}
+
+.container {
+  width: 1170px;
+  max-width: 95%;
+  margin: auto;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+/* ---- trip summary ---- */
+
+.summary {
+  width: 290px;
+  flex-shrink: 0;
+  padding: 18px 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+.summary h3 {
+  margin: 0 0 14px;
+  font-size: 14px;
+  color: #777;
+}
+
+.summaryRoute {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.summaryRoute i {
+  color: #3498db;
+  margin-inline: 10px;
+  font-size: 13px;
+}
+
+.summaryTerminals {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  gap: 8px;
+  padding: 7px 0;
+}
+
+.summaryRow span:first-child {
+  color: #777;
+  min-width: 48px;
+}
+
+.summarySmall {
+  color: #777;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.summarySeats {
+  margin-top: 8px;
+  color: #777;
+}
+
+.summarySeats strong {
+  color: #3498db;
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+/* ---- main card and step line ---- */
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 20px 25px 25px;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: #999;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.steps li::after {
+  content: "";
+  width: 26px;
+  height: 2px;
+  background-color: #ddd;
+  margin-right: 4px;
+}
+
+.steps li:last-child::after {
+  display: none;
+}
+
+.stepNumber {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  text-align: center;
+  background-color: #ddd;
+  color: white;
+  font-weight: bold;
+}
+
+.steps li.stepReached {
+  color: #2980b9;
+}
+
+.steps li.stepReached .stepNumber,
+.steps li.stepPassed::after {
+  background-color: #3498db;
+}
+
+.main h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #333;
+}
+
+.intro {
+  font-size: 13px;
+  color: #555;
+  line-height: 2.1;
+  margin: 0 0 16px;
+}
+
+.main h4 {
+  margin: 22px 0 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* ---- seat choosing ---- */
+
+.busArea {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.legend {
+  width: 95%;
+  margin: 8px auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #777;
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.busPlaceholder {
+  position: relative;
+  height: 190px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #777;
+  font-size: 14px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 40px;
+  align-items: center;
+  font-size: 13px;
+  color: #777;
+}
+
+.chip {
+  background-color: #27ae60;
+  padding: 9px 14px;
+  font-size: 14px;
+}
+
+.chip:hover {
+  background-color: #1f9150;
+}
+
+.chip i {
+  margin-left: 8px;
+}
+
+/* ---- messages ---- */
+
+.notice {
+  background-color: #fef5e7;
+  color: #a2660a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 2;
+  margin: 12px 0;
+}
+
+.errorNotice {
+  background-color: #fdecea;
+  color: #c0392b;
+}
+
+.countdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.countdown strong {
+  font-size: 20px;
+  direction: ltr;
+}
+
+/* ---- forms ---- */
+
+.passengerBlock {
+  border-top: 1px solid #eaeaea;
+  margin-top: 18px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-family: 'IRANSansWeb', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+  outline: none;
+  direction: rtl;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #3498db;
+}
+
+.field.invalid input,
+.field.invalid select {
+  border-color: #e74c3c;
+}
+
+.fieldError {
+  margin: 4px 2px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #e74c3c;
+}
+
+.phoneField {
+  max-width: 330px;
+}
+
+.hint {
+  font-size: 12px;
+  color: #777;
+  line-height: 2;
+  margin: 14px 0 0;
+}
+
+/* ---- buttons ---- */
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.primary,
+.pay {
+  padding: 12px 38px;
+  font-size: 16px;
+  background-color: #3498db;
+}
+
+.primary:hover {
+  background-color: #2980b9;
+}
+
+.pay {
+  background-color: #2ecc71;
+}
+
+.pay:hover {
+  background-color: #22b25e;
+}
+
+.primary:disabled,
+.pay:disabled {
+  opacity: 0.6;
+  cursor: auto;
+}
+
+.plain {
+  background-color: transparent;
+  color: #555;
+  font-size: 14px;
+  padding: 10px 4px;
+  text-decoration: none;
+}
+
+.plain:hover {
+  color: #2980b9;
+}
+
+/* ---- review ---- */
+
+.reviewGrid {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 16px;
+}
+
+.box {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.box h4 {
+  margin-top: 0;
+}
+
+.box p {
+  font-size: 13px;
+  color: #555;
+  line-height: 2;
+  margin: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th,
+.table td {
+  text-align: right;
+  padding: 8px 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table th {
+  color: #777;
+  font-weight: normal;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.priceRow span:first-child {
+  color: #777;
+}
+
+.priceRow.total {
+  border-top: 1px solid #eaeaea;
+  margin-top: 6px;
+  padding-top: 12px;
+  font-weight: bold;
+}
+
+/* ---- small centred pages: demo bank, ticket issued, failure, phone ---- */
+
+.centred {
+  width: 620px;
+  max-width: 95%;
+  margin: auto;
+  padding: 30px 30px 34px;
+  text-align: center;
+  color: #333;
+}
+
+.centred h2 {
+  margin: 14px 0 12px;
+  font-size: 20px;
+}
+
+.centred p {
+  font-size: 14px;
+  color: #555;
+  line-height: 2.1;
+  margin: 0 0 6px;
+}
+
+.bigIcon {
+  font-size: 54px;
+  color: #3498db;
+}
+
+.failed .bigIcon,
+.failed h2 {
+  color: #e74c3c;
+}
+
+.issued .bigIcon {
+  color: #2ecc71;
+}
+
+.code {
+  display: inline-block;
+  direction: ltr;
+  letter-spacing: 3px;
+  font-size: 26px;
+  font-weight: bold;
+  color: #2980b9;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 8px 22px;
+  margin: 8px 0 14px;
+}
+
+.centredActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.buttonLink {
+  display: inline-block;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+.ticketDetails {
+  text-align: right;
+  margin-top: 18px;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .summary {
+    width: 100%;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .reviewGrid {
+    grid-template-columns: 1fr;
+  }
+}

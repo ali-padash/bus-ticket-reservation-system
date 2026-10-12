@@ -1,29 +1,37 @@
 import { toPersianNum } from "../util/Function";
-import { SeatType } from "../util/Models";
+import { SeatStatus } from "../util/Models";
 
 interface Props {
-  seat: SeatType;
+  seatNumber: number | null;
+  status: SeatStatus;
   size?: string;
+  // Given only for a seat the visitor may choose or un-choose. It makes the seat clickable.
+  onClick?: () => void;
 }
 
-const Seat = ({ seat, size="27px" }: Props) => {
-  return seat == null ? (
-    <div />
-  ) : (
+const backgroundColors = { M: "#aee2fa", F: "#ffb2d3", N: "#C5C5C5", S: "#27ae60", free: "white" };
+const textColors = { M: "white", F: "white", N: "#777", S: "white", free: "#22819c" };
+
+const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
+  const look = status ?? "free";
+  return (
     <div
       className="seat"
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-label={onClick ? `صندلی ${toPersianNum(seatNumber ?? "")}` : undefined}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (onClick && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          // Enter here chooses the seat; it must not also reach a page-wide Enter handler.
+          e.stopPropagation();
+          onClick();
+        }
+      }}
       style={{
-        backgroundColor:
-          seat[1] == "M"
-            ? "#aee2fa"
-            : seat[1] == "F"
-            ? "#ffb2d3"
-            : seat[1] == null
-            ? "white"
-            : seat[1] == "N"
-            ? "#C5C5C5"
-            : "black",
-        color:  seat[1] == null ? "#22819c" : seat[1] == "N" ? "#777"  : "white",
+        backgroundColor: backgroundColors[look],
+        color: textColors[look],
         margin: "4px auto",
         borderRadius: "5px",
         fontWeight: "bold",
@@ -33,9 +41,10 @@ const Seat = ({ seat, size="27px" }: Props) => {
         fontSize: "11px",
         textAlign: "center",
         boxSizing: "border-box",
-        border: seat[1] == null ? "1px solid silver" : "none",
+        border: status == null ? "1px solid silver" : "none",
+        cursor: onClick ? "pointer" : undefined,
       }}>
-      {seat[0] && toPersianNum(seat[0])}
+      {seatNumber && toPersianNum(seatNumber)}
     </div>
   );
 };

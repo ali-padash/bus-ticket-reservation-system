@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./assets/css/index.css";
 import MainPage from "./pages/MainPage"
 import ServicePage from "./pages/ServicePage"
+import BookingPage from "./pages/BookingPage"
+import TicketPage from "./pages/TicketPage"
 import { CitiesStatus, City } from "./util/Models";
 import { fetchCities } from "./util/FetchFunction";
 
@@ -33,6 +35,9 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage cities={cities} citiesStatus={citiesStatus} />} />
         <Route path="/services/" element={<ServicePage cities={cities} citiesStatus={citiesStatus} />} />
+        <Route path="/booking/:tripId" element={<BookingPage />} />
+        <Route path="/tickets/:code" element={<TicketPage />} />
+        <Route path="/tickets/:code/payment" element={<TicketPage bank />} />
       </Routes>
     </Router>
     </>

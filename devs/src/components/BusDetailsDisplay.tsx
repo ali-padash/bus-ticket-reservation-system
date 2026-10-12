@@ -2,30 +2,30 @@ import RefundBox from './RefundBox'
 import BusSchema from './BusSchema'
 import Legend from './Legend'
 import s from "../assets/css/busDetails.module.css";
-import { SeatType } from '../util/Models';
+import { SeatMap } from '../util/Models';
 
 interface Props {
   setShowDetails: (showDetails: boolean) => void
-  convertedSeatsArray: SeatType[]
-  column: number
+  seatMap: SeatMap
+  onBuy: () => void
 }
 
-const BusDetailsDisplay = ({ setShowDetails, convertedSeatsArray, column }: Props) => {
+const BusDetailsDisplay = ({ setShowDetails, seatMap, onBuy }: Props) => {
   return (
     <>
     <div className={s.cover}>
-      <button className={s.transparentBuy}>خرید</button>
+      <button className={s.transparentBuy} onClick={onBuy}>خرید</button>
       <button className={s.backButton} onClick={() => setShowDetails(false)}>
         بازگشت
       </button>
     </div>
     <div className={s.dividerLine} />
     <div className={s.busInformation}>
-      <BusSchema convertedSeatsArray={convertedSeatsArray} column={column} />
+      <BusSchema layout={seatMap.Layout} seats={seatMap.Seats} />
       <Legend className={s.legend} />
     </div>
     <RefundBox />
-    <button className={s.greenBuy}>خرید</button>
+    <button className={s.greenBuy} onClick={onBuy}>خرید</button>
   </>
   )
 }

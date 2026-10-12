@@ -1,0 +1,213 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import s from "../assets/css/booking.module.css";
+import BookingFrame from "../components/BookingFrame";
+import BookingSteps from "../components/BookingSteps";
+import TripSummary from "../components/TripSummary";
+import TicketReview from "../components/TicketReview";
+import FakeBank from "../components/FakeBank";
+import TicketIssued from "../components/TicketIssued";
+import TicketFailed from "../components/TicketFailed";
+import PhonePrompt from "../components/PhonePrompt";
+import { Ticket } from "../util/Models";
+import { ApiError, cancelTicket, lookupTicket, payTicket } from "../util/FetchFunction";
+import { readTicketSession, saveTicketSession } from "../util/TicketStorage";
+
+interface Props {
+  // True on /tickets/<code>/payment, the demo bank page.
+  bank?: boolean;
+}
+
+// Steps 4 and 5 of buying, at /tickets/<code>: the review with its countdown, the demo bank,
+// and then either the ticket or the failure page.
+//
+// The page keeps almost nothing of its own. Every time it opens it asks the server for the
+// ticket (code from the address, phone from this tab's sessionStorage) and shows whatever the
+// ticket's Status says. That is why a refresh loses nothing. (written 2026-10-12)
+function TicketPage({ bank = false }: Props) {
+  const { code = "" } = useParams();
+  const navigate = useNavigate();
+  const [session, setSession] = useState(() => readTicketSession(code));
+  const phone = session?.phone ?? "";
+  const search = session?.search ?? "";
+
+  const [ticket, setTicket] = useState<Ticket | null>(null);
+  // The moment (on this computer's clock) the ticket above arrived. The countdown is the
+  // server's SecondsLeft minus the time that has passed since then, so only the *length* of
+  // time is measured here and a wrong clock on the visitor's computer does no harm.
+  const [receivedAt, setReceivedAt] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+  const [lookupProblem, setLookupProblem] = useState<"not_found" | "failed" | null>(null);
+  // Goes up by one each time the ticket should be asked for again.
+  const [lookupVersion, setLookupVersion] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  const receive = (newTicket: Ticket) => {
+    setTicket(newTicket);
+    setReceivedAt(Date.now());
+    setNow(Date.now());
+  };
+
+  useEffect(() => {
+    if (!phone) return;
+    const abortController = new AbortController();
+    setLookupProblem(null);
+    lookupTicket(code, phone, abortController.signal)
+      .then((newTicket) => {
+        // Only a phone that really opens the ticket is remembered for this tab.
+        saveTicketSession(code, { phone, search });
+        receive(newTicket);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") return;
+        setLookupProblem(err instanceof ApiError && err.code === "ticket_not_found" ? "not_found" : "failed");
+      });
+    return () => abortController.abort();
+  }, [code, phone, search, lookupVersion]);
+
+  const onHold = ticket?.Status === "reserved";
+  const secondsPassed = Math.max(0, Math.floor((now - receivedAt) / 1000));
+  const secondsLeft = ticket && onHold ? Math.max(0, ticket.SecondsLeft - secondsPassed) : 0;
+  const timeUp = onHold && secondsLeft === 0;
+
+  // While the seats are on hold, redraw once a second so the countdown moves.
+  useEffect(() => {
+    if (!onHold) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [onHold]);
+
+  // When the countdown reaches zero, ask the server once more: it is the judge of whether
+  // the hold has really ended.
+  useEffect(() => {
+    if (timeUp) setLookupVersion((version) => version + 1);
+  }, [timeUp]);
+
+  // Both buttons of the demo bank work the same way: call the API, show the ticket it
+  // returns, and go back to /tickets/<code>, which then shows the ticket or the failure page.
+  const finish = (action: (code: string, phone: string) => Promise<Ticket>) => {
+    setBusy(true);
+    setActionError(null);
+    action(code, phone)
+      .then((newTicket) => {
+        receive(newTicket);
+        navigate(`/tickets/${code}`, { replace: true });
+      })
+      .catch((err) => {
+        const settled = ["hold_expired", "ticket_cancelled", "ticket_already_paid"];
+        if (err instanceof ApiError && settled.includes(err.code)) {
+          // The ticket's fate was already decided. Read it again and show what it is.
+          setLookupVersion((version) => version + 1);
+          navigate(`/tickets/${code}`, { replace: true });
+        } else {
+          setActionError("متاسفانه خطایی رخ داده است. لطفا دوباره تلاش کنید.");
+        }
+      })
+      .finally(() => setBusy(false));
+  };
+
+  const resultsLink = search ? `/services?${search}` : "/";
+
+  if (!phone || lookupProblem === "not_found") {
+    return (
+      <BookingFrame>
+        <PhonePrompt
+          notFound={lookupProblem === "not_found"}
+          onSubmit={(newPhone) => {
+            setSession({ phone: newPhone, search });
+            setLookupProblem(null);
+            setLookupVersion((version) => version + 1);
+          }}
+        />
+      </BookingFrame>
+    );
+  }
+
+  if (!ticket) {
+    return (
+      <BookingFrame>
+        <div className={`${s.card} ${s.centred}`}>
+          {lookupProblem === "failed" ? (
+            <>
+              <p>متاسفانه خطایی رخ داده است.</p>
+              <div className={s.centredActions}>
+                <button className={s.primary} onClick={() => setLookupVersion((version) => version + 1)}>
+                  تلاش مجدد
+                </button>
+              </div>
+            </>
+          ) : (
+            <p>در حال بارگذاری ...</p>
+          )}
+        </div>
+      </BookingFrame>
+    );
+  }
+
+  if (ticket.Status === "paid") {
+    return (
+      <BookingFrame>
+        <TicketIssued ticket={ticket} />
+      </BookingFrame>
+    );
+  }
+
+  if (ticket.Status !== "reserved" || timeUp) {
+    return (
+      <BookingFrame>
+        <TicketFailed reason={ticket.Status === "cancelled" ? "cancelled" : "expired"} resultsLink={resultsLink} />
+      </BookingFrame>
+    );
+  }
+
+  if (bank) {
+    return (
+      <BookingFrame>
+        <FakeBank
+          ticket={ticket}
+          busy={busy}
+          actionError={actionError}
+          onPay={() => finish(payTicket)}
+          onCancel={() => finish(cancelTicket)}
+        />
+        <div className={s.centredActions}>
+          <Link className={s.plain} to={`/tickets/${code}`}>
+            بازگشت به اطلاعات سفر
+          </Link>
+        </div>
+      </BookingFrame>
+    );
+  }
+
+  return (
+    <BookingFrame>
+      <div className={s.container}>
+        <TripSummary
+          originName={ticket.Trip.OriginPersianName}
+          destinationName={ticket.Trip.DestinationPersianName}
+          originTerminal={ticket.Trip.OriginTerminalPersianName}
+          destinationTerminal={ticket.Trip.DestinationTerminalPersianName}
+          company={ticket.Trip.CompanyPersianName}
+          busType={ticket.Trip.BusType}
+          date={ticket.Trip.DepartureDate}
+          time={ticket.Trip.DepartureTime}
+          price={ticket.PricePerSeat}
+        />
+        <div className={`${s.card} ${s.main}`}>
+          <BookingSteps current={4} />
+          <TicketReview
+            ticket={ticket}
+            secondsLeft={secondsLeft}
+            busy={busy}
+            actionError={actionError}
+            onPay={() => navigate(`/tickets/${code}/payment`)}
+            onCancel={() => finish(cancelTicket)}
+          />
+        </div>
+      </div>
+    </BookingFrame>
+  );
+}
+
+export default TicketPage;

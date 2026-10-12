@@ -8,23 +8,58 @@ A mixed bag: types, helper functions, API calls, big data files, and one Python 
 
 | File | Contents | Used? |
 | --- | --- | --- |
-| `Models.ts` | TypeScript types: `City`, `Service`, `ServiceResponse`, `SeatStatus`, `SeatType`, `SeatArrayType`. They match the API contract in `backend/internal/httpapi/httpapi.doc.md`. | Yes |
-| `FetchFunction.ts` | The four API calls: `fetchCities` (`GET /cities`), `fetchServices` (`GET /trips`), `fetchSeats` (`GET /trips/{id}/seats`), `fetchNumberOfAvailableSeats` (`GET /trips/{id}/availability`). | Yes |
+| `Models.ts` | TypeScript types: `City`, `Service`, `ServiceResponse`, `SeatStatus`, `SeatArrayType`, `SeatMap`, `RefundRule`, `Passenger`, `Ticket`, `TicketTrip`, `TicketStatus`. They match the API contract in `backend/internal/httpapi/httpapi.doc.md`. | Yes |
+| `FetchFunction.ts` | The eight API calls and the `ApiError` class, see below. | Yes |
+| `Validation.ts` | Checks for the passenger form, digit conversion, Persian-to-Gregorian birth date, and the Persian message for each field. | Yes |
+| `TicketStorage.ts` | Keeps a ticket's phone and the search it came from in `sessionStorage`, per tab. | Yes |
 | `Function.ts` | Small helpers, see below. | Yes |
-| `BusModels.ts` | Seat layouts for four bus types plus one dummy layout. | Yes |
 | `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
 | `addCitiesJsonToDatabase.py` | One-off script that loads `cities.json` into Postgres. | By hand only |
 
 Deleted on 2026-10-12 because nothing used them: `Constant.ts`, `serviceResponse.json`, and
-`GlobalState.ts` (its values are now page state, see [src.doc.md](../src.doc.md)).
+`GlobalState.ts` (its values are now page state, see [src.doc.md](../src.doc.md)). `BusModels.ts`
+was deleted the same day: the bus is drawn from the layout the API sends.
 
 ## API calls
 
+*Updated 2026-10-12.*
+
+All calls share one small function, `callAPI`, which builds the address, sends JSON when there
+is a body, and parses the answer. Calls that load a page accept an `AbortSignal`, so one that
+is no longer wanted can be cancelled.
+
+| Function | Route |
+| --- | --- |
+| `fetchCities` | `GET /cities` |
+| `fetchServices` | `GET /trips?from=&to=&date=` |
+| `fetchSeatMap` | `GET /trips/{id}/seat-map` |
+| `fetchRefundRules` | `GET /trips/{id}/refund-rules` |
+| `reserveSeats` | `POST /trips/{id}/tickets` |
+| `lookupTicket` | `POST /tickets/{code}/lookup` |
+| `payTicket` | `POST /tickets/{code}/payment` |
+| `cancelTicket` | `POST /tickets/{code}/cancellation` |
+
+The older `GET /trips/{id}/seats` and `/availability` are no longer called; `seat-map` gives both.
+
+**Errors.** A status outside 200–299 becomes an `ApiError` carrying the status and the API's
+`code` (a fixed word such as `seats_unavailable`), plus `fields` for a validation error and
+`seats` for seats that could not be had. The pages decide what to do from `code`, never from
+the English sentence, so the API may reword its sentences freely.
+
+## Passenger form checks (`Validation.ts`)
+
 *Written 2026-10-12.*
 
-The four calls share one small function, `getJSON`, which builds the address, turns a status
-outside 200–299 into an error, and parses the JSON. Each call accepts an `AbortSignal`, so a
-call that is no longer wanted can be cancelled.
+- `toLatinDigits`: Persian (۰-۹) and Arabic (٠-٩) digits become 0-9. The API accepts only those.
+- `isValidPhone`: 11 digits starting with 09.
+- `isValidNationalCode`: 10 digits, and the last is the check digit worked out from the first nine.
+- `persianDateToGregorian`: `1374/01/21` -> `1995-04-10` with `jalaali-js`; null if it is not a
+  real date, is in the future, or is before 1900.
+- `validateBooking`: runs all of the above and returns a message per field name.
+- `translateFieldErrors`: turns the field names in the API's validation error into the same
+  Persian messages.
+
+The browser's checks are for speed only. The server checks everything again and is the judge.
 
 ## API address
 
@@ -47,21 +82,6 @@ call that is no longer wanted can be cancelled.
 | `addDays` | Date plus N days. |
 | `getWeekdayName` | Persian weekday name. |
 | `getFirstWeekday` | Which weekday a Persian month starts on. |
-
-## Seat layouts in `BusModels.ts`
-
-Each layout is a flat list read as a grid of **5 rows** by N columns. Each cell is either `null`
-(empty floor) or `[seatNumber, status]`. Row 3 is the aisle.
-
-| Export | Bus code from the API | Columns |
-| --- | --- | --- |
-| `seatsArray_25_1` | `VIP_25_1` | 9 |
-| `seatsArray_26_1` | `VIP_26_1` | 10 |
-| `seatsArray_29_1` | `VIP_29_1` | 11 |
-| `seatsArray_32_1` | `VIP_32_1` | 12 |
-| `seatsArray_DUMMY` | shown blurred behind the error message | 12 |
-
-Any other bus code gives an empty map.
 
 ## Problems
 

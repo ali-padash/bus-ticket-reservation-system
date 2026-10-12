@@ -1,6 +1,6 @@
 # devs/src/components
 
-41 components in one flat folder. Grouped here by what they are for.
+51 components in one flat folder. Grouped here by what they are for.
 
 ## Navigation and page frame
 
@@ -79,20 +79,42 @@ none of them stores the date.
 | `DummyPanel` | Grey placeholder card shown while loading. |
 | `TicketModel` | "We are arranging service on this route" notice. Hard-coded content. |
 
-## Seat map (opens inside a `Panel`)
+## Seat map (opens inside a `Panel`, and on the booking page)
+
+*Updated 2026-10-12.*
 
 | Component | Job |
 | --- | --- |
-| `BusDetails` | Fetches the seats, picks the layout for the bus type, shows loading / error / map. |
-| `BusDetailsDisplay` | Lays out the map, legend, refund box and buy buttons. |
-| `BusSchema` | The grid of seats with the bus front image. |
-| `Seat` | One square. Blue = man, pink = woman, grey = not for sale, white = free. |
-| `Legend` | Explains the four seat colours. |
+| `BusDetails` | Shows loading / error / map inside a trip card. The card (`Panel`) loads the data from `GET /trips/{id}/seat-map`. |
+| `BusDetailsDisplay` | Lays out the map, legend, refund box and buy buttons. Both buy buttons open the booking page. |
+| `BusSchema` | Draws the bus from the API's `Layout` (rows of seat numbers, `null` = empty floor). It knows no bus model. With `onToggleSeat` the free seats can be clicked. |
+| `Seat` | One square. Blue = man, pink = woman, grey = not for sale, white = free, green = chosen by this visitor. Clickable ones work with Enter and Space too. |
+| `Legend` | Explains the seat colours; the booking page adds the green one. |
 | `BusLoading` | Spinner. |
 | `BusDisplayError` | Error state with a retry button. (The file exports `BusSchemaError`.) |
 | `RefundBox` | Refund conditions. A popup under 1024 px wide, inline above that. |
 | `RefundItem` | One refund line. |
 | `AlertBox` | Generic modal used by `RefundBox`. |
+
+## Booking
+
+*Written 2026-10-12.*
+
+| Component | Job |
+| --- | --- |
+| `BookingFrame` | Navbar above, footer below, grey page between. Used by both booking pages. |
+| `BookingSteps` | The five-step line; steps up to the current one are blue. |
+| `TripSummary` | The "service information" box. Takes plain values, because a search result fills it on one page and a ticket on the other. |
+| `SeatPicker` | Step 2: the bus, the legend, the chosen seats as removable chips, the 4-seat notice, the "just taken" notice. |
+| `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date (Persian calendar) and gender for each seat, with a message under each wrong field. |
+| `TicketReview` | Step 4: passengers, phone, prices, the refund rules from the API, the countdown, "confirm and pay" and "cancel". |
+| `FakeBank` | The demo bank page. Says plainly that no money moves. |
+| `TicketIssued` | Step 5, success: the ticket. |
+| `TicketFailed` | Step 5, failure: cancelled or out of time; says the seats were released. |
+| `PhonePrompt` | Asks for the buyer's phone when the ticket address is opened without it. |
+
+These components only show things and report clicks. The two pages hold the state and make the
+API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 ## Landing page content
 
@@ -106,14 +128,14 @@ none of them stores the date.
 
 ### Things that look finished but are not
 
-- Both **buy** buttons in `BusDetailsDisplay` have no click handler.
-- Seats cannot be clicked or selected.
-- `RefundBox` shows two fixed lines. It never reads the refund rules in the database.
-  The second line says "50" in the badge and "10%" in the text.
+- `RefundBox` (inside a trip card on the results page) still shows two fixed lines, and the
+  second says "50" in the badge and "10%" in the text. The review page shows the real rules
+  from the API; this box should use them too.
+- "Left out from earlier passengers", login and "my tickets" do not exist.
 
 ### Decisions made in the 2026-10-12 cleanup
 
-*Written 2026-10-12.*
+*Updated 2026-10-12.*
 
 - **Sorted and filtered lists are derived, not stored.** `ServicesDisplay` computes the list
   with `useMemo` from the search result, the sort choice and the filters. Before, it kept three
@@ -125,14 +147,16 @@ none of them stores the date.
   would stay with the row and show up on the wrong trip.
 - **Load-on-scroll was removed, not finished.** It never worked (the cards ignored it), and a
   search returns a handful of trips, so drawing them all at once is simpler and fast enough.
-- **Seat layout is looked up, not stored.** `BusDetails` keeps only the seats the API sent and
-  works out the map from them and the layout for the bus code.
+- **The bus is drawn from the API's layout** (2026-10-12). The four hardcoded layouts are gone;
+  a new kind of bus needs no change in the website. The trip card loads the seat map once per
+  opening and gets the fresh free-seat count from the same call.
 - **"Try again" on the seat map** raises a counter that the loading effect depends on, instead
   of closing and reopening the card.
-- **Five timers remain**, each waiting for a CSS animation, each with a comment saying which:
-  `AlertBox` (fade-in), `RefundBox` (fade-out before removal), `BusDetails` (map folds away
-  before it is swapped for the spinner), `Panel` (the card above folds away before scrolling),
-  `CustomInput` (calendar and dark cover fade out before the box comes forward).
+- **Four timers remain**, each waiting for a CSS animation, each with a comment saying which:
+  `AlertBox` (fade-in), `RefundBox` (fade-out before removal), `Panel` (the card above folds
+  away before scrolling), `CustomInput` (calendar and dark cover fade out before the box comes
+  forward). The fifth, in `BusDetails`, went on 2026-10-12: a closed card now simply keeps its
+  last seat map and replaces it when opened again.
 
 ### Small behaviour changes from the cleanup
 
@@ -167,6 +191,6 @@ none of them stores the date.
 
 ### Structure
 
-- A flat folder of 41 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
+- A flat folder of 51 files. Grouping by feature (`search/`, `results/`, `seat-map/`,
   `layout/`, `landing/`) would make it far easier to read.
 - Each component's CSS lives far away in `assets/css/`. Keeping the CSS next to its component is easier.

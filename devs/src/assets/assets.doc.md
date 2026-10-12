@@ -3,14 +3,14 @@
 Static files: styles, fonts, icon fonts and images. This doc covers the four subfolders together,
 since none of them contain logic.
 
-## `css/` — 30 files
+## `css/` — 31 files
 
 *Updated 2026-10-12.*
 
 Two styles are mixed:
 
-- **Plain CSS** (`*.css`, 17 files). Class names are global, for example `.search-panel`.
-- **CSS Modules** (`*.module.css`, 13 files). Class names are local to the importing component.
+- **Plain CSS** (`*.css`, 19 files). Class names are global, for example `.search-panel`.
+- **CSS Modules** (`*.module.css`, 12 files). Class names are local to the importing component.
 
 `index.css` is the global sheet. It declares the fonts, the scrollbar look, and shared helper
 classes such as `.black-cover`, `.element-cover`, `.unselectable` and `.seat`.
@@ -28,6 +28,8 @@ such section at once, instead of adding a background to each. This was already t
 the original version (`v1-original` has the same CSS); it was not caused by the refactor.
 
 Each other file is named after the component that uses it (`panel.module.css` → `Panel.tsx`).
+The exception is `booking.module.css` (added 2026-10-12), which is shared by the two booking
+pages and their ten components: frame, step line, forms, buttons and the small result pages.
 `expandableCard.css` also holds the styles for `ExpandableCard2`.
 
 ## `fonts/`
