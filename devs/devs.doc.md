@@ -19,11 +19,13 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 
 ## Layout
 
+*Updated 2026-10-12.*
+
 | Path | Contents | Doc |
 | --- | --- | --- |
 | `src/` | All application code. | [src.doc.md](src/src.doc.md) |
 | `public/` | Only `vite.svg`, the default Vite icon. | — |
-| `index.html` | The single HTML page. | — |
+| `index.html` | The single HTML page. It declares the site light-only (`color-scheme`), see [assets.doc.md](src/assets/assets.doc.md). | — |
 | `package.json` | Scripts and dependencies. | — |
 | `tsconfig*.json`, `vite.config.ts`, `.eslintrc.cjs` | Tool settings, all Vite defaults. | — |
 | `README.md` | The untouched Vite template README. Says nothing about this project. | — |

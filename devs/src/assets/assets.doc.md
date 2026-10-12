@@ -5,6 +5,8 @@ since none of them contain logic.
 
 ## `css/` — 30 files
 
+*Updated 2026-10-12.*
+
 Two styles are mixed:
 
 - **Plain CSS** (`*.css`, 17 files). Class names are global, for example `.search-panel`.
@@ -12,6 +14,18 @@ Two styles are mixed:
 
 `index.css` is the global sheet. It declares the fonts, the scrollbar look, and shared helper
 classes such as `.black-cover`, `.element-cover`, `.unselectable` and `.seat`.
+
+### One look, no dark theme
+
+`index.css` starts the page with `color-scheme: only light`, a white background and black
+text on `:root`, and `index.html` carries the matching `<meta name="color-scheme">` tag.
+
+Why: many sections set no background or text colour of their own. They relied on the
+browser's default white page. When the browser or system is in dark mode that default can be
+dark, and those sections (the results list was the visible one) turned black with dark text
+on top. Saying "this page is light only" and writing the two base colours out fixes every
+such section at once, instead of adding a background to each. This was already the case in
+the original version (`v1-original` has the same CSS); it was not caused by the refactor.
 
 Each other file is named after the component that uses it (`panel.module.css` → `Panel.tsx`).
 `expandableCard.css` also holds the styles for `ExpandableCard2`.

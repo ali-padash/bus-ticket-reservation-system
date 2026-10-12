@@ -45,6 +45,17 @@ p {
     line-height: 2.5;
 }
 
+/* This design has one look and no dark theme. `color-scheme: only light` tells the browser
+   so, which keeps its own parts (page backdrop, form controls, scrollbars) light and stops
+   automatic darkening. The white background and black text are also written out, because
+   many sections set no colours of their own and used to rely on the browser's defaults.
+   (added 2026-10-12) */
+:root {
+    color-scheme: only light;
+    background-color: #fff;
+    color: #000;
+}
+
 body {
     margin: 0;
     font-family: 'IRANSansWeb', sans-serif;
