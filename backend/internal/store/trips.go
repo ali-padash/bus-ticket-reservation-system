@@ -3,19 +3,31 @@ package store
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/ali-padash/bus-ticket-reservation-system/backend/internal/domain"
 )
 
-// A seat is free when it is for sale and no passenger sits in it.
+// A passenger holds a seat while the row is active and the ticket is not a hold that
+// ran out of time. The second half matters between two runs of the clean-up job: an
+// unpaid hold stops counting the moment it expires, not a minute later. (updated 2026-10-12)
+const holdsSeat = `passengers.active AND (tickets.status <> 'reserved' OR tickets.expires_at > now())`
+
+// A seat is free when it is for sale and no passenger holds it.
 const freeSeatCount = `(
 	SELECT count(*)
 	FROM seats
 	WHERE seats.service_id = services.id
 	  AND seats.for_sale
-	  AND NOT EXISTS (SELECT 1 FROM passengers WHERE passengers.seat_id = seats.id)
+	  AND NOT EXISTS (
+		SELECT 1
+		FROM passengers
+		JOIN tickets ON tickets.id = passengers.ticket_id
+		WHERE passengers.seat_id = seats.id AND ` + holdsSeat + `
+	  )
 )`
 
 // City returns one city, or domain.ErrCityNotFound.
@@ -158,9 +170,15 @@ type seatRow struct {
 func (s *Store) Seats(ctx context.Context, tripID uint) ([]domain.Seat, error) {
 	var rows []seatRow
 	err := s.db.WithContext(ctx).Raw(`
-		SELECT seats.seat_number, seats.for_sale, passengers.gender
+		SELECT seats.seat_number, seats.for_sale, holder.gender
 		FROM seats
-		LEFT JOIN passengers ON passengers.seat_id = seats.id
+		LEFT JOIN LATERAL (
+			SELECT passengers.gender
+			FROM passengers
+			JOIN tickets ON tickets.id = passengers.ticket_id
+			WHERE passengers.seat_id = seats.id AND `+holdsSeat+`
+			LIMIT 1
+		) AS holder ON true
 		WHERE seats.service_id = ?
 		ORDER BY seats.seat_number`, tripID).Scan(&rows).Error
 	if err != nil {
@@ -187,4 +205,56 @@ func (s *Store) FreeSeatCount(ctx context.Context, tripID uint) (int, error) {
 		return 0, domain.ErrTripNotFound
 	}
 	return count, err
+}
+
+// Layout returns the floor plan of the bus that runs a trip, or domain.ErrTripNotFound.
+// A zero in the plan is empty floor.
+func (s *Store) Layout(ctx context.Context, tripID uint) ([][]uint, error) {
+	var raw string
+	err := s.db.WithContext(ctx).Raw(`
+		SELECT bus_types.layout::text
+		FROM services
+		JOIN bus_types ON bus_types.id = services.bus_type_id
+		WHERE services.id = ?`, tripID).Row().Scan(&raw)
+	if errors.Is(err, sql.ErrNoRows) {
+		return nil, domain.ErrTripNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	// The column holds seat numbers and nulls; a null becomes 0 here.
+	var cells [][]*uint
+	if err := json.Unmarshal([]byte(raw), &cells); err != nil {
+		return nil, fmt.Errorf("read layout of trip %d: %w", tripID, err)
+	}
+	layout := make([][]uint, len(cells))
+	for r, row := range cells {
+		layout[r] = make([]uint, len(row))
+		for c, cell := range row {
+			if cell != nil {
+				layout[r][c] = *cell
+			}
+		}
+	}
+	return layout, nil
+}
+
+// RefundRules returns the cancellation rules of a trip, strictest notice first,
+// or domain.ErrTripNotFound.
+func (s *Store) RefundRules(ctx context.Context, tripID uint) ([]domain.RefundRule, error) {
+	var exists bool
+	err := s.db.WithContext(ctx).Raw(`SELECT EXISTS (SELECT 1 FROM services WHERE id = ?)`, tripID).Row().Scan(&exists)
+	if err != nil {
+		return nil, err
+	}
+	if !exists {
+		return nil, domain.ErrTripNotFound
+	}
+	rules := []domain.RefundRule{}
+	err = s.db.WithContext(ctx).Raw(`
+		SELECT min_hours_before_departure, penalty_percent
+		FROM refund_rules
+		WHERE service_id = ?
+		ORDER BY min_hours_before_departure DESC`, tripID).Scan(&rules).Error
+	return rules, err
 }

@@ -11,7 +11,7 @@ build the parts and connect them.
 2. Loads the settings (`internal/config`).
 3. Opens the database and runs pending migrations (`internal/store`).
 4. `seed`: loads the demo data and exits. `migrate`: exits.
-5. `serve`: creates the trip and city services on top of the store, creates the web layer on
+5. `serve`: creates the trip, city and booking services on top of the store, creates the web layer on
    top of the services, and starts the HTTP server.
 
 Step 5 is the only place where the layers meet:
@@ -19,11 +19,24 @@ Step 5 is the only place where the layers meet:
 ```go
 trips := service.NewTrips(db)
 cities := service.NewCities(db, cityListLifetime, time.Now)
-handler := httpapi.NewHandler(trips, cities, log, cfg.CORSOrigin)
+bookings := service.NewBookings(db, holdLifetime, time.Now)
+handler := httpapi.NewHandler(trips, cities, bookings, log, cfg.CORSOrigin)
 ```
 
 This is called **dependency injection by constructor**: each part receives what it needs as an
 argument, instead of reaching for a global variable. It is what lets the tests pass in a fake.
+
+## The clean-up job
+
+*Written 2026-10-12.*
+
+While the server runs, a background loop calls `bookings.ExpireHolds` once a minute. It marks
+unpaid holds past their 10-minute deadline as expired. Seats do not wait for it: every seat
+query already ignores a hold past its deadline. The job only writes that fact into the tables.
+It stops with the server.
+
+Three numbers are set at the top of `main.go`: seats are held for 10 minutes, the clean-up runs
+every minute, and the city list is kept for an hour.
 
 ## Stopping
 

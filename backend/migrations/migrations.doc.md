@@ -53,13 +53,34 @@ The `users` table stays. An account is optional: a ticket can still point at a u
 
 Undoing this migration deletes guest tickets, because they cannot exist once a user is required.
 
+### `00003_booking.sql`
+
+*Written 2026-10-12.*
+
+What buying a ticket needs.
+
+- **`bus_types.layout`**: the floor plan of the bus, as JSON. A list of rows, each a list of
+  seat numbers, with `null` for empty floor. JSON fits here because the plan is a small grid
+  that is always read whole and never searched inside.
+- **`tickets.price_per_seat`, `total_price`**: the price is copied onto the ticket, so a later
+  price change does not alter a sale.
+- **`tickets.expires_at`, `paid_at`**: a ticket starts as a hold that must be paid before
+  `expires_at`. A hold without a deadline is refused by a check.
+- **Ticket status** gains `expired`, for a hold that was not paid in time.
+- **`passengers.active`**, and the seat rule changes from "one passenger per seat, ever" to
+  **"one active passenger per seat"** (a unique index that only covers active rows). Without
+  this, a cancelled or expired hold would lock its seat for good. Cancelling or expiring a
+  ticket sets its passengers to not active; the rows stay as history.
+- An index on unpaid holds by deadline, for the clean-up job.
+
 ### Rules the database enforces by itself
 
-- `passengers.seat_id` is unique: **a seat cannot be sold twice.**
+- At most one **active** passenger per seat: **a seat cannot be sold twice.** (Since migration 3;
+  before that, one passenger per seat at all.)
 - `(service_id, seat_number)` is unique in `seats`: no duplicate seat numbers on a trip.
 - A trip's origin and destination terminals must differ.
 - Prices cannot be negative. Percentages must be 0 to 100.
-- Gender must be `M` or `F`. Ticket status must be `reserved`, `paid` or `cancelled`.
+- Gender must be `M` or `F`. Ticket status must be `reserved`, `paid`, `cancelled` or `expired`.
 - Usernames, emails, national codes, ticket codes, and all `code` columns are unique.
 - Every link between tables is a real foreign key.
 
@@ -92,4 +113,3 @@ The diagram at the repo root (`Safar724.drawio.png`) shows the **old** design an
 
 - Nothing forces a passenger's seat to belong to the same trip as their ticket. The booking code
   must check it.
-- Tickets do not store the price that was paid. Add it with booking, since trip prices can change.

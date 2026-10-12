@@ -35,6 +35,12 @@ const shutdownTimeout = 10 * time.Second
 // How long the city list is kept in memory before it is read from the database again.
 const cityListLifetime = time.Hour
 
+// How long chosen seats stay set aside for a buyer who has not paid yet.
+const holdLifetime = 10 * time.Minute
+
+// How often unpaid holds that ran out of time are cleaned up.
+const holdSweepEvery = time.Minute
+
 func main() {
 	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
 	if err := run(os.Args[1:], log); err != nil {
@@ -83,15 +89,18 @@ func serve(cfg config.Config, db *store.Store, log *slog.Logger) error {
 	gin.SetMode(gin.ReleaseMode)
 	trips := service.NewTrips(db)
 	cities := service.NewCities(db, cityListLifetime, time.Now)
+	bookings := service.NewBookings(db, holdLifetime, time.Now)
 	server := &http.Server{
 		Addr:              cfg.APIAddr,
-		Handler:           httpapi.NewHandler(trips, cities, log, cfg.CORSOrigin),
+		Handler:           httpapi.NewHandler(trips, cities, bookings, log, cfg.CORSOrigin),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
 	// Ctrl+C or a stop signal cancels ctx.
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+
+	go sweepHolds(ctx, bookings, log)
 
 	failed := make(chan error, 1)
 	go func() { failed <- server.ListenAndServe() }()
@@ -114,4 +123,26 @@ func serve(cfg config.Config, db *store.Store, log *slog.Logger) error {
 		return err
 	}
 	return nil
+}
+
+// sweepHolds ends unpaid holds whose time is up, once a minute, until ctx is cancelled.
+// Seats do not wait for it: an expired hold stops counting at once in every query.
+// The sweep only writes that fact down, so the tables say what the queries already assume.
+func sweepHolds(ctx context.Context, bookings *service.Bookings, log *slog.Logger) {
+	ticker := time.NewTicker(holdSweepEvery)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			ended, err := bookings.ExpireHolds(ctx)
+			switch {
+			case err != nil && ctx.Err() == nil:
+				log.Error("could not expire holds", "error", err)
+			case ended > 0:
+				log.Info("expired unpaid holds", "tickets", ended)
+			}
+		}
+	}
 }

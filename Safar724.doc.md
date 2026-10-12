@@ -50,8 +50,9 @@ next 14 days from when the seed was run.
 6. Clicking "view and buy" on a trip calls `/trips/{id}/seats` and `/trips/{id}/availability`,
    then draws the bus seat map.
 
-That is where it stops. **There is no booking.** The "buy" buttons do nothing. There is no login,
-no payment, and the API has no write endpoints at all.
+Booking exists **in the API only** (2026-10-12): seats can be held for 10 minutes, paid or
+cancelled, and a ticket read back with its code and phone number. The website's "buy" buttons
+do not use it yet. There is no login and no real payment.
 
 ## What works and what does not
 
@@ -60,7 +61,7 @@ Checked by actually running the tools:
 | Check | Result |
 | --- | --- |
 | `go vet ./...` (backend) | Clean. |
-| `go test ./...` (backend) | 30 tests pass (2026-10-12). 7 of them need the database running. |
+| `go test ./...` (backend) | 60 tests pass (2026-10-12). 19 of them need the database running. |
 | `npx tsc --noEmit` (frontend) | Clean (was 13 errors). |
 | `npm run lint` (frontend) | Clean (was 29 errors, 16 warnings). |
 | `npm run build` (frontend) | Passes. |
@@ -118,7 +119,9 @@ Suggested order. Each step leaves the project in a better, working state.
 6. **Clean the backend.** *Done 2026-10-12:* split into web / service / store layers, one config
    package, one error shape, 30 tests. The API now serves the city list from the database,
    cached in memory, and the website loads it from there (its script went from 481 KB to 219 KB).
-7. **Finish one real feature: booking a seat.** This is the piece that makes the project
+7. **Finish one real feature: booking a seat.** *Backend done 2026-10-12* (hold for 10 minutes,
+   then pay; a test proves 20 buyers cannot get one seat twice). The website's screens are
+   still to do. This is the piece that makes the project
    interesting, because two people must not be able to book the same seat. A database
    transaction plus a test that proves it is worth more on a CV than any amount of tidying.
 8. **Add tests and deploy it.** A live link and a green CI badge at the top of the README.

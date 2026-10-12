@@ -60,6 +60,25 @@ func (f *fakeTrips) Seats(_ context.Context, tripID uint) ([]domain.Seat, error)
 	return nil, domain.ErrTripNotFound
 }
 
+func (f *fakeTrips) SeatMap(_ context.Context, tripID uint) (domain.SeatMap, error) {
+	if tripID != 7 {
+		return domain.SeatMap{}, domain.ErrTripNotFound
+	}
+	female := domain.GenderFemale
+	return domain.SeatMap{
+		Layout:         [][]uint{{1, 0}, {0, 2}},
+		Seats:          []domain.Seat{{Number: 1, ForSale: true, Gender: &female}, {Number: 2, ForSale: true}},
+		AvailableSeats: 1,
+	}, nil
+}
+
+func (f *fakeTrips) RefundRules(_ context.Context, tripID uint) ([]domain.RefundRule, error) {
+	if tripID != 7 {
+		return nil, domain.ErrTripNotFound
+	}
+	return []domain.RefundRule{{MinHoursBeforeDeparture: 1, PenaltyPercent: 10}, {MinHoursBeforeDeparture: 0, PenaltyPercent: 50}}, nil
+}
+
 func (f *fakeTrips) Availability(_ context.Context, tripID uint) (int, error) {
 	switch tripID {
 	case 7:
@@ -73,7 +92,7 @@ func (f *fakeTrips) Availability(_ context.Context, tripID uint) (int, error) {
 func get(t *testing.T, service TripService, path string) (int, string) {
 	t.Helper()
 	gin.SetMode(gin.TestMode)
-	handler := NewHandler(service, &fakeCities{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
+	handler := NewHandler(service, &fakeCities{}, &fakeBookings{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
 	recorder := httptest.NewRecorder()
 	handler.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, path, nil))
 	return recorder.Code, recorder.Body.String()
@@ -87,19 +106,19 @@ func TestStatusAndErrorBody(t *testing.T) {
 		body   string // expected body for errors; empty means "do not compare"
 	}{
 		{"search", "/api/v1/trips?from=1&to=21&date=2026-10-12", 200, ""},
-		{"search without from", "/api/v1/trips?to=21&date=2026-10-12", 400, `{"error":"Invalid from: expected a city id"}`},
-		{"search with a word as to", "/api/v1/trips?from=1&to=mashhad&date=2026-10-12", 400, `{"error":"Invalid to: expected a city id"}`},
-		{"search with a negative id", "/api/v1/trips?from=-1&to=21&date=2026-10-12", 400, `{"error":"Invalid from: expected a city id"}`},
-		{"search with a Persian-calendar date", "/api/v1/trips?from=1&to=21&date=1405/07/20", 400, `{"error":"Invalid date: expected YYYY-MM-DD"}`},
-		{"search with an impossible date", "/api/v1/trips?from=1&to=21&date=2026-02-30", 400, `{"error":"Invalid date: expected YYYY-MM-DD"}`},
-		{"search for an unknown city", "/api/v1/trips?from=999&to=21&date=2026-10-12", 404, `{"error":"City not found"}`},
+		{"search without from", "/api/v1/trips?to=21&date=2026-10-12", 400, `{"error":"Invalid from: expected a city id","code":"bad_request"}`},
+		{"search with a word as to", "/api/v1/trips?from=1&to=mashhad&date=2026-10-12", 400, `{"error":"Invalid to: expected a city id","code":"bad_request"}`},
+		{"search with a negative id", "/api/v1/trips?from=-1&to=21&date=2026-10-12", 400, `{"error":"Invalid from: expected a city id","code":"bad_request"}`},
+		{"search with a Persian-calendar date", "/api/v1/trips?from=1&to=21&date=1405/07/20", 400, `{"error":"Invalid date: expected YYYY-MM-DD","code":"bad_request"}`},
+		{"search with an impossible date", "/api/v1/trips?from=1&to=21&date=2026-02-30", 400, `{"error":"Invalid date: expected YYYY-MM-DD","code":"bad_request"}`},
+		{"search for an unknown city", "/api/v1/trips?from=999&to=21&date=2026-10-12", 404, `{"error":"City not found","code":"city_not_found"}`},
 		{"seats", "/api/v1/trips/7/seats", 200, `[{"SeatNumber":1,"Accessible":true,"Gender":"F"},{"SeatNumber":2,"Accessible":false,"Gender":null}]`},
-		{"seats of an unknown trip", "/api/v1/trips/8/seats", 404, `{"error":"Trip not found"}`},
-		{"seats with a word as id", "/api/v1/trips/abc/seats", 400, `{"error":"Invalid trip id"}`},
-		{"seats when the database fails", "/api/v1/trips/500/seats", 500, `{"error":"Internal server error"}`},
+		{"seats of an unknown trip", "/api/v1/trips/8/seats", 404, `{"error":"Trip not found","code":"trip_not_found"}`},
+		{"seats with a word as id", "/api/v1/trips/abc/seats", 400, `{"error":"Invalid trip id","code":"bad_request"}`},
+		{"seats when the database fails", "/api/v1/trips/500/seats", 500, `{"error":"Internal server error","code":"internal_error"}`},
 		{"availability", "/api/v1/trips/7/availability", 200, `{"AvailableSeatCount":12}`},
-		{"availability of an unknown trip", "/api/v1/trips/8/availability", 404, `{"error":"Trip not found"}`},
-		{"availability when the database fails", "/api/v1/trips/500/availability", 500, `{"error":"Internal server error"}`},
+		{"availability of an unknown trip", "/api/v1/trips/8/availability", 404, `{"error":"Trip not found","code":"trip_not_found"}`},
+		{"availability when the database fails", "/api/v1/trips/500/availability", 500, `{"error":"Internal server error","code":"internal_error"}`},
 		{"a route that does not exist", "/api/v1/getservices", 404, ""},
 	}
 	for _, c := range cases {
@@ -192,7 +211,7 @@ func TestNoTripsIsAnEmptyList(t *testing.T) {
 
 func TestCORSAllowsOnlyTheWebsite(t *testing.T) {
 	gin.SetMode(gin.TestMode)
-	handler := NewHandler(&fakeTrips{}, &fakeCities{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
+	handler := NewHandler(&fakeTrips{}, &fakeCities{}, &fakeBookings{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
 
 	for origin, want := range map[string]string{
 		"http://localhost:5173": "http://localhost:5173",

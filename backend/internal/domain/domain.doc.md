@@ -2,7 +2,8 @@
 
 *Written 2026-10-12.*
 
-The words the backend speaks in. One file, `domain.go`. It imports only the standard library,
+The words the backend speaks in. Two files: `domain.go` (trips and cities) and `booking.go`
+(tickets). It imports only the standard library,
 and has no JSON tags and no database tags.
 
 ## Types
@@ -17,17 +18,30 @@ and has no JSON tags and no database tags.
 | `Seat` | One seat of a trip. `Gender` is nil while it is empty. |
 | `TripSearch` | The question: from which city, to which city, on which day. |
 | `SearchResult` | The answer: both cities and the list of trips. |
+| `SeatMap` | The bus floor plan (a grid of seat numbers, 0 for empty floor) with every seat's state. |
+| `RefundRule` | "Cancel at least N hours before departure and lose X percent." |
+| `HoldRequest`, `PassengerInput` | What a buyer sends: trip, phone, and one person per seat. |
+| `NewHold` | A checked request with its ticket code, ready to be written. |
+| `Ticket`, `Passenger`, `TicketTrip` | One purchase: its state, price, deadline, passengers, and the trip details printed on it. |
 
 ## Errors
 
-`ErrCityNotFound` and `ErrTripNotFound`. The store returns them, the service passes them up
+`ErrCityNotFound` and `ErrTripNotFound`, and for booking (2026-10-12): `ErrTicketNotFound`,
+`ErrTripDeparted`, `ErrHoldExpired`, `ErrTicketClosed`, `ErrTicketPaid`, `ErrDuplicateCode`.
+Two errors carry data: `SeatsUnavailableError` lists the seats that cannot be had, and
+`ValidationError` maps each wrong field to what is wrong with it.
+
+The store returns them, the service passes them up
 (wrapped with more detail), and the web layer recognises them with `errors.Is` and answers 404.
 Any error that is not one of these is treated as a server fault and answered with 500.
 
 ## Constants
 
-`GenderMale` (`"M"`), `GenderFemale` (`"F"`), and the ticket states `TicketReserved`,
-`TicketPaid`, `TicketCancelled`. They match the values the database allows.
+`GenderMale` (`"M"`), `GenderFemale` (`"F"`), the ticket states `TicketReserved`,
+`TicketPaid`, `TicketCancelled`, `TicketExpired`, and `MaxSeatsPerTicket` (4).
+
+`DiscountedPrice(price, percent)` is the one calculation here: the price of a seat after the
+trip's discount, rounded down to a whole rial. It has a test. They match the values the database allows.
 
 ## Why these are separate from the JSON and the tables
 

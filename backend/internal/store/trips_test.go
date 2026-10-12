@@ -17,7 +17,9 @@ import (
 // DATABASE_URL is not set. Each test works inside a transaction that is rolled back,
 // so it leaves the database exactly as it found it.
 
-func openTestStore(t *testing.T) *Store {
+// openRealStore connects to the database for a test that needs real commits.
+// Such a test must remove what it creates.
+func openRealStore(t *testing.T) *Store {
 	t.Helper()
 	_ = godotenv.Load("../../../.env")
 	url := os.Getenv("DATABASE_URL")
@@ -31,11 +33,15 @@ func openTestStore(t *testing.T) *Store {
 	if err := real.Migrate(); err != nil {
 		t.Fatalf("Migrate() error: %v", err)
 	}
+	t.Cleanup(func() { real.Close() })
+	return real
+}
+
+func openTestStore(t *testing.T) *Store {
+	t.Helper()
+	real := openRealStore(t)
 	tx := real.db.Begin()
-	t.Cleanup(func() {
-		tx.Rollback()
-		real.Close()
-	})
+	t.Cleanup(func() { tx.Rollback() })
 	return &Store{db: tx}
 }
 
@@ -52,6 +58,12 @@ func insert(t *testing.T, db *gorm.DB, query string, args ...any) uint {
 // seat 1 is taken by a woman, seat 2 is not for sale, seats 3 and 4 are free.
 func insertTrip(t *testing.T, db *gorm.DB) uint {
 	t.Helper()
+	return insertTripOn(t, db, "2001-02-03")
+}
+
+// insertTripOn is insertTrip with a chosen departure day (YYYY-MM-DD).
+func insertTripOn(t *testing.T, db *gorm.DB, day string) uint {
+	t.Helper()
 	const origin, destination = 900001, 900002
 	insert(t, db, `INSERT INTO cities (id, code, name, persian_name, province_name, province_persian_name)
 		VALUES (?, 'TST-A', 'Testville', 'تست', 'p', 'p')`, origin)
@@ -60,16 +72,20 @@ func insertTrip(t *testing.T, db *gorm.DB) uint {
 	from := insert(t, db, `INSERT INTO terminals (city_id, code, name, persian_name) VALUES (?, 'TST-A-T1', 'west', 'غرب')`, origin)
 	to := insert(t, db, `INSERT INTO terminals (city_id, code, name, persian_name) VALUES (?, 'TST-B-T1', 'central', 'مرکزی')`, destination)
 	company := insert(t, db, `INSERT INTO companies (code, name, persian_name) VALUES ('TST-C', 'test-lines', 'خط تست')`)
-	busType := insert(t, db, `INSERT INTO bus_types (code, seat_count, is_vip) VALUES ('TST_4_1', 4, true)`)
+	busType := insert(t, db, `INSERT INTO bus_types (code, seat_count, is_vip, layout)
+		VALUES ('TST_4_1', 4, true, '[[1,2],[null,null],[3,4]]')`)
 	trip := insert(t, db, `INSERT INTO services
 		(company_id, bus_type_id, origin_terminal_id, destination_terminal_id, bus_name, price, discount_percentage, departure_date, departure_time)
-		VALUES (?, ?, ?, ?, 'Test Bus', 2500000, 10, '2001-02-03', '08:30')`, company, busType, from, to)
+		VALUES (?, ?, ?, ?, 'Test Bus', 2500000, 10, ?, '08:30')`, company, busType, from, to, day)
+	insert(t, db, `INSERT INTO refund_rules (service_id, min_hours_before_departure, penalty_percent) VALUES (?, 0, 50)`, trip)
+	insert(t, db, `INSERT INTO refund_rules (service_id, min_hours_before_departure, penalty_percent) VALUES (?, 1, 10)`, trip)
 
 	var seatIDs [4]uint
 	for i := range seatIDs {
 		seatIDs[i] = insert(t, db, `INSERT INTO seats (service_id, seat_number, for_sale) VALUES (?, ?, ?)`, trip, i+1, i != 1)
 	}
-	ticket := insert(t, db, `INSERT INTO tickets (code, service_id, contact_phone) VALUES ('TST-000000001', ?, '09120000000')`, trip)
+	ticket := insert(t, db, `INSERT INTO tickets (code, service_id, contact_phone, status, price_per_seat, total_price, paid_at)
+		VALUES ('TST-000000001', ?, '09120000000', 'paid', 2250000, 2250000, now())`, trip)
 	insert(t, db, `INSERT INTO passengers (ticket_id, seat_id, first_name, last_name, gender, national_code, birth_date)
 		VALUES (?, ?, 'a', 'b', 'F', '0000000000', '1990-01-01')`, ticket, seatIDs[0])
 	return trip

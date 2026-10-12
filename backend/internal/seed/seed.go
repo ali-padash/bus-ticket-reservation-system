@@ -132,6 +132,9 @@ func seedCatalog(tx *gorm.DB, cities map[uint]City) ([]BusType, []Company, map[u
 		{Code: "VIP_29_1", SeatCount: 29, IsVIP: true},
 		{Code: "VIP_32_1", SeatCount: 32, IsVIP: true},
 	}
+	for i := range busTypes {
+		busTypes[i].Layout = layoutJSON(busLayouts[busTypes[i].Code])
+	}
 	if err := tx.Create(&busTypes).Error; err != nil {
 		return nil, nil, nil, err
 	}
@@ -291,10 +294,17 @@ func seedBookings(tx *gorm.DB, services []Service, users []User) (int, int, erro
 		sold := seatIDs[:rand.Intn(len(seatIDs)*7/10)]
 		for len(sold) > 0 {
 			size := min(1+rand.Intn(3), len(sold))
+			// Most demo tickets are paid. About one in ten is a hold made just now,
+			// which runs out ten minutes after the seed unless someone pays it.
+			reservedAt := time.Now().Add(-time.Duration(1+rand.Intn(72)) * time.Hour)
 			status := domain.TicketPaid
+			paidAt, expiresAt := &reservedAt, (*time.Time)(nil)
 			if rand.Intn(10) == 0 {
-				status = domain.TicketReserved
+				reservedAt = time.Now()
+				holdEnds := reservedAt.Add(10 * time.Minute)
+				status, paidAt, expiresAt = domain.TicketReserved, nil, &holdEnds
 			}
+			pricePerSeat := domain.DiscountedPrice(int64(service.Price), service.DiscountPercentage)
 			nextCode++
 			// About one ticket in five belongs to an account; the rest are guest purchases.
 			var userID *uint
@@ -309,7 +319,11 @@ func seedBookings(tx *gorm.DB, services []Service, users []User) (int, int, erro
 				UserID:       userID,
 				ContactPhone: phone,
 				Status:       status,
-				ReservedAt:   time.Now().Add(-time.Duration(rand.Intn(72)) * time.Hour),
+				PricePerSeat: pricePerSeat,
+				TotalPrice:   pricePerSeat * int64(size),
+				ReservedAt:   reservedAt,
+				ExpiresAt:    expiresAt,
+				PaidAt:       paidAt,
 			})
 			group := make([]Passenger, size)
 			for i := range group {

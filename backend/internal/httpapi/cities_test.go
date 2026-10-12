@@ -44,7 +44,7 @@ func newFakeCities() *fakeCities {
 
 func cityHandler(cities CityService) http.Handler {
 	gin.SetMode(gin.TestMode)
-	return NewHandler(&fakeTrips{}, cities, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
+	return NewHandler(&fakeTrips{}, cities, &fakeBookings{}, slog.New(slog.NewTextHandler(io.Discard, nil)), "http://localhost:5173")
 }
 
 func getCities(handler http.Handler, headers map[string]string) *httptest.ResponseRecorder {
@@ -138,7 +138,7 @@ func TestCitiesServerError(t *testing.T) {
 
 	response := getCities(cityHandler(cities), nil)
 
-	if response.Code != 500 || response.Body.String() != `{"error":"Internal server error"}` {
+	if response.Code != 500 || response.Body.String() != `{"error":"Internal server error","code":"internal_error"}` {
 		t.Errorf("status %d, body %s; want 500 with the general message", response.Code, response.Body.String())
 	}
 }

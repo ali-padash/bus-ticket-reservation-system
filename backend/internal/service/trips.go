@@ -16,6 +16,8 @@ type TripStore interface {
 	TripsBetween(ctx context.Context, originCityID uint, destinationCityID uint, date time.Time) ([]domain.Trip, error)
 	Seats(ctx context.Context, tripID uint) ([]domain.Seat, error)
 	FreeSeatCount(ctx context.Context, tripID uint) (int, error)
+	Layout(ctx context.Context, tripID uint) ([][]uint, error)
+	RefundRules(ctx context.Context, tripID uint) ([]domain.RefundRule, error)
 }
 
 type Trips struct {
@@ -60,4 +62,32 @@ func (s *Trips) Availability(ctx context.Context, tripID uint) (int, error) {
 		return 0, fmt.Errorf("free seats of trip %d: %w", tripID, err)
 	}
 	return count, nil
+}
+
+// SeatMap returns the floor plan of the bus and the state of every seat on it.
+func (s *Trips) SeatMap(ctx context.Context, tripID uint) (domain.SeatMap, error) {
+	layout, err := s.store.Layout(ctx, tripID)
+	if err != nil {
+		return domain.SeatMap{}, fmt.Errorf("layout of trip %d: %w", tripID, err)
+	}
+	seats, err := s.store.Seats(ctx, tripID)
+	if err != nil {
+		return domain.SeatMap{}, fmt.Errorf("seats of trip %d: %w", tripID, err)
+	}
+	available := 0
+	for _, seat := range seats {
+		if seat.ForSale && seat.Gender == nil {
+			available++
+		}
+	}
+	return domain.SeatMap{Layout: layout, Seats: seats, AvailableSeats: available}, nil
+}
+
+// RefundRules returns what cancelling a ticket on this trip costs, by how early it is done.
+func (s *Trips) RefundRules(ctx context.Context, tripID uint) ([]domain.RefundRule, error) {
+	rules, err := s.store.RefundRules(ctx, tripID)
+	if err != nil {
+		return nil, fmt.Errorf("refund rules of trip %d: %w", tripID, err)
+	}
+	return rules, nil
 }

@@ -2,8 +2,8 @@
 
 *Rewritten 2026-10-12 after the restructure into layers.*
 
-The Go API. It only reads from the database; nothing here writes bookings yet. It serves trip
-search, seat maps, and the city list for the search boxes.
+The Go API. It serves trip search, seat maps with the bus layout, the city list, and **ticket
+booking**: seats are held for 10 minutes, then paid or released.
 
 ## The layers
 
@@ -77,17 +77,20 @@ go vet ./...
 go test ./...
 ```
 
-30 tests in 4 packages (2026-10-12):
+60 tests in 6 packages (2026-10-12):
 
 | Package | Tests | Needs a database? |
 | --- | --- | --- |
 | `internal/config` | 2 | No |
-| `internal/service` | 9 | No, uses a fake store |
-| `internal/httpapi` | 12 (one of them runs 15 request cases) | No, uses a fake service |
-| `internal/store` | 7 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
+| `internal/domain` | 1 | No |
+| `internal/seed` | 2 | No |
+| `internal/service` | 18 | No, uses a fake store |
+| `internal/httpapi` | 18 | No, uses a fake service |
+| `internal/store` | 19 | **Yes.** Skipped when `DATABASE_URL` is not set or the database is down. |
 
 The store tests run inside a transaction that is rolled back, so they are safe to run against
-the local demo database.
+the local demo database. Two of them (20 buyers racing for one seat, and overlapping purchases)
+need real commits; they create their own test trip and delete it afterwards.
 
 ## Settings
 
@@ -126,9 +129,9 @@ inside the project start with that path.
 
 ## Things still to improve
 
-- No booking yet. The schema is ready for buying without an account (migration 2).
-- The API serves the city list (`GET /api/v1/cities`), but the website still uses its own copy
-  until the frontend switches over.
+- A paid ticket cannot be cancelled or refunded, and there is no "my tickets" page yet.
+- Payment is faked: one route marks a hold as paid. There is no bank.
+- Nothing limits how many holds one visitor can make.
 - Go's race detector was not run: it needs a C compiler, which this PC does not have.
 - No OpenAPI file.
 - No CI yet, so the tests only run when someone runs them.

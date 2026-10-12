@@ -43,7 +43,8 @@ type BusType struct {
 	ID        uint `gorm:"primaryKey"`
 	Code      string
 	SeatCount uint
-	IsVIP     bool `gorm:"column:is_vip"`
+	IsVIP     bool   `gorm:"column:is_vip"`
+	Layout    string `gorm:"type:jsonb"`
 }
 
 type Service struct {
@@ -90,7 +91,11 @@ type Ticket struct {
 	UserID       *uint
 	ContactPhone string
 	Status       string
+	PricePerSeat int64
+	TotalPrice   int64
 	ReservedAt   time.Time
+	ExpiresAt    *time.Time
+	PaidAt       *time.Time
 }
 
 type Passenger struct {

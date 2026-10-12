@@ -44,6 +44,20 @@ func (f *fakeStore) FreeSeatCount(_ context.Context, tripID uint) (int, error) {
 	return 12, nil
 }
 
+func (f *fakeStore) Layout(_ context.Context, tripID uint) ([][]uint, error) {
+	if tripID != 7 {
+		return nil, domain.ErrTripNotFound
+	}
+	return [][]uint{{1, 2}, {0, 3}}, nil
+}
+
+func (f *fakeStore) RefundRules(_ context.Context, tripID uint) ([]domain.RefundRule, error) {
+	if tripID != 7 {
+		return nil, domain.ErrTripNotFound
+	}
+	return []domain.RefundRule{{MinHoursBeforeDeparture: 1, PenaltyPercent: 10}}, nil
+}
+
 func newFakeStore() *fakeStore {
 	return &fakeStore{
 		cities: map[uint]domain.City{
