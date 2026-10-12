@@ -16,7 +16,8 @@ October 2026 from a full read of the code, and last updated on 2026-10-12.
 
 Other root files:
 
-- `README.md` — the public description. Several claims in it are not true (see below).
+- `README.md` — the public description: what the project does, how to run it, and its limits.
+  Rewritten on 2026-10-12 so it only claims what exists.
 - `Safar724.drawio.png` — the **old** database diagram. The schema has since changed; see
   [migrations.doc.md](backend/migrations/migrations.doc.md).
 - `docker-compose.yml` — starts the local PostgreSQL database.
@@ -82,13 +83,6 @@ Checked by actually running the tools:
   tree on 2026-10-12; the Go seed replaces it. No file in the current tree holds a password,
   but the old commits still do.
 
-### The README says things that are not true
-
-- It lists **Tailwind CSS**. Tailwind is not installed. Styling is 30 hand-written CSS files.
-- It lists "searching by date" and a normalized database as features, which is fair, but the
-  feature list reads as if booking exists. It does not.
-- The frontend folder tree in the README is missing the `src/` level.
-
 ### It uses Safar724's own files
 
 Mimicking Safar724 is the purpose of the project, and that is fine. The design, the flow and the
@@ -108,10 +102,10 @@ name can stay. The issue is narrower: some of their actual property is committed
 Suggested order. Each step leaves the project in a better, working state.
 
 1. **Make it safe and honest.** *Done:* the old databases are deleted and the Python script
-   that held their password is removed. Still to do: fix the README so it only claims what exists.
+   that held their password is removed. The README was rewritten on 2026-10-12 and only claims what exists.
 2. **Make it run for a stranger.** *Done for the backend:* `.env.example`, Docker Compose with
-   Postgres, migrations, and a working seed. Still to do: the frontend build, and a README that
-   explains the steps.
+   Postgres, migrations, and a working seed. The frontend builds and the README explains the steps
+   (2026-10-12).
 3. **Make it build.** *Done 2026-10-12:* 13 type errors and 29 lint errors fixed, the build
    passes. Still to do: CI that runs `go vet`, `go test`, `tsc` and `eslint`.
 4. **Swap out the borrowed files.** Keep the design and the name. Replace the logo, use a free

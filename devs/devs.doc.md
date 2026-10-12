@@ -15,7 +15,7 @@ The website. The folder is called `devs` for historical reasons; `frontend` woul
 | Shared state | None. State lives in the page that owns it and goes down by props; the search lives in the address. |
 | Calendar maths | `jalaali-js` (Persian calendar) |
 | Icons | `react-icons` (one icon), Font Awesome 5 from a CDN, and two icon font files |
-| Styling | Plain CSS files and CSS Modules, mixed. **Not Tailwind**, despite the root README. |
+| Styling | Plain CSS files and CSS Modules, mixed. No CSS framework. |
 
 ## Layout
 
