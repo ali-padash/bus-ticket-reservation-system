@@ -14,11 +14,12 @@ A mixed bag: types, helper functions, API calls, big data files, and one Python 
 | `TicketStorage.ts` | Keeps a ticket's phone in `sessionStorage`, per tab (`savePhone`, `readPhone`). | Yes |
 | `Function.ts` | Small helpers, see below. | Yes |
 | `cities.json` | 915 cities with all their alternate spellings. **490 KB.** | Not by the website since 2026-10-12. The backend seed reads it from this path, so it must stay. |
-| `addCitiesJsonToDatabase.py` | One-off script that loads `cities.json` into Postgres. | By hand only |
 
 Deleted on 2026-10-12 because nothing used them: `Constant.ts`, `serviceResponse.json`, and
 `GlobalState.ts` (its values are now page state, see [src.doc.md](../src.doc.md)). `BusModels.ts`
 was deleted the same day: the bus is drawn from the layout the API sends.
+`addCitiesJsonToDatabase.py`, a one-off script that loaded `cities.json` into an old database,
+was also deleted that day: `go run ./cmd/api seed` in `backend/` does that job now.
 
 ## API calls
 
@@ -93,9 +94,6 @@ The browser's checks are for speed only. The server checks everything again and 
 
 *Updated 2026-10-12.*
 
-- **`addCitiesJsonToDatabase.py` contains an old database host, user and password.** That
-  database has been deleted, so the password opens nothing. The script is no longer needed:
-  `go run ./cmd/api seed` in `backend/` loads the cities. It should be deleted.
 - `cities.json` is no longer used by the website but still lives in the website's folder,
   because the backend seed reads it from here. It would sit better next to the seed.
 - `getFirstWeekday` splits a locale-formatted date string to get the month and year, which

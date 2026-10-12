@@ -74,10 +74,13 @@ Checked by actually running the tools:
 
 ### Old secrets in git history
 
+*Updated 2026-10-12.*
+
 - Database passwords for two old Vercel/Neon databases are in the git history
   (`addCitiesJsonToDatabase.py`, an old `.env` file, old versions of `db.go`). **Those databases
-  have been deleted**, so the passwords open nothing. The Python script is still in the tree and
-  should be removed; the Go seed replaces it.
+  have been deleted**, so the passwords open nothing. The Python script was removed from the
+  tree on 2026-10-12; the Go seed replaces it. No file in the current tree holds a password,
+  but the old commits still do.
 
 ### The README says things that are not true
 
@@ -104,8 +107,8 @@ name can stay. The issue is narrower: some of their actual property is committed
 
 Suggested order. Each step leaves the project in a better, working state.
 
-1. **Make it safe and honest.** Rotate the database password. Remove the Python script's
-   credentials. Fix the README so it only claims what exists.
+1. **Make it safe and honest.** *Done:* the old databases are deleted and the Python script
+   that held their password is removed. Still to do: fix the README so it only claims what exists.
 2. **Make it run for a stranger.** *Done for the backend:* `.env.example`, Docker Compose with
    Postgres, migrations, and a working seed. Still to do: the frontend build, and a README that
    explains the steps.
