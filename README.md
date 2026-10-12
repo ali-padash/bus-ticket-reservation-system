@@ -1,27 +1,27 @@
-# سامانه رزرو بلیت اتوبوس
+# Bus Ticket Reservation System
 
-## معرفی پروژه
+## Project Introduction
 
-این پروژه یک سامانه رزرو بلیت اتوبوس است که با الهام از فرآیند و رابط کاربری وب‌سایت **Safar724** طراحی و پیاده‌سازی شده است. هدف از توسعه این پروژه، شبیه‌سازی فرآیند جستجوی سرویس‌های اتوبوس، مشاهده اطلاعات سفر و انتخاب صندلی با استفاده از معماری Full-Stack بوده است.
+This project is a bus ticket reservation system designed and implemented with inspiration from the process and user interface of the **Safar724** website. The goal of the project was to simulate the process of searching for bus services, viewing trip information, and selecting seats using a full-stack architecture.
 
-**نمونه طراحی رابط کاربری (UI):**
+**UI design sample:**
 
-[مشاهده نمونه ظاهر وب‌سایت](https://drive.google.com/file/d/1bKAPiJDvvOPJwmRDGqtUo6dlS5NmOQBG/view?usp=sharing&utm_source=chatgpt.com)
+[View a sample of the website's appearance](https://drive.google.com/file/d/1bKAPiJDvvOPJwmRDGqtUo6dlS5NmOQBG/view?usp=sharing)
 
-این پروژه با استفاده از **Go (net/http، Gin، GORM)** در بخش Backend و **React + TypeScript + Vite** در بخش Frontend و **PostgreSQL (Neon)** به عنوان پایگاه داده توسعه یافته است.
-
----
-# ویژگی‌های پروژه
-
-* جستجوی سرویس‌های اتوبوس بر اساس مبدا، مقصد و تاریخ
-* نمایش اطلاعات سرویس‌ها
-* ارتباط Frontend و Backend از طریق REST API
-* طراحی ساختار پایگاه داده بر اساس اصول نرمال‌سازی
-* معماری چندبخشی (Frontend / Backend / Database)
+The project was developed using **Go (net/http, Gin, GORM)** for the backend, **React + TypeScript + Vite** for the frontend, and **PostgreSQL (Neon)** as the database.
 
 ---
+# Project Features
 
-# تکنولوژی‌های استفاده شده
+* Searching for bus services by origin, destination, and date
+* Displaying service information
+* Frontend and backend communication through a REST API
+* Database structure designed according to normalization principles
+* Multi-tier architecture (Frontend / Backend / Database)
+
+---
+
+# Technologies Used
 
 ## Backend
 
@@ -46,19 +46,19 @@
 
 ---
 
-# معماری پروژه
+# Project Architecture
 
-پروژه از سه بخش اصلی تشکیل شده است:
+The project consists of three main parts:
 
-* **Frontend** برای رابط کاربری
-* **Backend** برای مدیریت درخواست‌ها و منطق برنامه
-* **PostgreSQL Database** برای ذخیره اطلاعات
+* **Frontend** for the user interface
+* **Backend** for handling requests and application logic
+* **PostgreSQL Database** for storing data
 
-ارتباط Frontend و Backend از طریق REST API انجام می‌شود و Backend نیز با استفاده از GORM با پایگاه داده PostgreSQL در ارتباط است.
+The frontend and backend communicate through a REST API, and the backend communicates with the PostgreSQL database using GORM.
 
 ---
 
-# ساختار پروژه
+# Project Structure
 
 ```
 backend/
@@ -77,14 +77,14 @@ devs/
 
 ---
 
-# مدل پایگاه داده (ERD)
+# Database Model (ERD)
 
-تصویر ERD پروژه در این بخش قرار می‌گیرد.
-![تصویر ERD](Safar724.drawio.png)
+The project's ERD image is placed in this section.
+![ERD image](Safar724.drawio.png)
 
-### توضیح ساختار ERD
+### ERD Structure Explanation
 
-موجودیت‌های اصلی عبارت‌اند از:
+The main entities are:
 
 * User
 * Service
@@ -98,45 +98,45 @@ devs/
 * CancelationCondition
 * SearchExpression
 
-روابط بین موجودیت‌ها به گونه‌ای طراحی شده است که:
+The relationships between entities are designed so that:
 
-* هر سرویس به یک شرکت اتوبوس‌رانی، نوع اتوبوس و شهرهای مبدا و مقصد وابسته است.
-* هر کاربر می‌تواند چندین بلیت داشته باشد.
-* هر بلیط می‌تواند حداقل یک مسافر داشته باشد.
-* هر مسافر به یک صندلی اختصاص داده می‌شود.
-* برای هر سرویس، قوانین کنسلی و استرداد قابل تعریف است.
-
----
-
-# ساختار Backend
-
-Backend پروژه با زبان Go توسعه داده شده و شامل بخش‌های زیر است:
-
-* تعریف مدل‌های داده با GORM
-* مدیریت درخواست‌های HTTP
-* پیاده‌سازی REST API
-* ارتباط با PostgreSQL
-* مدیریت Routing با Gin
+* Each service depends on a bus company, a bus type, and origin and destination cities.
+* Each user can have multiple tickets.
+* Each ticket can have at least one passenger.
+* Each passenger is assigned to one seat.
+* Cancellation and refund rules can be defined for each service.
 
 ---
 
-# ساختار Frontend
+# Backend Structure
 
-رابط کاربری پروژه با React و TypeScript توسعه داده شده است.
+The project's backend is developed in Go and includes the following parts:
 
-ویژگی‌های اصلی Frontend:
-
-* Component-Based Architecture
-* مدیریت مسیرها با React Router
-* مدیریت State با Jotai
-* طراحی Responsive
-* استفاده از Tailwind CSS
+* Defining data models with GORM
+* Handling HTTP requests
+* Implementing the REST API
+* Communicating with PostgreSQL
+* Managing routing with Gin
 
 ---
 
-# تکنولوژی‌های کلیدی
+# Frontend Structure
 
-| بخش              | فناوری       |
+The project's user interface is developed with React and TypeScript.
+
+Main frontend features:
+
+* Component-based architecture
+* Route management with React Router
+* State management with Jotai
+* Responsive design
+* Use of Tailwind CSS
+
+---
+
+# Key Technologies
+
+| Area             | Technology   |
 | ---------------- | ------------ |
 | Backend          | Go           |
 | HTTP Server      | net/http     |
@@ -153,27 +153,27 @@ Backend پروژه با زبان Go توسعه داده شده و شامل بخ�
 
 ---
 
-# اهداف پروژه
+# Project Goals
 
-* آشنایی با توسعه Backend در Go
-* طراحی REST API
-* مدل‌سازی پایگاه داده رابطه‌ای
-* توسعه رابط کاربری مدرن با React
-* مدیریت ارتباط بین Frontend و Backend
-* شبیه‌سازی فرآیند رزرو بلیت اتوبوس
+* Gaining familiarity with backend development in Go
+* Designing a REST API
+* Modeling a relational database
+* Developing a modern user interface with React
+* Managing communication between the frontend and backend
+* Simulating the bus ticket reservation process
 
 ---
 
-# پیشنهادهای توسعه آینده
+# Suggestions for Future Development
 
-* احراز هویت کاربران
-* پنل مدیریت
-* ثبت و خرید بلیت
-* اتصال به درگاه پرداخت
-* مدیریت شرکت‌های اتوبوس‌رانی
-* مدیریت ظرفیت سرویس‌ها
-* سیستم گزارش‌گیری
-* تاریخچه خرید کاربران
-* قوانین استرداد و کنسلی پویا
+* User authentication
+* Admin panel
+* Ticket booking and purchase
+* Payment gateway integration
+* Bus company management
+* Service capacity management
+* Reporting system
+* User purchase history
+* Dynamic refund and cancellation rules
 
 ---
