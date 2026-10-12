@@ -1,0 +1,111 @@
+name: CI
+
+# Runs the same checks a developer runs by hand, on every push to main and on every
+# pull request, so a broken build or a failing test is seen before it is merged.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A newer push to the same branch cancels the run of the older one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (Go)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    # The store tests run their SQL against a real PostgreSQL, the same major version
+    # as docker-compose.yml. The password is for this throwaway container only.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: safar724
+          POSTGRES_PASSWORD: ci-only
+          POSTGRES_DB: safar724
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U safar724 -d safar724"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://safar724:ci-only@localhost:5432/safar724?sslmode=disable
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Formatting
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "These files are not gofmt-formatted:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build
+        run: go build ./...
+
+      - name: Test
+        # pipefail keeps a failing test from being hidden by the "tee" after it.
+        run: |
+          set -o pipefail
+          go test ./... -v 2>&1 | tee test-output.txt
+
+      # The database tests skip themselves when they cannot reach a database, which is
+      # right on a laptop and wrong here: a skipped test would look like a passing one.
+      - name: No test may be skipped
+        run: |
+          if grep -q -- "--- SKIP" test-output.txt; then
+            echo "Some tests were skipped:"
+            grep -- "--- SKIP" test-output.txt
+            exit 1
+          fi
+
+  frontend:
+    name: Frontend (React)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: devs
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: devs/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

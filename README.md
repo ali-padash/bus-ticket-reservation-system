@@ -1,5 +1,7 @@
 # Bus Ticket Reservation System
 
+[![CI](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml)
+
 A bus ticket website with a Go API behind it: search for trips, pick seats on a drawing of the
 bus, enter the passengers, and get a ticket.
 
@@ -104,7 +106,7 @@ go vet ./...
 go test ./...
 ```
 
-65 tests. 20 of them use the database and are skipped when it is not running.
+66 tests. 20 of them use the database and are skipped when it is not running.
 
 ```bash
 cd devs
@@ -113,13 +115,16 @@ npm run lint
 npm run build
 ```
 
+GitHub Actions runs all of these on every push, against a real PostgreSQL
+(see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
+
 ## Limits
 
 - No login, no user accounts, and no panel for bus companies. Trips come from the seed only.
 - Payment is a demo page. No money moves.
 - A paid ticket cannot be cancelled yet. The refund rules are shown but not applied.
 - There is no limit on how many holds one visitor can open.
-- The website has no automated tests, and there is no CI yet.
+- The website has no automated tests.
 - It is not deployed.
 - The website is in Persian only.
 - Some images, the font and some of the page text come from the real Safar724 site and are to

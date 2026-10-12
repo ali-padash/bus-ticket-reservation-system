@@ -21,6 +21,8 @@ Other root files:
 - `Safar724.drawio.png` — the **old** database diagram. The schema has since changed; see
   [migrations.doc.md](backend/migrations/migrations.doc.md).
 - `docker-compose.yml` — starts the local PostgreSQL database.
+- `.github/workflows/ci.yml` — the checks GitHub runs on every push (added 2026-10-12); see
+  [workflows.doc.md](.github/workflows/workflows.doc.md).
 - `.env.example` — the settings to copy into `.env`.
 
 ## Run it
@@ -64,7 +66,7 @@ Checked by actually running the tools:
 | Check | Result |
 | --- | --- |
 | `go vet ./...` (backend) | Clean. |
-| `go test ./...` (backend) | 65 tests pass (2026-10-12). 20 of them need the database running. |
+| `go test ./...` (backend) | 66 tests pass (2026-10-12). 20 of them need the database running. |
 | `npx tsc --noEmit` (frontend) | Clean (was 13 errors). |
 | `npm run lint` (frontend) | Clean (was 29 errors, 16 warnings). |
 | `npm run build` (frontend) | Passes. |
@@ -107,7 +109,8 @@ Suggested order. Each step leaves the project in a better, working state.
    Postgres, migrations, and a working seed. The frontend builds and the README explains the steps
    (2026-10-12).
 3. **Make it build.** *Done 2026-10-12:* 13 type errors and 29 lint errors fixed, the build
-   passes. Still to do: CI that runs `go vet`, `go test`, `tsc` and `eslint`.
+   passes. CI runs `gofmt`, `go vet`, `go test`, `tsc`, `eslint` and the build on
+   every push (added 2026-10-12).
 4. **Swap out the borrowed files.** Keep the design and the name. Replace the logo, use a free
    font (for example Vazirmatn), and rewrite the copied marketing text and phone number.
    Keep "inspired by Safar724" in the README, and add a "demo project, not affiliated" banner
