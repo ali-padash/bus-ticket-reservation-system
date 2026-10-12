@@ -2,30 +2,31 @@ import { useState } from "react";
 import "../assets/css/calendar.css";
 import { getFirstWeekday, toPersianNum } from "../util/Function";
 import jalaali from "jalaali-js";
-import { GlobalSelectedDate } from "../util/GlobalState";
-import { useAtom } from "jotai";
 
 interface Props {
   className: string;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
 }
 
-const Calendar = ({ className }: Props) => {
-  const [searchDate, setSearchDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useAtom(GlobalSelectedDate);
+const Calendar = ({ className, selectedDate, onSelectDate }: Props) => {
+  // The month on screen. It starts at the chosen date's month and moves with the arrows.
+  const [searchDate, setSearchDate] = useState(() => new Date(selectedDate));
   const today = new Date();
+  const changeMonth = (step: number) => {
+    const newSearchDate = new Date(searchDate);
+    newSearchDate.setMonth(newSearchDate.getMonth() + step);
+    setSearchDate(newSearchDate);
+  };
   const clickHandler = (day: number) => {
     const jalaaliDate = jalaali.toJalaali(searchDate);
     const newGregorianDate = jalaali.toGregorian(jalaaliDate.jy, jalaaliDate.jm, day);
-    setSelectedDate(new Date(newGregorianDate.gy, newGregorianDate.gm - 1, newGregorianDate.gd));
+    onSelectDate(new Date(newGregorianDate.gy, newGregorianDate.gm - 1, newGregorianDate.gd));
   };
   return (
     <div className={className} style={{ direction: "rtl" }}>
-      <input type="hidden" name="date" value={selectedDate.toISOString().split("T")[0]} />
       <div>
-        <i
-          className="fas fa-chevron-right"
-          onClick={() => setSearchDate(new Date(searchDate.setMonth(searchDate.getMonth() - 1)))}
-        />
+        <i className="fas fa-chevron-right" onClick={() => changeMonth(-1)} />
         <div className="year-and-month unselectable">
           <span> {searchDate.toLocaleString("fa-IR", { year: "numeric" })}</span>
           <span style={{ width: "40px", textAlign: "center" }}>
@@ -33,10 +34,7 @@ const Calendar = ({ className }: Props) => {
             {searchDate.toLocaleString("fa-IR", { month: "long" })}{" "}
           </span>
         </div>
-        <i
-          className="fas fa-chevron-left"
-          onClick={() => setSearchDate(new Date(searchDate.setMonth(searchDate.getMonth() + 1)))}
-        />
+        <i className="fas fa-chevron-left" onClick={() => changeMonth(1)} />
       </div>
       <div className="seperator-line-calendar"></div>
       <div className="grid weekdays">

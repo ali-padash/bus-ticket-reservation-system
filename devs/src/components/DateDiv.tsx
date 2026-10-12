@@ -1,20 +1,15 @@
 import "../assets/css/dateDiv.css";
-import { GlobalDisplayBoolean, GlobalSelectedDate } from "../util/GlobalState";
-import { useAtom } from "jotai";
 interface Props {
   className: string;
+  selectedDate: Date;
+  onOpen: () => void;
 }
 
-const DateDiv = ({ className }: Props) => {
-  const [selectedDate] = useAtom(GlobalSelectedDate);
-  const [_, setDisplay] = useAtom(GlobalDisplayBoolean);
+const DateDiv = ({ className, selectedDate, onOpen }: Props) => {
   return (
-    <div className={className} onMouseDown={() => setTimeout(() => setDisplay(true))}>
-      <input
-        type="text"
-        onFocus={() => setTimeout(() => setDisplay(true))}
-        style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
-      />
+    <div className={className} onClick={onOpen}>
+      {/* Invisible, but it can take the focus, so the Tab key reaches the date and opens the calendar. */}
+      <input type="text" onFocus={onOpen} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
       <div className="date">
         <span>{selectedDate.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
         <span>{selectedDate.toLocaleString("fa-IR", { day: "numeric" })}</span>{" "}

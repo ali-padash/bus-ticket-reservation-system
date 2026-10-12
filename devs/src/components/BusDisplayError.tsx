@@ -1,4 +1,3 @@
-import React from "react";
 import RefundBox from "./RefundBox";
 import BusSchema from "./BusSchema";
 import Legend from "./Legend";
@@ -6,17 +5,10 @@ import { seatsArray_DUMMY } from "../util/BusModels";
 import s from "../assets/css/busDetails.module.css";
 
 interface Props {
-  setShowDetails: (showDetails: boolean) => void;
-  setErrorFetching: (errorFetching: boolean) => void;
+  retry: () => void;
 }
 
-const BusSchemaError = ({ setShowDetails, setErrorFetching }: Props) => {
-  const retry = () => {
-    setShowDetails(false);
-    setTimeout(() => setShowDetails(true));
-    setErrorFetching(false);
-  };
-
+const BusSchemaError = ({ retry }: Props) => {
   return (
     <div style={{ marginTop: "40px" }}>
       <div className={s.dividerLine} />

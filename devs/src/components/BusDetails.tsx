@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import s from "../assets/css/busDetails.module.css";
-import { SeatType } from "../util/Models";
+import { SeatArrayType, SeatType } from "../util/Models";
 import { seatsArray_25_1, seatsArray_26_1, seatsArray_29_1, seatsArray_32_1 } from "../util/BusModels";
 import BusLoading from "./BusLoading";
 import BusSchemaError from "./BusDisplayError";
@@ -12,91 +12,71 @@ interface Props {
   busCode: string;
   showDetails: boolean;
   setShowDetails: (showDetails: boolean) => void;
-  trigger: boolean;
 }
 
-const BusDetails = ({ serviceID, busCode, showDetails, setShowDetails, trigger }: Props) => {
-  const [column, setColumn] = useState(9);
-  const [convertedSeatsArray, setConvertedSeatsArray] = useState<SeatType[]>(Array(5 * column).fill([null, null]));
-  const [isFetched, setIsFetched] = useState(false);
+// The seat layout for each bus code the API can send. Any other code gives an empty map.
+const busLayouts: { [busCode: string]: { column: number; seatsArray: SeatType[] } } = {
+  VIP_25_1: { column: 9, seatsArray: seatsArray_25_1 },
+  VIP_26_1: { column: 10, seatsArray: seatsArray_26_1 },
+  VIP_29_1: { column: 11, seatsArray: seatsArray_29_1 },
+  VIP_32_1: { column: 12, seatsArray: seatsArray_32_1 },
+};
+const unknownLayout = { column: 9, seatsArray: [] };
+
+const BusDetails = ({ serviceID, busCode, showDetails, setShowDetails }: Props) => {
+  // The seats as the API sent them, or null while they are not loaded.
+  const [seats, setSeats] = useState<SeatArrayType[] | null>(null);
   const [errorFetching, setErrorFetching] = useState(false);
-  const [exceptMe, setExceptMe] = useState(false);
+  // Goes up by one for each press of "try again", which makes the effect below run again.
+  const [retryCount, setRetryCount] = useState(0);
+  const { column, seatsArray } = busLayouts[busCode] ?? unknownLayout;
 
   useEffect(() => {
-    setExceptMe(false);
-    if (!exceptMe) {
-      setShowDetails(false);
-    }
-  }, [trigger]);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
     if (!showDetails) {
-      setTimeout(() => setIsFetched(false), 400);
-      setExceptMe(false);
-      return;
+      // This timer waits for a CSS animation: the seat map takes 0.3s to fold away
+      // (max-height in busDetails.module.css). The map is swapped for the loading spinner
+      // only after it is out of sight. (updated 2026-10-12)
+      const timer = setTimeout(() => setSeats(null), 400);
+      return () => clearTimeout(timer);
     }
-    setExceptMe(true);
-    fetchSeats(serviceID, signal)
-      .then((data) => {
-        let seatsArray: SeatType[] = [];
-        switch (busCode) {
-          case "VIP_25_1":
-            setColumn(9);
-            seatsArray = seatsArray_25_1;
-            break;
-          case "VIP_26_1":
-            setColumn(10);
-            seatsArray = seatsArray_26_1;
-            break;
-          case "VIP_29_1":
-            setColumn(11);
-            seatsArray = seatsArray_29_1;
-            break;
-          case "VIP_32_1":
-            setColumn(12);
-            seatsArray = seatsArray_32_1;
-            break;
-          default:
-            break;
-        }
-        setConvertedSeatsArray(Array(5 * column).fill([null, null]));
-        const newSeatsArray = [...seatsArray];
-        for (let i = 0; i < seatsArray.length; i++) {
-          const seat = seatsArray[i];
-          if (seat && seat[0] != null) {
-            const matchedData = data.filter((re) => re.SeatNumber === seat[0]);
-            if (matchedData.length > 0) {
-              newSeatsArray[i] = [matchedData[0].SeatNumber, matchedData[0].Gender];
-              if (!matchedData[0].Accessible) {
-                newSeatsArray[i] = [seat[0], "N"];
-              }
-            }
-          }
-        }
-        setConvertedSeatsArray(newSeatsArray);
-        setIsFetched(true);
-      })
+    const abortController = new AbortController();
+    fetchSeats(serviceID, abortController.signal)
+      .then((data) => setSeats(data))
       .catch((error) => {
         if (error.name === "AbortError") return;
         console.error(error);
-        setIsFetched(false);
+        setSeats(null);
         setErrorFetching(true);
       });
-      return () => abortController.abort();
-  }, [showDetails]);
+    return () => abortController.abort();
+  }, [showDetails, serviceID, retryCount]);
+
+  // The layout with each seat's status filled in from the API's answer.
+  const convertedSeatsArray = useMemo(
+    () =>
+      seatsArray.map((seat): SeatType => {
+        const matchedSeat = seat && seats?.find((re) => re.SeatNumber === seat[0]);
+        if (!seat || !matchedSeat) return seat;
+        return [seat[0], matchedSeat.Accessible ? matchedSeat.Gender : "N"];
+      }),
+    [seatsArray, seats]
+  );
+
+  const retry = () => {
+    setErrorFetching(false);
+    setRetryCount((count) => count + 1);
+  };
 
   const busDetailsClasses = `${s.busDetails} ${showDetails ? s.show : ""}`;
 
   return (
     <div className={busDetailsClasses}>
-      {isFetched ? (
+      {seats ? (
         <BusDetailsDisplay convertedSeatsArray={convertedSeatsArray} column={column} setShowDetails={setShowDetails} />
       ) : !errorFetching ? (
         <BusLoading />
       ) : (
-        <BusSchemaError setShowDetails={setShowDetails} setErrorFetching={setErrorFetching} />
+        <BusSchemaError retry={retry} />
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Service } from "../util/Models";
 import { TbClockHour9 } from "react-icons/tb";
 import s from "../assets/css/panel.module.css";
@@ -6,56 +6,53 @@ import defaultImg from "../assets/images/CompanyDefaultLogo.png";
 import { toPersianNum, putComma } from "../util/Function";
 import BusDetails from "./BusDetails";
 import { fetchNumberOfAvailableSeats } from "../util/FetchFunction";
-import { useAtom } from "jotai";
-import { GlobalServiceData } from "../util/GlobalState";
 
 interface Props {
   item: Service;
-  visibleCount?: number;
-  lastItemRef?: React.LegacyRef<HTMLDivElement>;
-  trigger: boolean;
-  setTrigger: (trigger: boolean) => void;
+  originName: string;
+  destinationName: string;
+  // Whether this card shows its seat map. The list owns it, so only one card is open.
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   index?: number;
 }
 
-const Panel = ({ item, trigger, setTrigger, index = 0 }: Props) => {
-  const [servicesData] = useAtom(GlobalServiceData);
-  const [showDetails, setShowDetails] = useState(false);
-  const [numberOfAvailableSeats, setNumberOfAvailableSeats] = useState(item.AvailableSeatCount);
+const Panel = ({ item, originName, destinationName, isOpen, setIsOpen, index = 0 }: Props) => {
+  // The count from the search can be a little old. Opening the card asks for a fresh one.
+  const [freshSeatCount, setFreshSeatCount] = useState<number | null>(null);
   const [loadingSeatCount, setLoadingSeatCount] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const showDetailsRef = useRef(showDetails);
 
   useEffect(() => {
-    setNumberOfAvailableSeats(item.AvailableSeatCount);
-  }, [servicesData]);
-  useEffect(() => {
-    showDetailsRef.current = showDetails;
-  }, [showDetails]);
-
-  useEffect(() => {
+    if (!isOpen) return;
     const abortController = new AbortController();
-    const signal = abortController.signal;
-    if (!showDetails) return;
-    setTimeout(() => setTrigger(!trigger));
-    setTimeout(() => {
-      if (!showDetailsRef.current) return;
+    // This timer waits for a CSS animation: the seat map of the card that was open before
+    // takes up to 0.4s to fold away (max-height in busDetails.module.css), which moves this
+    // card up the page. Scrolling before that would land in the wrong place. (updated 2026-10-12)
+    const scrollTimer = setTimeout(() => {
+      if (!ref.current) return;
       const yOffset = -90;
       const y = ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }, 350);
     setLoadingSeatCount(true);
-    fetchNumberOfAvailableSeats(item.ID, signal)
+    fetchNumberOfAvailableSeats(item.ID, abortController.signal)
       .then((result) => {
-        setNumberOfAvailableSeats(result);
+        setFreshSeatCount(result);
         setLoadingSeatCount(false);
       })
       .catch((err) => {
+        if (err.name === "AbortError") return;
         console.error("Error fetching details:", err);
         setLoadingSeatCount(false);
       });
-    return () => abortController.abort();
-  }, [showDetails, item.ID]);
+    return () => {
+      clearTimeout(scrollTimer);
+      abortController.abort();
+      setLoadingSeatCount(false);
+    };
+  }, [isOpen, item.ID]);
+
   return (
     <div className={s.panel} ref={ref} style={{ animationDuration: `${Math.min(index * 0.05 + 0.3, 0.6)}s` }}>
       <div className={s.flexRow}>
@@ -67,9 +64,9 @@ const Panel = ({ item, trigger, setTrigger, index = 0 }: Props) => {
           <h6>نوع اتوبوس {item.BusType}</h6>
           <div className={s.inner}>
             <div className={s.od}>
-              {servicesData?.OriginPersianName + " - پایانه " + item.OriginTerminalPersianName}
+              {originName + " - پایانه " + item.OriginTerminalPersianName}
               <i className="fas fa-arrow-left" />
-              {servicesData?.DestinationPersianName + " - پایانه " + item.DestinationTerminalPersianName}
+              {destinationName + " - پایانه " + item.DestinationTerminalPersianName}
             </div>
             <div className={s.departureTime}>
               {toPersianNum(item.DepartureTime)}
@@ -79,11 +76,15 @@ const Panel = ({ item, trigger, setTrigger, index = 0 }: Props) => {
               {toPersianNum(putComma(item.Price))} <span> ریال</span>
             </div>
             <div className={s.buy}>
-              <button onClick={() => setShowDetails(!showDetails)}>مشاهده و خرید</button>
+              <button onClick={() => setIsOpen(!isOpen)}>مشاهده و خرید</button>
               <span>
                 تعداد صندلی های خالی:
                 <span className={s.availableSeatCount}>
-                  {!loadingSeatCount ? toPersianNum(numberOfAvailableSeats) : <i className="fas fa-spinner"></i>}
+                  {!loadingSeatCount ? (
+                    toPersianNum(freshSeatCount ?? item.AvailableSeatCount)
+                  ) : (
+                    <i className="fas fa-spinner"></i>
+                  )}
                 </span>
               </span>
             </div>
@@ -93,14 +94,7 @@ const Panel = ({ item, trigger, setTrigger, index = 0 }: Props) => {
           {!item.Description && <div style={{ height: "30px" }}></div>}
         </div>
       </div>
-      <BusDetails
-        serviceID={item.ID}
-        busCode={item.BusCode}
-        showDetails={showDetails}
-        trigger={trigger}
-        setTrigger={setTrigger}
-        setShowDetails={setShowDetails}
-      />
+      <BusDetails serviceID={item.ID} busCode={item.BusCode} showDetails={isOpen} setShowDetails={setIsOpen} />
     </div>
   );
 };

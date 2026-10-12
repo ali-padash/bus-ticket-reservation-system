@@ -36,7 +36,7 @@ export interface Service {
   DepartureTime: string;
   DepartureDate: string;
   Description: string;
-  BriefDescription: string;
+  BriefDescription: string | null;
   AvailableSeatCount: number;
   DiscountPercentage: number;
   CompanyLogo: string;
@@ -51,14 +51,20 @@ export interface ServiceResponse {
   DestinationPersianName: string;
   DestinationEnglishName: string;
   DestinationCode: string;
-  Today: string;
+  Today: string | null;
   Items: Service[];
 }
 
-export type SeatType = [number | null, string | null] | null;
+// What a seat on the map can be: taken by a man, taken by a woman, not for sale ("N"),
+// or free (null). "N" is made up here from `Accessible: false`; the API never sends it.
+export type SeatStatus = "M" | "F" | "N" | null;
 
+// One cell of a bus layout: [seat number, status], or null for empty floor.
+export type SeatType = [number | null, SeatStatus] | null;
+
+// One seat as the API sends it. Gender is null when nobody sits there.
 export interface SeatArrayType {
   SeatNumber: number;
-  Gender: string;
+  Gender: "M" | "F" | null;
   Accessible: boolean;
-};
+}

@@ -9,7 +9,6 @@ interface Props {
   disabled?: boolean;
   checked?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  ref?: React.Ref<HTMLInputElement>;
 }
 
 const InputBox = ({
@@ -20,19 +19,17 @@ const InputBox = ({
   children,
   disabled = false,
   checked,
-  onChange, 
-  ref = null,
+  onChange,
 }: Props) => {
   return (
     <div className={className}>
       <input
-        ref={ref}
         type={type}
         name={name}
         id={id}
         disabled={disabled}
         checked={checked}
-        onChange={onChange} 
+        onChange={onChange}
       />
       <label htmlFor={id}>{children}</label>
     </div>
@@ -40,4 +37,3 @@ const InputBox = ({
 };
 
 export default InputBox;
-

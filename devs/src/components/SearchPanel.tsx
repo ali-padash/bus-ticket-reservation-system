@@ -1,112 +1,78 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "../assets/css/searchPanel.css";
 import CustomAutocomplete from "./CustomAutocomplete";
 import CalenderInput from "./CalendarInput";
 import cities from "../util/cities.json";
-import { useLocation, useNavigate } from "react-router-dom";
-import { formatDate } from "../util/Function";
-import { fetchServices } from "../util/FetchFunction";
-import {
-  GlobalAlertDoubleBoolean,
-  GlobalDisplayBoolean,
-  GlobalSelectedDate,
-  GlobalServiceData,
-} from "../util/GlobalState";
-import { useAtom } from "jotai";
+import { City } from "../util/Models";
 
 interface Props {
-  setErrorFetching: (errorFetching: boolean) => void;
+  initialOrigin: City | null;
+  initialDestination: City | null;
+  selectedDate: Date;
+  onSearch: (origin: City, destination: City) => void;
+  onSelectDate: (date: Date) => void;
 }
 
-const SearchPanel = ({ setErrorFetching }: Props) => {
-  const [__, setServicesData] = useAtom(GlobalServiceData);
-  const [selectedDate, setSelectedDate] = useAtom(GlobalSelectedDate);
-  const [triggerFetch, setTriggerFetch] = useState(false);
-  const [_, setDisplay] = useAtom(GlobalDisplayBoolean);
-  const [alert, setAlert] = useAtom(GlobalAlertDoubleBoolean);
-  const [forceInput, setForceInput] = useState<[string | undefined, string | undefined]>([undefined, undefined]);
-  const location = useLocation();
-  var formData = location.state?.formData;
-  const navigate = useNavigate();
+// The search bar on the results page. The two cities here are a draft: they start as the
+// cities of the search on screen and only become the search when the visitor presses the
+// button (or swaps them). The date is not a draft; picking a day searches at once.
+// (updated 2026-10-12)
+const SearchPanel = ({ initialOrigin, initialDestination, selectedDate, onSearch, onSelectDate }: Props) => {
+  const [origin, setOrigin] = useState(initialOrigin);
+  const [destination, setDestination] = useState(initialDestination);
+  const [display, setDisplay] = useState(false);
+  const [showMissing, setShowMissing] = useState(!initialOrigin || !initialDestination);
+  const originRef = useRef<HTMLInputElement>(null);
+  const destinationRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const hiddenInputs = document.querySelectorAll<HTMLInputElement>('input[type="hidden"]');
-    const inputs = document.querySelectorAll<HTMLInputElement>('input[type="text"]');
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-    if (!inputs[1].value || !inputs[0].value) {
-      setAlert([!Boolean(inputs[0].value), !Boolean(inputs[1].value)]);
-      return;
-    }
-    setAlert([false, false]);
-    setServicesData(null);
-    setErrorFetching(false);
-    fetchServices(formatDate(selectedDate), Number(hiddenInputs[0].value), Number(hiddenInputs[1].value), signal)
-      .then((data) => {
-        setServicesData(data);
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setErrorFetching(true);
-      });
-      return () => abortController.abort();
-  }, [selectedDate, triggerFetch, forceInput]);
-
-  useEffect(() => {
-    if (!formData) {
-      setErrorFetching(true);
-      return;
-    }
-    setSelectedDate(formData.date);
-  }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      let temp = document.querySelectorAll<HTMLInputElement>('input[type="text"]');
-      let temp2 = document.querySelectorAll<HTMLInputElement>('input[type="hidden"]');
-      if (formData) {
-        formData.origin = temp[0].value;
-        formData.destination = temp[1].value;
-        formData.originID = temp2[0].value;
-        formData.destinationID = temp2[1].value;
-        formData.date = selectedDate;
-      } else {
-        formData = {
-          origin: temp[0].value,
-          destination: temp[1].value,
-          originID: temp2[0].value,
-          destinationID: temp2[1].value,
-          date: selectedDate,
-        };
+  const search = useCallback(
+    (from: City | null, to: City | null) => {
+      if (!from || !to) {
+        setShowMissing(true);
+        return;
       }
-      navigate("/services", { state: { formData } });
-    };
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [selectedDate]);
+      setShowMissing(false);
+      setDisplay(false);
+      onSearch(from, to);
+    },
+    [onSearch]
+  );
 
-  const handleFocus = () => {
-    const temp = document.querySelectorAll<HTMLInputElement>('input[type="text"]');
-    if (document.activeElement === temp[0]) {
-      temp[0]?.blur();
-      temp[1]?.focus();
-    } else if (document.activeElement === temp[1]) {
-      temp[1]?.blur();
-      setDisplay(true);
-    }
-  };
+  // Enter walks through the form: origin -> destination -> calendar -> search.
+  // Escape closes everything. The keys are caught on the window because they must also work
+  // when nothing on the page has the focus. (updated 2026-10-12)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDisplay(false);
+        originRef.current?.blur();
+        destinationRef.current?.blur();
+        return;
+      }
+      const tagName = event.target instanceof HTMLElement ? event.target.tagName : "";
+      if (event.key !== "Enter" || ["BUTTON", "INPUT", "A"].includes(tagName)) return;
+      event.preventDefault();
+      if (!origin) originRef.current?.focus();
+      else if (!destination) destinationRef.current?.focus();
+      else if (!display) setDisplay(true);
+      else search(origin, destination);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [origin, destination, display, search]);
 
   const handleExchange = () => {
-    const inputs = document.querySelectorAll<HTMLInputElement>('input[type="text"]');
-    setForceInput([inputs[1].value, inputs[0].value]);
+    setOrigin(destination);
+    setDestination(origin);
+    search(destination, origin);
   };
 
   const alertMessage = () => {
-    if (Array.isArray(alert) && alert.length === 2) {
-      const [isSourceMissing, isDestinationMissing] = alert;
-      if (isSourceMissing && isDestinationMissing) return "لطفا مبداء و مقصد را وارد نمایید";
-      else if (isSourceMissing) return "لطفا مبداء را وارد نمایید";
-      else if (isDestinationMissing) return "لطفا مقصد را وارد نمایید";
-    }
+    const isSourceMissing = showMissing && !origin;
+    const isDestinationMissing = showMissing && !destination;
+    if (isSourceMissing && isDestinationMissing) return "لطفا مبداء و مقصد را وارد نمایید";
+    else if (isSourceMissing) return "لطفا مبداء را وارد نمایید";
+    else if (isDestinationMissing) return "لطفا مقصد را وارد نمایید";
     return "";
   };
 
@@ -125,10 +91,10 @@ const SearchPanel = ({ setErrorFetching }: Props) => {
             <CustomAutocomplete
               placeholder="مبداء را تایپ نمایید"
               cities={cities}
-              handleFocus={handleFocus}
-              initialInputValue={formData?.origin ? formData.origin : ""}
-              initialCityID={formData?.originID ? formData.originID : 0}
-              ForceInputValue={forceInput[0]}
+              value={origin}
+              onChange={setOrigin}
+              onPick={() => destinationRef.current?.focus()}
+              inputRef={originRef}
               style={{ color: "#333" }}
             />
           </div>
@@ -138,17 +104,25 @@ const SearchPanel = ({ setErrorFetching }: Props) => {
             <CustomAutocomplete
               placeholder="مقصد را تایپ نمایید"
               cities={cities}
-              handleFocus={handleFocus}
-              initialInputValue={formData?.destination ? formData.destination : ""}
-              initialCityID={formData?.destinationID ? formData.destinationID : 0}
-              ForceInputValue={forceInput[1]}
+              value={destination}
+              onChange={setDestination}
+              onPick={() => {
+                destinationRef.current?.blur();
+                setDisplay(true);
+              }}
+              inputRef={destinationRef}
               style={{ color: "#333" }}
             />
           </div>
           <div className="custom-gap" />
-          <CalenderInput />
+          <CalenderInput
+            display={display}
+            setDisplay={setDisplay}
+            selectedDate={selectedDate}
+            onSelectDate={onSelectDate}
+          />
           <div className="custom-gap" />
-          <button className="search" id="search-button" onClick={() => setTriggerFetch((prev) => !prev)}>
+          <button className="search" id="search-button" onClick={() => search(origin, destination)}>
             جستجو
             <i className="fas fa-search" />
           </button>

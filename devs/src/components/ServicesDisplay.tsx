@@ -1,14 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { ServiceResponse } from "../util/Models";
 import s from "../assets/css/servicesDisplay.module.css";
 import { turnTimeToInteger, turnToDate } from "../util/Function";
 import Panel from "./Panel";
 import DummyPanel from "./DummyPanel";
 import ServicesDisplayTitle from "./ServicesDisplayTitle";
-import { useAtom } from "jotai";
-import { GlobalServiceData } from "../util/GlobalState";
 
 interface Props {
+  servicesData: ServiceResponse | null;
   sortBasedOnPrice: boolean;
   checkedState: { [key: string]: boolean };
   originState: { [key: string]: boolean };
@@ -16,76 +15,32 @@ interface Props {
   errorFetching: boolean;
 }
 
-const ServicesDisplay = ({ sortBasedOnPrice, checkedState, originState, destinationState, errorFetching }: Props) => {
-  const [dataBasedOnPrice, setDataBasedOnPrice] = useState<ServiceResponse | null>(null);
-  const [dataBasedOnHour, setDataBasedOnHour] = useState<ServiceResponse | null>(null);
-  const [minDepartureTime, setMinDepartureTime] = useState<string>("00:00");
-  const [maxDepartureTime, setMaxDepartureTime] = useState<string>("00:00");
-  const [servicesData] = useAtom(GlobalServiceData);
-  const [data, setData] = useState<ServiceResponse | null>(null);
-  const [visibleCount, setVisibleCount] = useState(3);
-  const [trigger, setTrigger] = useState(false);
-  const observer = useRef<IntersectionObserver>();
+const ServicesDisplay = ({
+  servicesData,
+  sortBasedOnPrice,
+  checkedState,
+  originState,
+  destinationState,
+  errorFetching,
+}: Props) => {
+  // Only one trip shows its seat map at a time. Keeping the open trip's ID here, in the
+  // parent of all the cards, means opening one card closes the others without any signal.
+  const [openTripID, setOpenTripID] = useState<number | null>(null);
 
-  const lastItemRef = useCallback(
-    (node: any) => {
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && data?.Items && visibleCount < data.Items?.length) {
-          setVisibleCount((prevVisibleCount) => prevVisibleCount + 3);
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [visibleCount, data?.Items?.length]
-  );
-
-  const setMaxAndMin = (filtered: any) => {
-    try {
-      let minTime = filtered.Items[0].DepartureTime;
-      let maxTime = filtered.Items[0].DepartureTime;
-      data?.Items?.forEach((item) => {
-        if (turnTimeToInteger(item.DepartureTime) < turnTimeToInteger(minTime)) minTime = item.DepartureTime;
-        if (turnTimeToInteger(item.DepartureTime) > turnTimeToInteger(maxTime)) maxTime = item.DepartureTime;
-      });
-      setMinDepartureTime(minTime);
-      setMaxDepartureTime(maxTime);
-    } catch {}
-  };
-
-  useEffect(() => {
-    if (!servicesData?.Items?.length) {
-      return;
-    }
-    const clonedDataHour = JSON.parse(JSON.stringify(servicesData));
-    clonedDataHour?.Items?.sort(
-      (a: any, b: any) => turnTimeToInteger(a.DepartureTime) - turnTimeToInteger(b.DepartureTime)
+  // The list on screen is worked out from the search result and the chosen sort and filters.
+  // It is not kept in state, so it can never be out of step with them. (updated 2026-10-12)
+  const items = useMemo(() => {
+    const filtered = (servicesData?.Items ?? []).filter(
+      (item) =>
+        (checkedState["all"] || checkedState[item.CompanyId.toString()]) &&
+        (originState["all"] || originState[item.OriginTerminalCode]) &&
+        (destinationState["all"] || destinationState[item.DestinationTerminalCode])
     );
-    setDataBasedOnHour(clonedDataHour);
-  }, [servicesData]);
-
-  useEffect(() => {
-    setTrigger(!trigger);
-    if (!servicesData?.Items?.length) {
-      return;
-    }
-    if (!dataBasedOnPrice) {
-      const clonedDataPrice = JSON.parse(JSON.stringify(servicesData));
-      clonedDataPrice?.Items?.sort((a: any, b: any) => a.Price - b.Price);
-      setDataBasedOnPrice(clonedDataPrice);
-    }
-    const filtered = {
-      ...(sortBasedOnPrice ? dataBasedOnPrice : dataBasedOnHour),
-      Items: (sortBasedOnPrice ? dataBasedOnPrice : dataBasedOnHour)?.Items.filter(
-        (item) =>
-          (checkedState["all"] || checkedState[item.CompanyId.toString()]) &&
-          (originState["all"] || originState[item.OriginTerminalCode]) &&
-          (destinationState["all"] || destinationState[item.DestinationTerminalCode])
-      ),
-    };
-    setMaxAndMin(filtered);
-    setData(filtered);
-  }, [checkedState, originState, destinationState, dataBasedOnPrice, dataBasedOnHour, sortBasedOnPrice, servicesData]);
+    // filter() made a new list, so sorting it in place leaves the search result untouched.
+    return filtered.sort((a, b) =>
+      sortBasedOnPrice ? a.Price - b.Price : turnTimeToInteger(a.DepartureTime) - turnTimeToInteger(b.DepartureTime)
+    );
+  }, [servicesData, sortBasedOnPrice, checkedState, originState, destinationState]);
 
   if (!servicesData)
     return errorFetching ? (
@@ -99,7 +54,7 @@ const ServicesDisplay = ({ sortBasedOnPrice, checkedState, originState, destinat
       </div>
     );
 
-  if (!servicesData?.Items?.length)
+  if (!servicesData.Items.length)
     return (
       <p className={s["no-service-alert"]}>
         {`متاسفانه بلیط اتوبوس ${servicesData.OriginPersianName} به ${
@@ -111,20 +66,25 @@ const ServicesDisplay = ({ sortBasedOnPrice, checkedState, originState, destinat
       </p>
     );
 
-  if (!data?.Items?.length) return <p className={s["no-service-alert"]}>متاسفانه خطایی رخ داده است.</p>;
+  if (!items.length) return <p className={s["no-service-alert"]}>متاسفانه خطایی رخ داده است.</p>;
+
+  // The earliest and latest departure among the trips on screen, for the heading.
+  const byTime = [...items].sort((a, b) => turnTimeToInteger(a.DepartureTime) - turnTimeToInteger(b.DepartureTime));
+  const minDepartureTime = byTime[0].DepartureTime;
+  const maxDepartureTime = byTime[byTime.length - 1].DepartureTime;
 
   return (
     <div className={s.service}>
-      <ServicesDisplayTitle minDepartureTime={minDepartureTime} maxDepartureTime={maxDepartureTime} />
-      {data?.Items?.map((item: any, index: any) => (
+      <ServicesDisplayTitle data={servicesData} minDepartureTime={minDepartureTime} maxDepartureTime={maxDepartureTime} />
+      {items.map((item, index) => (
         <Panel
-          trigger={trigger}
-          setTrigger={setTrigger}
-          key={index}
+          key={item.ID}
           index={index}
           item={item}
-          visibleCount={visibleCount}
-          lastItemRef={lastItemRef}
+          originName={servicesData.OriginPersianName}
+          destinationName={servicesData.DestinationPersianName}
+          isOpen={item.ID === openTripID}
+          setIsOpen={(isOpen) => setOpenTripID(isOpen ? item.ID : null)}
         />
       ))}
     </div>

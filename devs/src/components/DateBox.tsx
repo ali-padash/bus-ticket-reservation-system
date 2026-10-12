@@ -1,11 +1,15 @@
 import { useEffect, useRef } from "react";
 import "../assets/css/dateBox.css";
 import Calendar from "./Calendar";
-import { GlobalDisplayBoolean } from "../util/GlobalState";
-import { useAtom } from "jotai";
 
-const DateBox = () => {
-  const [display, setDisplay] = useAtom(GlobalDisplayBoolean);
+interface Props {
+  display: boolean;
+  setDisplay: (display: boolean) => void;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
+}
+
+const DateBox = ({ display, setDisplay, selectedDate, onSelectDate }: Props) => {
   const dateBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -35,7 +39,7 @@ const DateBox = () => {
         <div className="tooltip-message">date</div>
       </i>
       <h3 style={{ color: "black" }}>تاریخ را انتخاب نمایید</h3>
-      <Calendar className="calendar"/>
+      <Calendar className="calendar" selectedDate={selectedDate} onSelectDate={onSelectDate} />
     </div>
   );
 };

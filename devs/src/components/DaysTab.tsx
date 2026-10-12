@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import "../assets/css/daysTab.css";
-import { addDays, getWeekdayName, toPersianNum } from "../util/Function";
-import { GlobalSelectedDate } from "../util/GlobalState";
-import { useAtom } from "jotai";
+import { addDays, formatDate, getWeekdayName, toPersianNum } from "../util/Function";
 
-const DaysTab = () => {
+interface Props {
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
+}
+
+const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
   const currentDate = new Date();
-  const [selectedDate, setSelectedDate] = useAtom(GlobalSelectedDate);
   const [numberOfTabs, setNumberOfTabs] = useState(7);
 
   const handleChange = (variable: number | Date) => {
-    if (typeof variable === "number") setSelectedDate(addDays(selectedDate, variable));
-    else setSelectedDate(variable);
+    if (typeof variable === "number") onSelectDate(addDays(selectedDate, variable));
+    else onSelectDate(variable);
   };
   currentDate.setHours(0, 0, 0, 0);
   let startDate;
@@ -43,9 +45,9 @@ const DaysTab = () => {
           onClick={() => {
             handleChange(-1);
           }}></i>
-        {daysToShow.map((date, index) => (
+        {daysToShow.map((date) => (
           <div
-            key={index}
+            key={formatDate(date)}
             className={`specific-day${selectedDate.toDateString() === date.toDateString() ? " selected" : ""}`}
             onClick={() => {
               handleChange(date);

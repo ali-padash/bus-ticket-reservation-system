@@ -1,59 +1,68 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
 import ExpandableCard2 from "./ExpandableCard2";
 import InputBox from "./InputBox";
 import "../assets/css/filterSearch.css";
 import IdFilter from "./IdFilter";
-import { GlobalServiceData } from "../util/GlobalState";
-import { useAtom } from "jotai";
+import { ServiceResponse } from "../util/Models";
+
+type CheckedState = { [key: string]: boolean };
 
 interface Props {
-  checkedState?: { [key: string]: boolean };
-  setCheckedState?: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
-  originState?: { [key: string]: boolean };
-  setOriginState?: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
-  destinationState?: { [key: string]: boolean };
-  setDistinationState?: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+  servicesData: ServiceResponse | null;
+  sortBasedOnPrice: boolean;
+  setSortBasedOnPrice: (sortBasedOnPrice: boolean) => void;
+  checkedState: CheckedState;
+  setCheckedState: React.Dispatch<React.SetStateAction<CheckedState>>;
+  originState: CheckedState;
+  setOriginState: React.Dispatch<React.SetStateAction<CheckedState>>;
+  destinationState: CheckedState;
+  setDestinationState: React.Dispatch<React.SetStateAction<CheckedState>>;
 }
 
 const FilterSearch = ({
+  servicesData,
+  sortBasedOnPrice,
+  setSortBasedOnPrice,
   checkedState,
   setCheckedState,
   originState,
   setOriginState,
   destinationState,
-  setDistinationState,
+  setDestinationState,
 }: Props) => {
-  const [companyData, setCompanyData] = useState<Map<string, string>>(new Map());
-  const [originData, setOriginData] = useState<Map<string, string>>(new Map());
-  const [destinationData, setDestinationData] = useState<Map<string, string>>(new Map());
-  const [servicesData] = useAtom(GlobalServiceData);
+  // The filter lists are worked out from the search result, so they are not kept in state:
+  // every company and terminal that appears in the result, once, as id -> name.
+  const { companyData, originData, destinationData } = useMemo(() => {
+    const companyData = new Map<string, string>();
+    const originData = new Map<string, string>();
+    const destinationData = new Map<string, string>();
 
-  const extractCompanies = () => {
-    const newCompanyData = new Map<string, string>();
-    const newOriginData = new Map<string, string>();
-    const newDestinationData = new Map<string, string>();
-
-    servicesData?.Items?.forEach((item) => {
-      newCompanyData.set(item.CompanyId.toString(), item.CompanyPersianName);
-      newOriginData.set(item.OriginTerminalCode, item.OriginTerminalPersianName);
-      newDestinationData.set(item.DestinationTerminalCode, item.DestinationTerminalPersianName);
+    servicesData?.Items.forEach((item) => {
+      companyData.set(item.CompanyId.toString(), item.CompanyPersianName);
+      originData.set(item.OriginTerminalCode, item.OriginTerminalPersianName);
+      destinationData.set(item.DestinationTerminalCode, item.DestinationTerminalPersianName);
     });
 
-    setCompanyData(newCompanyData);
-    setOriginData(newOriginData);
-    setDestinationData(newDestinationData);
-  };
-  useEffect(() => {
-    extractCompanies();
+    return { companyData, originData, destinationData };
   }, [servicesData]);
 
   return (
     <div className="filter-search">
       <ExpandableCard2 title="مرتب سازی بر اساس">
-        <InputBox type="radio" name="sort" id="s1">
+        <InputBox
+          type="radio"
+          name="sort"
+          id="s1"
+          checked={!sortBasedOnPrice}
+          onChange={() => setSortBasedOnPrice(false)}>
           ساعت
         </InputBox>
-        <InputBox type="radio" name="sort" id="s2">
+        <InputBox
+          type="radio"
+          name="sort"
+          id="s2"
+          checked={sortBasedOnPrice}
+          onChange={() => setSortBasedOnPrice(true)}>
           قیمت
         </InputBox>
       </ExpandableCard2>
@@ -62,8 +71,8 @@ const FilterSearch = ({
           allElementTitle="همه شرکت ها"
           elements={companyData}
           id="company"
-          excheckedState={checkedState}
-          exsetCheckedState={setCheckedState}
+          checkedState={checkedState}
+          setCheckedState={setCheckedState}
         />
       </ExpandableCard2>
       <ExpandableCard2 title="فیلتر بر اساس پایانه" direction="row">
@@ -73,8 +82,8 @@ const FilterSearch = ({
             allElementTitle="همه پایانه های مبداء"
             elements={originData}
             id="origin"
-            excheckedState={originState}
-            exsetCheckedState={setOriginState}
+            checkedState={originState}
+            setCheckedState={setOriginState}
           />
         </div>
         <div className="end-start-point">
@@ -83,8 +92,8 @@ const FilterSearch = ({
             allElementTitle="همه پایانه های مقصد"
             elements={destinationData}
             id="destination"
-            excheckedState={destinationState}
-            exsetCheckedState={setDistinationState}
+            checkedState={destinationState}
+            setCheckedState={setDestinationState}
           />
         </div>
       </ExpandableCard2>

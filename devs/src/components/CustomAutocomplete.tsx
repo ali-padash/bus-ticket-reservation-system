@@ -1,156 +1,144 @@
-import { useState, ChangeEvent, KeyboardEvent, useEffect } from "react";
+import { useState, ChangeEvent, KeyboardEvent, useEffect, useRef } from "react";
 import "../assets/css/autocomplete.css";
 import { City } from "../util/Models";
 
 interface Props {
   cities: City[];
   placeholder: string;
-  handleFocus?: () => void;
+  value: City | null;
+  onChange: (city: City | null) => void;
+  onPick?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  inputRef?: React.RefObject<HTMLInputElement>;
   offset?: string;
-  name?: string;
-  initialInputValue?: string;
-  initialCityID?: number;
-  ForceInputValue?: string;
   style?: React.CSSProperties;
 }
 
+// A controlled city box. The parent owns the chosen city (`value`) and hears about every
+// change through `onChange`: a city when the text names exactly one, null otherwise.
+// `onPick` is called when the visitor chooses from the list with Enter or the mouse, so the
+// parent can move the focus on. (updated 2026-10-12)
 const CustomAutocomplete = ({
   cities,
   placeholder,
-  handleFocus = () => {},
+  value,
+  onChange,
+  onPick = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
+  inputRef = undefined,
   offset = "11%",
-  name = undefined,
-  initialInputValue = "",
-  initialCityID = undefined,
-  ForceInputValue = undefined,
   style = undefined,
 }: Props) => {
-  const [inputValue, setInputValue] = useState(initialInputValue);
-  const [cityID, setCityID] = useState(initialCityID);
+  // The text being typed. It is null whenever the box simply shows the chosen city's name.
+  const [draft, setDraft] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<City[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [alertNoMatch, setAlertNoMatch] = useState(false);
-  const [correct, setCorrect] = useState(false);
+  const selectedItemRef = useRef<HTMLLIElement>(null);
 
+  const inputValue = draft ?? value?.PersianName ?? "";
+
+  // Keep the highlighted suggestion in view while moving through the list with the arrow keys.
   useEffect(() => {
-    if (ForceInputValue == undefined) {
-      setCityID(undefined);
-      return;
-    }
-    setInputValue(ForceInputValue);
-    let temp = cities.filter((city) => city.PersianName === ForceInputValue);
-    if (temp.length == 1) setCityID(temp[0].ID);
-    else {
-      setInputValue("");
-      setCityID(undefined);
-    }
-  }, [ForceInputValue]);
+    selectedItemRef.current?.scrollIntoView({ behavior: "instant", block: "nearest", inline: "start" });
+  }, [selectedOption, suggestions]);
+
+  const showSuggestions = (text: string) => {
+    const filteredSuggestions = !text
+      ? []
+      : cities
+          .filter((city) =>
+            city.SearchExpressions.some((expression) => expression.toLowerCase().startsWith(text.toLowerCase()))
+          )
+          .sort((a, b) => b.Order - a.Order);
+    setSuggestions(filteredSuggestions);
+    setSelectedOption(0);
+    if (text) setAlertNoMatch(!filteredSuggestions.length);
+    return filteredSuggestions;
+  };
+
+  const closeSuggestions = () => {
+    setAlertNoMatch(false);
+    setSuggestions([]);
+    setSelectedOption(null);
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputValue(value);
-    setSelectedOption(0);
+    const text = event.target.value;
+    setDraft(text);
+    // Typed text counts as a choice only when it is exactly the name of one suggested city.
+    const exactMatches = showSuggestions(text).filter((city) => city.PersianName === text);
+    onChange(exactMatches.length === 1 ? exactMatches[0] : null);
+  };
 
-    if (!value) {
-      setSuggestions([]);
-    } else {
-      const filteredSuggestions = cities
-        .filter((city) =>
-          city.SearchExpressions.some((expression) => expression.toLowerCase().startsWith(value.toLowerCase()))
-        )
-        .sort((a, b) => b.Order - a.Order);
-      setAlertNoMatch(!filteredSuggestions?.length);
-      setSuggestions(filteredSuggestions);
-    }
-    document.querySelector(".selected")?.scrollIntoView({
-      behavior: "instant",
-      block: "end",
-      inline: "start",
-    });
+  const choose = (city: City) => {
+    setDraft(null);
+    onChange(city);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (!suggestions?.length) return;
-    let newSelectedOption;
+    if (!suggestions.length) return;
     if (event.key === "ArrowDown") {
       event.preventDefault();
-      newSelectedOption = selectedOption === null || selectedOption === suggestions.length - 1 ? 0 : selectedOption + 1;
+      const next = selectedOption === null || selectedOption === suggestions.length - 1 ? 0 : selectedOption + 1;
+      setSelectedOption(next);
+      choose(suggestions[next]);
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
-      newSelectedOption = selectedOption === 0 || selectedOption === null ? suggestions.length - 1 : selectedOption - 1;
+      const previous = selectedOption === 0 || selectedOption === null ? suggestions.length - 1 : selectedOption - 1;
+      setSelectedOption(previous);
+      choose(suggestions[previous]);
     } else if (event.key === "Enter") {
       event.preventDefault();
-      if (selectedOption != null && suggestions.length !== 0) {
-        setInputValue(suggestions[selectedOption].PersianName);
-        setCityID(suggestions[selectedOption].ID);
-        setCorrect(true);
-      }
-      setTimeout(() => handleFocus());
-      return;
+      // This Enter is used up by the list. Without stopPropagation the same key press would
+      // go on to the page's own Enter handler and be counted a second time.
+      event.stopPropagation();
+      if (selectedOption != null) choose(suggestions[selectedOption]);
+      closeSuggestions();
+      onPick();
     }
-
-    if (newSelectedOption !== undefined) {
-      setSelectedOption(newSelectedOption);
-      setInputValue(suggestions[newSelectedOption].PersianName);
-      setCityID(suggestions[newSelectedOption].ID);
-    }
-
-    setTimeout(() =>
-      document.querySelector(".selected")?.scrollIntoView({
-        behavior: "instant",
-        block: "nearest",
-        inline: "start",
-      })
-    );
   };
 
   return (
     <>
       <input
+        ref={inputRef}
         type="text"
-        name={name}
         placeholder={String(placeholder)}
         value={inputValue}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         autoComplete="off"
         style={style}
-        onBlur={() => {
-          setTimeout(() => {
-            const expressions = suggestions.flatMap((suggestion) => suggestion.SearchExpressions);
-            if (inputValue && !expressions.includes(inputValue)) {
-              setInputValue("");
-              setCityID(undefined);
-            } else if (inputValue === "") setCityID(undefined);
-            else if (!correct) {
-              let temp = suggestions.filter((city) => city.PersianName === inputValue);
-              if (temp.length == 1) setCityID(temp[0].ID);
-              else {
-                setInputValue("");
-                setCityID(undefined);
-              }
-            }
-            setCorrect(false);
-            setAlertNoMatch(false);
-            setSuggestions([]);
-            setSelectedOption(null);
-          });
+        onFocus={() => {
+          showSuggestions(inputValue);
+          onFocus();
         }}
-        onFocus={handleChange}
+        onBlur={() => {
+          // Text that names no city is thrown away: the box goes back to showing `value`.
+          setDraft(null);
+          closeSuggestions();
+          onBlur();
+        }}
       />
-      <input type="hidden" name={`${name}ID`} value={cityID} />
       {inputValue.length > 1 && suggestions.length > 0 ? (
         <ul className="suggestions">
           {suggestions.map((suggestion, index) => (
             <li
               style={{ paddingRight: offset }}
-              key={index}
+              key={suggestion.ID}
+              ref={index === selectedOption ? selectedItemRef : undefined}
               className={index === selectedOption ? "selected" : ""}
               onMouseDown={(e) => {
+                // preventDefault keeps the focus in the text box, so a blur does not close
+                // the list before the choice is made.
                 e.preventDefault();
-                setCityID(suggestion.ID);
-                setInputValue(suggestion.PersianName);
-                setTimeout(() => handleFocus());
+                e.stopPropagation();
+                choose(suggestion);
+                closeSuggestions();
+                onPick();
               }}>
               {suggestion.PersianName}
               {" - "}

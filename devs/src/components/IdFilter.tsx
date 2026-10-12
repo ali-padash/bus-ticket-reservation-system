@@ -1,35 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import InputBox from "./InputBox"; // Assuming InputBox is in the same directory
 
 interface Props {
   allElementTitle: string;
   elements: Map<string, string>; // This should be id to name mapping
   id: string; // Contextual ID for distinguishing different filters
-  excheckedState?: {[key: string]: boolean;};
-  exsetCheckedState?: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+  // Which boxes are ticked: `all`, or some element ids. The page owns it and puts it back
+  // to `{ all: true }` when a new search starts. (updated 2026-10-12)
+  checkedState: { [key: string]: boolean };
+  setCheckedState: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
 }
 
-const IdFilter = ({ elements, id, allElementTitle, excheckedState, exsetCheckedState }: Props) => {
-  const [internalCheckedState, internalSetCheckedState] = useState<{ [key: string]: boolean }>({ all: true });
-  const checkedState = excheckedState !== undefined ? excheckedState : internalCheckedState;
-  const setCheckedState = exsetCheckedState !== undefined ? exsetCheckedState : internalSetCheckedState;
-
-  useEffect(() => {
-    const initialStates: { [key: string]: boolean } = { all: true };
-    elements.forEach((_, elementId) => {
-      // Corrected order for Map iteration
-      initialStates[elementId] = false;
-    });
-    setCheckedState(initialStates);
-  }, [elements, id]);
-
+const IdFilter = ({ elements, id, allElementTitle, checkedState, setCheckedState }: Props) => {
   const handleCheckboxChange = (elementId: string) => {
     if (elementId === `all`) {
-      const newState: { [key: string]: boolean } = { all: true };
-      elements.forEach((_, id) => {
-        newState[id] = false;
-      });
-      setCheckedState(newState);
+      setCheckedState({ all: true });
     } else {
       const newState = {
         ...checkedState,
@@ -37,7 +22,7 @@ const IdFilter = ({ elements, id, allElementTitle, excheckedState, exsetCheckedS
         [`all`]: false,
       };
 
-      const areAllUnchecked = Array.from(elements.keys()).every((key) => newState[key] === false);
+      const areAllUnchecked = Array.from(elements.keys()).every((key) => !newState[key]);
       if (areAllUnchecked) {
         newState[`all`] = true;
       }
@@ -56,13 +41,13 @@ const IdFilter = ({ elements, id, allElementTitle, excheckedState, exsetCheckedS
         onChange={() => handleCheckboxChange(`all`)}>
         {allElementTitle}
       </InputBox>
-      {Array.from(elements.entries()).map(([elementId, name], index) => (
+      {Array.from(elements.entries()).map(([elementId, name]) => (
         <InputBox
-          key={index}
+          key={elementId}
           type="checkbox"
           name={`${id}_${elementId}`}
           id={`${id}_${elementId}`}
-          checked={checkedState[elementId]}
+          checked={!!checkedState[elementId]}
           onChange={() => handleCheckboxChange(elementId)}>
           {name}
         </InputBox>

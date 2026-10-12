@@ -1,21 +1,26 @@
 import React from "react";
 import "../assets/css/calendarInput.css";
 import Calendar from "./Calendar";
-import { GlobalDisplayBoolean, GlobalSelectedDate } from "../util/GlobalState";
-import { useAtom } from "jotai";
 
-const CalendarInput = () => {
-  const [display, setDisplay] = useAtom(GlobalDisplayBoolean);
-  const contentRef = React.useRef<HTMLDivElement>(null);
+interface Props {
+  display: boolean;
+  setDisplay: (display: boolean) => void;
+  selectedDate: Date;
+  onSelectDate: (date: Date) => void;
+}
+
+const CalendarInput = ({ display, setDisplay, selectedDate, onSelectDate }: Props) => {
+  const calendarDivRef = React.useRef<HTMLDivElement>(null);
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useAtom(GlobalSelectedDate);
-  const handleClick = (e: MouseEvent) => {
-    if (contentRef.current && !contentRef.current.contains(e.target as Node)) {
-      setDisplay(false);
-    }
-  };
 
+  // A click anywhere outside the date field and its dropdown closes the dropdown. The ref
+  // covers both, so a click on the field itself is left to the toggle below. (updated 2026-10-12)
   React.useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (calendarDivRef.current && !calendarDivRef.current.contains(e.target as Node)) {
+        setDisplay(false);
+      }
+    };
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("click", handleClick);
@@ -23,8 +28,8 @@ const CalendarInput = () => {
   }, [setDisplay]);
 
   return (
-    <div className="calendar-div">
-      <div className="calendar-input" onClick={() => setTimeout(() => setDisplay(!display))}>
+    <div className="calendar-div" ref={calendarDivRef}>
+      <div className="calendar-input" onClick={() => setDisplay(!display)}>
         <i className="fas fa-calendar" style={{ color: "#555" }} />
         <span>{selectedDate.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
         <span>{selectedDate.toLocaleString("fa-IR", { day: "numeric" })}</span>{" "}
@@ -32,15 +37,14 @@ const CalendarInput = () => {
         <span>{selectedDate.toLocaleString("fa-IR", { year: "numeric" })}</span>
       </div>
       <div
-        ref={contentRef}
         className={`expandable-card2-content${display ? " show" : ""} calendar`}
         style={{ width: "400px", paddingInline: "0", paddingBottom: "0"}}>
-        <Calendar className="calendar-2" />
+        <Calendar className="calendar-2" selectedDate={selectedDate} onSelectDate={onSelectDate} />
         <div className="bottom-calendar">
           <div className="crosss unselectable" onClick={() => setDisplay(false)}>
             ×
           </div>
-          <div className="today-info" onClick={() => setSelectedDate(today)}>
+          <div className="today-info" onClick={() => onSelectDate(today)}>
             <i className="fas fa-share"/>
             <span>امروز،</span>{" "}
             <span>{today.toLocaleString("fa-IR", { weekday: "long" })}</span>{" "}
