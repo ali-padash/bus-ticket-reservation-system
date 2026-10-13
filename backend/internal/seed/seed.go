@@ -174,6 +174,18 @@ func seedCatalog(tx *gorm.DB, cities map[uint]City) ([]BusType, []Company, map[u
 	return busTypes, companies, byCity, nil
 }
 
+// tripNotes are the short remarks a company adds to a trip, in both languages. The
+// two empty ones make about a third of the trips come without a remark. The remark
+// used to be the company's name, which the trip card already shows. (written 2026-10-13)
+var tripNotes = []struct{ persian, english string }{
+	{"", ""},
+	{"", ""},
+	{"پذیرایی و آب معدنی رایگان", "Free snack and bottled water"},
+	{"صندلی‌های تخت‌شو با مانیتور شخصی", "Reclining seats with a personal screen"},
+	{"یک توقف بین راه برای استراحت و غذا", "One stop on the way for rest and a meal"},
+	{"شارژر USB کنار هر صندلی", "USB charger at every seat"},
+}
+
 func seedServices(tx *gorm.DB, busTypes []BusType, companies []Company, terminals map[uint][]Terminal) ([]Service, error) {
 	brands := []string{"Scania", "Volvo", "MAN"}
 	today := time.Now().Truncate(24 * time.Hour)
@@ -196,6 +208,7 @@ func seedServices(tx *gorm.DB, busTypes []BusType, companies []Company, terminal
 						discount = float64(5 * (1 + rand.Intn(4)))
 					}
 					brand := brands[rand.Intn(len(brands))]
+					note := tripNotes[rand.Intn(len(tripNotes))]
 					services = append(services, Service{
 						CompanyID:             company.ID,
 						BusTypeID:             busType.ID,
@@ -207,8 +220,8 @@ func seedServices(tx *gorm.DB, busTypes []BusType, companies []Company, terminal
 						DiscountPercentage:    discount,
 						DepartureDate:         today.AddDate(0, 0, day),
 						DepartureTime:         fmt.Sprintf("%02d:%02d", 5+rand.Intn(19), 30*rand.Intn(2)),
-						Description:           company.PersianName,
-						DescriptionEn:         displayName(company.Name),
+						Description:           note.persian,
+						DescriptionEn:         note.english,
 					})
 				}
 			}
@@ -382,13 +395,4 @@ func randomFirstName() (name string, gender string) {
 
 func randomBirthDate() time.Time {
 	return time.Date(1960+rand.Intn(45), time.Month(1+rand.Intn(12)), 1+rand.Intn(28), 0, 0, 0, 0, time.UTC)
-}
-
-// displayName turns a stored name such as "hamrah-safar" into "Hamrah Safar".
-func displayName(slug string) string {
-	words := strings.Fields(strings.ReplaceAll(slug, "-", " "))
-	for i, word := range words {
-		words[i] = strings.ToUpper(word[:1]) + word[1:]
-	}
-	return strings.Join(words, " ")
 }
