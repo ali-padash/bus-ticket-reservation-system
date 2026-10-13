@@ -7,8 +7,25 @@ pick seats on a drawing of the bus, enter the passengers, and get a ticket. It c
 (left-to-right, at `/en/`) and Persian (right-to-left, at `/fa/`).
 
 It is a practice project. The look and the steps are modelled on the Iranian site **Safar724**.
-It is not affiliated with Safar724, sells nothing, and the payment page is a demo. It was first written in 2024 and reworked in 2026; the original
-version is kept under the git tag `v1-original`.
+It is not affiliated with Safar724, sells nothing, and the payment page is a demo. The name, logo
+and pictures are the project's own, and the fonts and icons are free ones. It was first written
+in 2024 and reworked in 2026; the original version is kept under the git tag `v1-original`.
+
+## Screenshots
+
+| Results, with one trip opened | Choosing seats |
+| --- | --- |
+| ![Search results with the seat map of one trip](screenshots/results-en.png) | ![The seat choice step with two seats chosen](screenshots/seats-en.png) |
+
+| The issued ticket | The same site in Persian, right-to-left |
+| --- | --- |
+| ![The page that shows the issued ticket and its code](screenshots/ticket-en.png) | ![Search results in Persian](screenshots/results-fa.png) |
+
+On a phone, in English and in Persian:
+
+![Home, results, seat choice and ticket at phone width, in English](screenshots/phone-en.png)
+
+![Home, results, seat choice and ticket at phone width, in Persian](screenshots/phone-fa.png)
 
 ## What it does
 
@@ -19,7 +36,9 @@ version is kept under the git tag `v1-original`.
 - **Booking without an account**: choose up to 4 seats, enter one passenger per seat, review,
   pay on a demo bank page, and see the issued ticket.
 - **Seats are held for 10 minutes** while the buyer reviews and pays, and released if they do not.
-- **A ticket is opened with its 12-digit code and the buyer's mobile number.**
+- **A ticket is opened with its 12-digit code and the buyer's mobile number**, on the
+  "Find a ticket" page.
+- **Fits a phone.** Every page was checked at 360, 390 and 480 pixels wide in both languages.
 - **Two languages.** The language is the first part of the address, so a link keeps it. Layout
   direction, digits, calendar (Gregorian or Persian) and font follow the language.
 
@@ -109,7 +128,7 @@ go vet ./...
 go test ./...
 ```
 
-67 tests. 21 of them use the database and are skipped when it is not running.
+66 tests. 21 of them use the database and are skipped when it is not running.
 
 ```bash
 cd devs
@@ -129,7 +148,6 @@ GitHub Actions runs all of these on every push, against a real PostgreSQL
 - There is no limit on how many holds one visitor can open.
 - The website has no automated tests.
 - It is not deployed.
-- The name and logo are the project's own. Some illustrations and the Persian font still come
-  from the real Safar724 site and are to be replaced.
+- Of the menu links, only "Bus tickets" and "Find a ticket" lead somewhere.
 - `Safar724.drawio.png` shows the 2024 database design, not the current one.
 - Old commits contain passwords for two hosted databases. Both databases have been deleted.

@@ -13,6 +13,7 @@ October 2026 from a full read of the code, and last updated on 2026-10-12.
 | --- | --- | --- |
 | `backend/` | Go API in three layers (web, rules, SQL). Gin, GORM, PostgreSQL in Docker. | [backend.doc.md](backend/backend.doc.md) |
 | `devs/` | The website. React 18, TypeScript, Vite, React Router. | [devs.doc.md](devs/devs.doc.md) |
+| `screenshots/` | Six pictures of the running site for the README (added 2026-10-13). | [screenshots.doc.md](screenshots/screenshots.doc.md) |
 
 Other root files:
 
@@ -66,7 +67,7 @@ Checked by actually running the tools:
 | Check | Result |
 | --- | --- |
 | `go vet ./...` (backend) | Clean. |
-| `go test ./...` (backend) | 67 tests pass (2026-10-12). 21 of them need the database running. |
+| `go test ./...` (backend) | 66 tests pass (2026-10-13). 21 of them need the database running. |
 | `npx tsc --noEmit` (frontend) | Clean (was 13 errors). |
 | `npm run lint` (frontend) | Clean (was 29 errors, 16 warnings). |
 | `npm run build` (frontend) | Passes. |
@@ -90,11 +91,12 @@ Checked by actually running the tools:
 Mimicking Safar724 is the purpose of the project, and that is fine. The design, the flow and the
 name can stay. The issue is narrower: some of their actual property is committed to a public repo.
 
-- *Updated 2026-10-13.* The site now has its own name, **Rahi** (راهی), and its own logo; the
-  copied customer-count line, company list and phone number were rewritten. Still borrowed:
-  the illustrations (for example `header.png`) and the font below.
-- The IRANSans font files are a paid font.
-- If the site is ever deployed, it could be mistaken for the real one.
+- *Updated 2026-10-13.* This is settled. The site has its own name, **Rahi** (راهی), and its own
+  logo. The copied customer-count line, company list, phone number and marketing claims were
+  rewritten. The paid IRANSans font was replaced by Vazirmatn and Inter (both free), the icon
+  fonts by free icon sets, and the pictures by the project's own drawings. The list of every
+  font, icon set and picture with its licence is in `devs/src/assets/assets.doc.md`.
+- The old files are still in the old commits.
 
 ### Code quality (short version; details are in each folder's doc)
 
@@ -113,10 +115,9 @@ Suggested order. Each step leaves the project in a better, working state.
 3. **Make it build.** *Done 2026-10-12:* 13 type errors and 29 lint errors fixed, the build
    passes. CI runs `gofmt`, `go vet`, `go test`, `tsc`, `eslint` and the build on
    every push (added 2026-10-12).
-4. **Swap out the borrowed files.** Keep the design and the name. Replace the logo, use a free
-   font (for example Vazirmatn), and rewrite the copied marketing text and phone number.
-   Keep "inspired by Safar724" in the README, and add a "demo project, not affiliated" banner
-   if it is deployed.
+4. **Swap out the borrowed files.** *Done 2026-10-13:* own name and logo, free fonts and icons,
+   own pictures, rewritten marketing text and phone number. The README keeps "modelled on
+   Safar724". Still open: a "demo project, not affiliated" banner if it is ever deployed.
 5. **Clean the frontend data flow.** *Done 2026-10-12:* the search is in the URL, the 18
    `querySelector` calls are gone, and `setTimeout` went from 22 to 5 (animation waits only).
    Still open: consider TanStack Query.
