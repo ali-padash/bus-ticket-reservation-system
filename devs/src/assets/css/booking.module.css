@@ -511,6 +511,18 @@
   color: #e74c3c;
 }
 
+/* The small "Paid" mark on a ticket that is looked at again later. (added 2026-10-13) */
+.paidMark {
+  display: inline-block;
+  padding: 2px 14px;
+  border-radius: 14px;
+  background-color: #e8f8ef;
+  color: #1e8449;
+  font-size: 13px;
+  line-height: 2;
+  margin-bottom: 10px;
+}
+
 .issued .bigIcon {
   color: #2ecc71;
 }

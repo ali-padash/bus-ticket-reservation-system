@@ -9,21 +9,36 @@ import Icon from "./Icon";
 
 interface Props {
   ticket: Ticket;
+  // True only on the arrival from the demo bank, the moment the payment went through.
+  justPaid: boolean;
 }
 
-// Step 5 when the payment went through: the ticket itself.
-const TicketIssued = ({ ticket }: Props) => {
+// A paid ticket, in one of two looks. Right after the payment it is step 5 of buying: the
+// step line, a green tick and "your ticket is issued". Opened any other way (from "Find a
+// ticket", a pasted address, a refresh) it is simply the ticket, because the visitor came to
+// look at something they already have, not to finish a purchase. (updated 2026-10-13)
+const TicketIssued = ({ ticket, justPaid }: Props) => {
   const { lang, t, num, name, text, path } = useLocale();
   const trip = ticket.Trip;
   const day = parseDate(trip.DepartureDate);
   return (
-    <div className={`${s.card} ${s.centred} ${s.issued}`}>
-      <BookingSteps current={5} />
-      <Icon name="check-circle" className={s.bigIcon} />
-      <h2>{t("issued.title")}</h2>
+    <div className={`${s.card} ${s.centred} ${justPaid ? s.issued : ""}`}>
+      {justPaid ? (
+        <>
+          <BookingSteps current={5} />
+          <Icon name="check-circle" className={s.bigIcon} />
+          <h2>{t("issued.title")}</h2>
+        </>
+      ) : (
+        <>
+          <Icon name="ticket-alt" className={s.bigIcon} />
+          <h2>{t("issued.viewTitle")}</h2>
+          <div className={s.paidMark}>{t("issued.paid")}</div>
+        </>
+      )}
       <p>{t("issued.codeLabel")}</p>
       <div className={s.code}>{num(ticket.Code)}</div>
-      <p>{t("issued.keepCode")}</p>
+      {justPaid && <p>{t("issued.keepCode")}</p>}
       <div className={s.ticketDetails}>
         <div className={s.box}>
           <div className={s.priceRow}>
@@ -78,11 +93,22 @@ const TicketIssued = ({ ticket }: Props) => {
           </table>
         </div>
       </div>
-      <div className={s.centredActions}>
-        <Link className={`${s.primary} ${s.buttonLink}`} to={path("/")}>
-          {t("issued.home")}
-        </Link>
-      </div>
+      {justPaid ? (
+        <div className={s.centredActions}>
+          <Link className={`${s.primary} ${s.buttonLink}`} to={path("/")}>
+            {t("issued.home")}
+          </Link>
+        </div>
+      ) : (
+        <div className={s.centredActions}>
+          <Link className={`${s.primary} ${s.buttonLink}`} to={path("/tickets")}>
+            {t("issued.findAnother")}
+          </Link>
+          <Link className={s.plain} to={path("/")}>
+            {t("issued.home")}
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

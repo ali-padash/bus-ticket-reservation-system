@@ -116,7 +116,7 @@ looked up when it is drawn, so switching the language translates the messages on
 
 ## `TicketPage.tsx` — routes `/<lang>/tickets/<code>` and `/<lang>/tickets/<code>/payment`
 
-*Updated 2026-10-12.*
+*Updated 2026-10-13.*
 
 Steps 4 and 5. Every time it opens it calls `POST /tickets/<code>/lookup` with the phone from
 `sessionStorage`, and then shows one of these. "Back to the results" on the failure page is
@@ -129,7 +129,8 @@ digits is read as the same code.
 | No phone in this tab, or the phone does not open the ticket | `PhonePrompt` |
 | `reserved`, on `/<lang>/tickets/<code>` | `TicketReview`: passengers, prices, refund rules, countdown |
 | `reserved`, on `/<lang>/tickets/<code>/payment` | `FakeBank`: the demo bank page with "pay" and "cancel" |
-| `paid` | `TicketIssued`: the 12-digit code, trip, passengers and seats |
+| `paid`, the moment the payment went through | `TicketIssued` as step 5: step line, "your ticket is issued", the code, trip, passengers and seats |
+| `paid`, opened any other way | `TicketIssued` as a plain ticket: "your ticket", a "paid" mark, the same details, and a link to find another ticket |
 | `cancelled`, `expired`, or the countdown at zero | `TicketFailed`: says the seats were released |
 
 "Pay" and "cancel" call the API, show the ticket that comes back, and return to
@@ -137,6 +138,23 @@ digits is read as the same code.
 `ticket_cancelled`, `ticket_already_paid`), the page reads the ticket again and shows the truth.
 On the English pages the trip is shown from the ticket's English fields (`CompanyName`,
 `BusTypeEnglish`, `OriginEnglishName`, `OriginTerminalName` and the two for the destination).
+
+**A paid ticket has two looks** (2026-10-13). Someone who comes back later through "Find a
+ticket", a pasted address or a refresh is looking at a ticket they already have, so the page
+must not announce a purchase. The page knows the difference from one piece of plain state,
+`justPaid`, set when "pay" succeeds. It is true only until the page is left or refreshed.
+
+- Why plain state and not the router's navigation state: that state is stored in the
+  browser's history entry and comes back after a refresh, so a refreshed ticket would still
+  say "issued". The address and `sessionStorage` would remember it even longer.
+- Why it survives the move from `/payment` back to `/tickets/<code>`: both routes draw
+  `TicketPage` in the same place, so React keeps the component and its state. If that ever
+  stopped being true, the ticket would simply show its plain look.
+
+The other statuses were left as they are. A ticket still on hold keeps the review with the
+step line, because that purchase really is in progress. A cancelled or expired one still shows
+`TicketFailed` with the step line; its sentences ("the ticket was not issued", "the seats were
+released", "you have not been charged") are true for someone who looks it up later too.
 
 The review has no "edit" button: the seats are already on hold, so changing the details means
 cancelling and starting again.

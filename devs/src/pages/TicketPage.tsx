@@ -45,6 +45,13 @@ function TicketPage({ bank = false }: Props) {
   const [busy, setBusy] = useState(false);
   // Where the sentence for a failed "pay" or "cancel" is in the text files.
   const [actionError, setActionError] = useState<string | null>(null);
+  // True from the moment "pay" succeeds until this page is left or refreshed. It decides
+  // whether a paid ticket is shown as the end of a purchase or simply as a ticket. It is plain
+  // state on purpose: the router's own navigation state is kept in the browser's history and
+  // would survive a refresh, and the address or sessionStorage would outlive the moment even
+  // longer. The two ticket routes draw this same component in the same place, so the state is
+  // still here after the move from /payment back to /tickets/<code>. (written 2026-10-13)
+  const [justPaid, setJustPaid] = useState(false);
 
   const receive = (newTicket: Ticket) => {
     setTicket(newTicket);
@@ -95,6 +102,7 @@ function TicketPage({ bank = false }: Props) {
     action(code, phone)
       .then((newTicket) => {
         receive(newTicket);
+        setJustPaid(action === payTicket);
         navigate(path(`/tickets/${code}`), { replace: true });
       })
       .catch((err) => {
@@ -149,7 +157,7 @@ function TicketPage({ bank = false }: Props) {
   if (ticket.Status === "paid") {
     return (
       <BookingFrame>
-        <TicketIssued ticket={ticket} />
+        <TicketIssued ticket={ticket} justPaid={justPaid} />
       </BookingFrame>
     );
   }

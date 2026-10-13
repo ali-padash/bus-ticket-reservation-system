@@ -9,7 +9,7 @@ Every text a visitor can read, once per language. No component has a sentence wr
 | `en.json` | English (the default) | left to right |
 | `fa.json` | Persian | right to left |
 
-Both files have exactly the same 267 keys (245 before the "find a ticket" page). A key is a path such as `home.title` or
+Both files have exactly the same 270 keys (245 before the "find a ticket" page). A key is a path such as `home.title` or
 `errors.codes.trip_departed`; the first part names the screen or the part of the site.
 
 ## How a text reaches the screen
@@ -72,6 +72,10 @@ const { t } = useLocale();
   was added ("Step 2 of 5: Choose seats", shown under the step numbers on a phone), and
   `notify.sampleOrigin`, `notify.sampleDestination` and `notify.sampleDate` were removed,
   because the "being arranged" card now shows the route and day that were searched.
+- **A ticket looked at again added 3 keys on 2026-10-13**, which takes 267 to 270:
+  `issued.viewTitle` ("Your ticket"), `issued.paid` ("Paid") and `issued.findAnother` ("Find
+  another ticket"). `issued.title` ("Your ticket is issued") and `issued.keepCode` are now
+  shown only at the moment the payment goes through.
 - **The "find a ticket" page added 24 keys on 2026-10-13**: 23 under `findTicket` (title,
   introduction, the labels of the form, the explanation, four notes, four questions with their
   answers) and `errors.fields.TicketCode`. They were written for this site and say only what it

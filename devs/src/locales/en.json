@@ -254,6 +254,9 @@
   },
   "issued": {
     "title": "Your ticket is issued",
+    "viewTitle": "Your ticket",
+    "paid": "Paid",
+    "findAnother": "Find another ticket",
     "codeLabel": "Ticket code",
     "keepCode": "Keep this code together with your mobile number.",
     "route": "Route:",
