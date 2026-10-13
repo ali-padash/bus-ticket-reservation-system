@@ -30,6 +30,9 @@ export const isValidName = (name: string) =>
 
 export const isValidPhone = (phone: string) => /^09\d{9}$/.test(phone);
 
+// A ticket code is exactly 12 digits, the form the API issues. (written 2026-10-13)
+export const isValidTicketCode = (code: string) => /^\d{12}$/.test(code);
+
 // An Iranian national code is 10 digits and the last one is a check digit worked out from
 // the first nine. This catches most typing mistakes before the form is sent.
 export const isValidNationalCode = (code: string) => {

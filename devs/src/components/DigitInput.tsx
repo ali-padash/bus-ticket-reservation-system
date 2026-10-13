@@ -13,6 +13,8 @@ interface Props {
   autoComplete?: string;
   // The id of a <datalist> whose entries the browser offers under the box. (added 2026-10-13)
   list?: string;
+  // "numeric" makes a phone show its digit keyboard for a box that is not a phone number. (added 2026-10-13)
+  inputMode?: "numeric";
 }
 
 // A text box for numbers. It shows the digits of the page's language (Persian digits in
@@ -23,7 +25,7 @@ interface Props {
 // would throw the caret to the end after each key. So the caret's place is noted when a key
 // arrives and put back after React has drawn the new text; one digit replaces one digit, so
 // the place is the same. (updated 2026-10-12)
-const DigitInput = ({ value, onChange, type = "text", label, name, autoComplete, list }: Props) => {
+const DigitInput = ({ value, onChange, type = "text", label, name, autoComplete, list, inputMode }: Props) => {
   const { num } = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
   const caret = useRef<number | null>(null);
@@ -41,6 +43,7 @@ const DigitInput = ({ value, onChange, type = "text", label, name, autoComplete,
       name={name}
       autoComplete={autoComplete}
       list={list}
+      inputMode={inputMode}
       placeholder={label}
       aria-label={label}
       value={num(value)}

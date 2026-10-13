@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage"
 import ServicePage from "./pages/ServicePage"
 import BookingPage from "./pages/BookingPage"
 import TicketPage from "./pages/TicketPage"
+import FindTicketPage from "./pages/FindTicketPage"
 import { CitiesStatus, City } from "./util/Models";
 import { fetchCities } from "./util/FetchFunction";
 import { DEFAULT_LANG } from "./util/Locale";
@@ -42,6 +43,7 @@ function App() {
           <Route index element={<MainPage cities={cities} citiesStatus={citiesStatus} />} />
           <Route path="services" element={<ServicePage cities={cities} citiesStatus={citiesStatus} />} />
           <Route path="booking/:tripId" element={<BookingPage />} />
+          <Route path="tickets" element={<FindTicketPage />} />
           <Route path="tickets/:code" element={<TicketPage />} />
           <Route path="tickets/:code/payment" element={<TicketPage bank />} />
           <Route path="*" element={<Navigate to=".." replace />} />

@@ -30,7 +30,7 @@ const Sidebar = ({ bringList, setBringList, sidebarRef} : Props) => {
         <li style={{marginTop: "25px"}}><a>{t("nav.login")}</a></li>
         <li><a>{t("nav.contact")}</a></li>
         <li style={{marginTop: "25px"}}><a>{t("nav.about")}</a></li>
-        <MainChoces/>
+        <MainChoces onNavigate={() => setBringList(false)} />
         {/* The list is drawn bottom-up, so the last item is the one on top. */}
         <li data-lang-switch><LanguageSwitch /></li>
       </ul>

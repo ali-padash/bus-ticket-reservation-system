@@ -19,7 +19,7 @@ All frontend code.
 
 ## Routes
 
-*Updated 2026-10-12.*
+*Updated 2026-10-13.*
 
 Every page exists twice, once under `/en` and once under `/fa`. `<lang>` below is one of the two.
 
@@ -28,6 +28,7 @@ Every page exists twice, once under `/en` and once under `/fa`. `<lang>` below i
 | `/<lang>/` | `MainPage` — landing page with the search form |
 | `/<lang>/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD` | `ServicePage` — search results |
 | `/<lang>/booking/<tripId>?seats=18,19&step=passengers` | `BookingPage` — choose seats, then type the passengers |
+| `/<lang>/tickets` | `FindTicketPage` — "find a ticket": type the ticket code and the buyer's mobile number (added 2026-10-13) |
 | `/<lang>/tickets/<code>` | `TicketPage` — review and countdown, then the ticket or the failure page |
 | `/<lang>/tickets/<code>/payment` | `TicketPage` — the demo bank page |
 

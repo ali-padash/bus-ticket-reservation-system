@@ -1,0 +1,210 @@
+/* The "find a ticket" page (/<language>/tickets). The grey page, the white cards, the boxes
+   and the blue button come from booking.module.css; this file only adds what that page does
+   not have: the heading above the card, the two boxes side by side, the information card and
+   the questions. Every side is named by reading direction (inline-start, inline-end), so the
+   same rules serve Persian and English. (written 2026-10-13) */
+
+.wrap {
+  width: 900px;
+  max-width: 95%;
+  margin: auto;
+  color: #333;
+}
+
+.wrap p {
+  /* The site-wide paragraph line height (2.5) is too loose for running text. */
+  line-height: 2.1;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 24px;
+  color: #2980b9;
+  /* searchPanel.css styles every <h1> of the site (centred, thin); this one reads from the start. */
+  text-align: start;
+  font-weight: bold;
+}
+
+.intro {
+  margin: 0 0 18px;
+  font-size: 15px;
+  color: #555;
+}
+
+/* ---- the form ---- */
+
+.formCard {
+  padding: 28px 30px 30px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.fieldLabel {
+  display: block;
+  margin: 0 2px 6px;
+  font-size: 13px;
+  color: #555;
+}
+
+.message {
+  max-width: 660px;
+  box-sizing: border-box;
+  margin: 16px auto 0;
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.submit {
+  width: 100%;
+  max-width: 360px;
+  min-height: 48px;
+}
+
+/* ---- information and notes ---- */
+
+.info {
+  margin-top: 22px;
+  padding: 24px 30px;
+}
+
+.info h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.info h2 i {
+  flex-shrink: 0;
+  font-size: 20px;
+  color: #3498db;
+}
+
+.info h2 i.warn {
+  color: #f39c12;
+}
+
+.info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.rule {
+  border: none;
+  border-top: 1px solid #eaeaea;
+  margin: 20px 0;
+}
+
+.notes {
+  margin: 0;
+  padding-inline-start: 22px;
+  font-size: 14px;
+  color: #555;
+  line-height: 2.1;
+}
+
+/* ---- questions ---- */
+
+.faqTitle {
+  margin: 44px 0 20px;
+  text-align: center;
+  font-size: 22px;
+  color: #555;
+}
+
+.question {
+  margin-bottom: 14px;
+}
+
+/* The row that is clicked. The browser's own triangle is hidden because the chevron at the
+   far end does its job. */
+.question summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+  padding: 12px 22px;
+  border-radius: 8px;
+  list-style: none;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.question summary::-webkit-details-marker {
+  display: none;
+}
+
+.question summary:hover {
+  color: #2980b9;
+}
+
+.question summary:focus-visible {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: #777;
+  transition: transform 0.2s;
+}
+
+.question[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.answer {
+  margin: 0;
+  padding: 0 22px 18px;
+  font-size: 14px;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 21px;
+  }
+
+  .formCard {
+    padding: 20px 16px 22px;
+  }
+
+  .fields {
+    grid-template-columns: 1fr;
+  }
+
+  .submit {
+    max-width: none;
+  }
+
+  .info {
+    padding: 20px 16px;
+  }
+
+  .faqTitle {
+    margin-top: 34px;
+    font-size: 19px;
+  }
+
+  .question summary {
+    padding: 10px 16px;
+  }
+
+  .answer {
+    padding: 0 16px 16px;
+  }
+}

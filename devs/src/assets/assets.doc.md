@@ -79,6 +79,9 @@ Each other file is named after the component that uses it (`panel.module.css` â†
 The exception is `booking.module.css` (added 2026-10-12), which is shared by the two booking
 pages and their ten components: frame, step line, forms, buttons and the small result pages.
 `expandableCard.css` also holds the styles for `ExpandableCard2`.
+`findTicket.module.css` (added 2026-10-13) belongs to the page `FindTicketPage.tsx` and holds
+only what `booking.module.css` does not: the heading, the two boxes side by side (one column
+up to 600px), the information card and the questions.
 
 ### Narrow screens on the results page
 

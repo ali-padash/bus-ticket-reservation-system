@@ -21,6 +21,8 @@ that language, so someone who cannot read the page they landed on can still find
 
 ## Navigation and page frame
 
+*Updated 2026-10-13.*
+
 | Component | Job |
 | --- | --- |
 | `WholeNavbar` | Combines the three below. Tracks scroll position and whether the menu is open. |
@@ -29,10 +31,11 @@ that language, so someone who cannot read the page they landed on can still find
 | `Icon` | Every icon of the site, as an SVG from the `react-icons` package. `<Icon name="search" />` draws one of 19 solid icons inside an `<i>` that keeps the class names the stylesheets use (`fas fa-search`); anything else given (onClick, role, aria-label) goes to that `<i>`. `LineIcon` draws one of 14 thin-line icons for places that already have their own `<i>`. The names are typed, so a misspelt icon is a compile error. Icons are SVG and not an icon font so that nothing is fetched from another host and nothing vanishes offline. (written 2026-10-13) |
 | `Logo` | The site's logo: an own mark drawn as one SVG shape, then the name as real text ("Rahi" or "راهی", from `meta.name`). Props: `variant` (blue, or white for the blue bar), `size` in pixels, `markOnly`. Used by `LowerNavbar`, `UpperNavbar`, `Sidebar` and, mark only, `BusLoading`. The name is text and not a picture so that it follows the language and the font of the page, stays sharp at any size, and can be read by screen readers and search engines. (written 2026-10-13) |
 | `Sidebar` | Slide-in menu for small screens. |
-| `MainChoces` | The six menu links, shared by `LowerNavbar` and `Sidebar`. |
+| `MainChoces` | The six menu links, shared by `LowerNavbar` and `Sidebar`, so a link is connected once for the top menu, the tablet panel and the phone menu. It takes `onNavigate`, which both parents use to close their menu when a working link is pressed. |
 | `BottomNavbar` | Footer links. |
 
-Every link goes to `#`. None of them lead anywhere.
+One link leads somewhere: "Find a ticket" opens `/<lang>/tickets` (since 2026-10-13), through
+the router's `Link`, so the page is not reloaded. Every other link still goes to `#`.
 
 ## Search form
 
@@ -140,7 +143,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | `TicketIssued` | Step 5, success: the ticket. |
 | `TicketFailed` | Step 5, failure: cancelled or out of time; says the seats were released. |
 | `PhonePrompt` | Asks for the buyer's phone when the ticket address is opened without it. |
-| `DigitInput` | A text box for numbers that shows the digits of the page's language whichever keyboard typed them. Used for the mobile number, national code and birth date. The page keeps the text in Latin digits and this box only changes how it is shown, so what was typed survives a change of language. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
+| `DigitInput` | A text box for numbers that shows the digits of the page's language whichever keyboard typed them. Used for the mobile number, national code and birth date, and for the two boxes of the "find a ticket" page, where `inputMode="numeric"` makes a phone show its digit keyboard for the ticket code (2026-10-13). The page keeps the text in Latin digits and this box only changes how it is shown, so what was typed survives a change of language. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
 
 These components only show things and report clicks. The two pages hold the state and make the
 API calls; see [pages.doc.md](../pages/pages.doc.md).

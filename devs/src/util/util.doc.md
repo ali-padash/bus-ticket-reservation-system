@@ -118,6 +118,7 @@ else, such as a network that is down (added 2026-10-12).
   plus space, hyphen, apostrophe and the Persian half-space. Digits and other signs are
   refused. The same rule as the API's.
 - `isValidPhone`: 11 digits starting with 09.
+- `isValidTicketCode`: exactly 12 digits. Used by the "find a ticket" page. (added 2026-10-13)
 - `isValidNationalCode`: 10 digits, and the last is the check digit worked out from the first nine.
 - `validateBooking`: runs all of the above, plus `parseBirthDate` from `Locale.ts`, and
   returns the *name* of a message per field name (`NationalCode`, `duplicateNationalCode`,

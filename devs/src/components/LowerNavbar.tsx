@@ -35,7 +35,7 @@ const LowerNavbar = ({ scrolled, bringList, setBringList, menuListRef, iconListR
       {/* Where the menu slides to is in the CSS (`.menu` and `.menu.open`), because the
           direction of the slide depends on the writing direction. (updated 2026-10-12) */}
       <ul className={`menu${bringList ? " open" : ""}`} ref={menuListRef}>
-        <MainChoces />
+        <MainChoces onNavigate={() => setBringList(false)} />
         <i role="button" aria-label={t("nav.closeMenu")} onClick={() => setBringList(false)}>×</i>
       </ul>
       <a href="#" className="before-logo">

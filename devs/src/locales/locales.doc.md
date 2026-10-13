@@ -9,7 +9,7 @@ Every text a visitor can read, once per language. No component has a sentence wr
 | `en.json` | English (the default) | left to right |
 | `fa.json` | Persian | right to left |
 
-Both files have exactly the same 245 keys. A key is a path such as `home.title` or
+Both files have exactly the same 269 keys (245 before the "find a ticket" page). A key is a path such as `home.title` or
 `errors.codes.trip_departed`; the first part names the screen or the part of the site.
 
 ## How a text reaches the screen
@@ -67,6 +67,15 @@ const { t } = useLocale();
 | Buy / View and buy | خرید / مشاهده و خرید | |
 
 ## Things to know
+
+- **The "find a ticket" page added 24 keys on 2026-10-13**: 23 under `findTicket` (title,
+  introduction, the labels of the form, the explanation, four notes, four questions with their
+  answers) and `errors.fields.TicketCode`. They were written for this site and say only what it
+  does: a 12-digit code shown after paying, the buyer's mobile number, no text message or
+  email, a 10-minute hold, no cancelling of a paid ticket yet, a demo payment. The answers
+  quote the names of other screens ("Your ticket is issued", "Passenger details", "Review and
+  pay"); if `issued.title`, `passengers.title` or `review.title` is reworded, reword them too.
+  The Persian button says "استعلام", the word the menu link already used.
 
 - The marketing texts on the home page (the four steps, the three info cards, the questions,
   the "why choose" block) began as the texts of the real Safar724 site, which this project is

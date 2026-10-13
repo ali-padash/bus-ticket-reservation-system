@@ -156,9 +156,6 @@
     "subheading": "We are setting up bus trips on this route",
     "textLine1": "If there is no trip or no free seat, you can sign up for alerts",
     "textLine2": "to hear about new trips",
-    "sampleOrigin": "Tehran",
-    "sampleDestination": "Rasht",
-    "sampleDate": "2024-04-13",
     "status": "New trips are being arranged",
     "signUp": "Sign up for alerts"
   },
@@ -190,6 +187,7 @@
     "stepPassengers": "Passenger details",
     "stepReview": "Review and pay",
     "stepTicket": "Ticket",
+    "progress": "Step {{current}} of {{total}}: {{name}}",
     "searchAgain": "Search again"
   },
   "summary": {
@@ -275,8 +273,34 @@
     "title": "View your ticket",
     "intro": "To view the ticket, enter the mobile number you gave when buying it."
   },
+  "findTicket": {
+    "title": "Find a ticket",
+    "intro": "Open a ticket you bought on Rahi with its ticket code and your mobile number.",
+    "codeLabel": "Ticket code",
+    "codePlaceholder": "12-digit ticket code",
+    "phonePlaceholder": "Mobile number entered when buying",
+    "submit": "Find the ticket",
+    "searching": "Searching ...",
+    "aboutTitle": "How finding a ticket works",
+    "aboutText": "Rahi has no accounts, so a ticket is opened with two things together: the 12-digit ticket code shown on the “Your ticket is issued” page after you pay, and the mobile number you entered when buying. Both must match. With them you can see the trip, the passengers and the seats again at any time.",
+    "notesTitle": "Good to know",
+    "noteKeepCode": "Rahi does not send the ticket code by text message or email. Write it down, or keep the ticket page open.",
+    "noteHold": "A seat on hold that is not paid for within 10 minutes is released, and the page of that ticket then says the ticket was not issued.",
+    "noteCancel": "A paid ticket cannot be cancelled on the website yet.",
+    "noteDemo": "Rahi is a practice project with a demo payment page: no money moves and no real seat is booked.",
+    "faqTitle": "Frequently asked questions",
+    "notFoundQuestion": "Why is my ticket not found?",
+    "notFoundAnswer": "A ticket opens only when the ticket code and the mobile number both match the purchase. Check that the code has all 12 digits, and that the number is the one typed on the passenger details form, starting with 09. For privacy, the website does not say which of the two is wrong.",
+    "phoneQuestion": "Which mobile number do I enter?",
+    "phoneAnswer": "The one typed in the “Mobile number” box of the “Passenger details” step when the ticket was bought. It is the buyer's number, even if the ticket is for other passengers. Any other number will not open the ticket, even if it is yours.",
+    "codeQuestion": "Where do I find my ticket code?",
+    "codeAnswer": "It is shown on the “Your ticket is issued” page right after the payment, under “Ticket code”, and it is also the last part of that page's address. Rahi sends no text message or email, so a lost code cannot be recovered.",
+    "holdQuestion": "What happens to a seat I held but did not pay for?",
+    "holdAnswer": "Seats are held for 10 minutes from the moment the passenger details are sent. While that time is running, the ticket code opens the “Review and pay” page so you can finish paying. If the payment is not made in time, the seats are released for other buyers and you are not charged. After that, the same code opens a page saying the ticket was not issued; to travel, search again and make a new purchase."
+  },
   "errors": {
     "fields": {
+      "TicketCode": "The ticket code must be exactly 12 digits",
       "ContactPhone": "The mobile number must be 11 digits and start with 09",
       "FirstName": "Use letters only for the first name (50 at most)",
       "LastName": "Use letters only for the last name (50 at most)",

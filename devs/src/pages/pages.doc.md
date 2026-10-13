@@ -141,15 +141,55 @@ On the English pages the trip is shown from the ticket's English fields (`Compan
 The review has no "edit" button: the seats are already on hold, so changing the details means
 cancelling and starting again.
 
+## `FindTicketPage.tsx` — route `/<lang>/tickets`
+
+*Written 2026-10-13.*
+
+"Find a ticket": the page behind the menu link. The visitor types the 12-digit ticket code and
+the buyer's mobile number, and the page opens that ticket. Top to bottom, inside
+`BookingFrame`: the title and one line of introduction, a card with the two boxes and one
+button, a card that explains how it works with four notes, and four questions.
+
+- **Both values are asked for together, in one card.** That is how the API opens a ticket
+  (`POST /tickets/<code>/lookup` with the phone in the body). There is no search by mobile
+  number alone, on purpose: it would show a person's tickets to anyone who knows their number.
+- **Checked in the browser first:** the code must be exactly 12 digits (`isValidTicketCode`)
+  and the phone must pass `isValidPhone`. A fault is written under its box and no request is
+  sent. Spaces inside a pasted code are dropped. Both boxes are `DigitInput`, so Persian or
+  Latin digits can be typed on either page.
+- **On success** the phone is saved for this tab (`savePhone`) and the page moves to
+  `/<lang>/tickets/<code>`. That page asks the server again and shows what the ticket's status
+  says, so this page needs no knowledge of paid, held, expired or cancelled tickets.
+- **`ticket_not_found` gives one sentence** ("no ticket was found with this code and mobile
+  number"), the same for a wrong code and for a wrong phone, because the API answers both the
+  same way. Saying which one was wrong would let a stranger test codes.
+- **Any other failure** shows the general sentence, and the button reads "try again".
+- The button is disabled while the request runs; Enter in either box sends the form, because
+  it is a real `<form>`. A request still on its way when the visitor leaves is cancelled.
+- **The phone is never in the address.** It travels in the request body and is kept in
+  `sessionStorage`.
+- **The questions are the browser's own `<details>` elements.** Each opens and closes on its
+  own, works with the keyboard and screen readers, and needs no state in the page.
+- The page scrolls to its top when it opens, because the menu link can be pressed far down
+  another page.
+
+State it owns: the two typed values, one "is wrong" flag per box, whether a request is
+running, and the *key* of the failure sentence (not the sentence, so it follows the language).
+
+Its own styles are in `assets/css/findTicket.module.css`; the cards, boxes and button come
+from `booking.module.css`.
+
 ## Problems
 
-*Updated 2026-10-12.*
+*Updated 2026-10-13.*
 
 - `TicketModel` (a "no service on this route" notice) is always shown on the results page, with
   Tehran, Rasht and a date typed in by hand.
 - There is no "not found" page. An unknown address under a language goes to that language's
   home page, and anything else to `/en/`.
 - A refresh on the passenger form keeps the seats but loses what was typed.
-- There is no page to find a ticket by typing its code; a ticket opens only from its address.
+- A lost ticket code cannot be recovered: the "find a ticket" page needs the code, and the API
+  has no search by mobile number (on purpose, see `FindTicketPage` above).
+- "Find a ticket" has no tab title of its own; every page shows the site's one title.
 - Pressing "search" twice without changing anything adds a second, identical entry to the
   browser history.
