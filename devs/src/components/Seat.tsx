@@ -40,6 +40,9 @@ const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
         // Never wider than its column: a bus with 12 rows of seats is wider than a phone, so
         // there the seats give up a few pixels and the whole bus stays in view. (updated 2026-10-13)
         width: `min(${size}, 100%)`,
+        // In the legend the seat sits in a row beside its label and has no number inside, so
+        // without this the row squeezes it down to a line. (added 2026-10-13)
+        flexShrink: 0,
         height: size,
         fontSize: "11px",
         textAlign: "center",
