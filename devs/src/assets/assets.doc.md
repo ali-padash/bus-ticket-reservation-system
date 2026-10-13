@@ -119,6 +119,11 @@ at the end of each file, in a `@media (max-width: 600px)` block with a comment t
 | "Being arranged" card (`ticketModel.module.css`) | Same card at every width; it is 90% of the screen at most. | Its parts had fixed heights, so text was cut and the button squeezed. |
 | Passenger form | Two names on one line, then one box per line. | The example in the birth date box was cut off. |
 | Buttons and links | About 40px tall: seats, day arrows, menus, form buttons, footer links, language link. | A finger needs more room than a mouse. |
+| Plain paragraphs (`index.css`) | 1.9 in Persian and 1.6 in English, in place of the site-wide 2.5. | That spacing put about a blank line between every two lines: on the home page's four steps, the "no trips" message and elsewhere. |
+| "No trips" message (`servicesDisplay.module.css`) | 20px away from the screen's edges, ordinary line spacing. | It touched both edges. |
+| City names on the "being arranged" card | Never broken inside a word; the bus drawing between them shrinks instead. | A long name was cut in the middle. |
+| Four steps on the home page (`blueHeader.css`) | Step one on top. | They are written last first for the desktop row, and a plain column listed them backwards. |
+| Small controls | The calendar's month arrows and closing cross, the menu's closing cross and the "more" button answer a finger over 40px. Padding makes the part that answers bigger and a negative margin takes the space back, so nothing looks different. | They were 23 to 34px. |
 
 Above 600px nothing here applies, and the desktop pages are as before.
 

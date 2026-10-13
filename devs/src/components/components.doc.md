@@ -141,7 +141,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | `TicketReview` | Step 4: passengers, phone, prices, the refund rules from the API, the countdown, "confirm and pay" and "cancel". |
 | `FakeBank` | The demo bank page. Says plainly that no money moves. |
 | `TicketIssued` | A paid ticket, in two looks chosen by the `justPaid` prop. Right after the payment: the step line at step 5, a green tick, "your ticket is issued", "keep this code", and a way home. Opened any other way: no step line, the heading "your ticket", a small "paid" mark, and two ways on, "find another ticket" and home. The code and the details table are the same in both. It is one component with a prop because only the top and the buttons differ. (updated 2026-10-13) |
-| `TicketFailed` | Step 5, failure: cancelled or out of time; says the seats were released. |
+| `TicketFailed` | The failure page: cancelled or out of time; says the seats were released. It has no step line, because a finished-looking line over a failure reads wrongly. (updated 2026-10-13) |
 | `PhonePrompt` | Asks for the buyer's phone when the ticket address is opened without it. |
 | `DigitInput` | A text box for numbers that shows the digits of the page's language whichever keyboard typed them. Used for the mobile number, national code and birth date, and for the two boxes of the "find a ticket" page, where `inputMode="numeric"` makes a phone show its digit keyboard for the ticket code (2026-10-13). The page keeps the text in Latin digits and this box only changes how it is shown, so what was typed survives a change of language. It notes the caret's place on each key and puts it back after the redraw, because a box that shows something other than what was typed would otherwise jump the caret to the end. |
 
@@ -152,7 +152,7 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 | Component | Job |
 | --- | --- |
-| `BlueHeader` + `Card` | "Four steps" section. |
+| `BlueHeader` + `Card` | "Four steps" section. The steps are written last first for the desktop row; on a narrow screen the stack is turned over so step one is on top. (updated 2026-10-13) |
 | `TwoColumns` + `CardWithIcon` + `ExpandableCard` | Info cards and FAQ. |
 | `PositivePoints` + `CardWithIconVerticall` | "Why people trust us" section. |
 

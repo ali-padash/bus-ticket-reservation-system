@@ -104,3 +104,12 @@
         border-radius: 0;
     }
 }
+
+/* On a phone the closing cross of the calendar answers a finger over 40px; the negative
+   margin keeps the cross itself where it was. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .date-box .cross {
+        padding: 8px 14px;
+        margin: 7px -1px;
+    }
+}

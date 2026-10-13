@@ -136,11 +136,37 @@ function BookingPage() {
 
   // Puts a remembered passenger into the boxes of one seat, with the birth date written in
   // the calendar of the page.
-  const fillPassenger = (seatNumber: number, passenger: SavedPassenger) =>
+  const fillPassenger = (seatNumber: number, passenger: SavedPassenger) => {
     setPassengers({
       ...passengers,
       [seatNumber]: { ...passenger, BirthDate: formatBirthDate(lang, passenger.BirthDate) },
     });
+    clearErrors((field) => field.startsWith(`Passengers[${selectedSeats.indexOf(seatNumber)}].`));
+  };
+
+  // A message under a box first appears when the form is sent. Once the buyer changes that
+  // box the message is taken away, so a corrected box is not still called wrong; the next
+  // send checks everything again. (added 2026-10-13)
+  const clearErrors = (isChanged: (field: string) => boolean) =>
+    setFieldErrors((errors) => {
+      const kept = Object.entries(errors).filter(([field]) => !isChanged(field));
+      return kept.length === Object.keys(errors).length ? errors : Object.fromEntries(kept);
+    });
+
+  const changePhone = (phone: string) => {
+    setContactPhone(phone);
+    clearErrors((field) => field === "ContactPhone");
+  };
+
+  const changePassenger = (seatNumber: number, passenger: PassengerDraft) => {
+    const before = passengers[seatNumber] ?? emptyPassenger;
+    setPassengers({ ...passengers, [seatNumber]: passenger });
+    // The API names a box by the passenger's place in the list it was sent, which is the
+    // place of the seat among the chosen seats.
+    const index = selectedSeats.indexOf(seatNumber);
+    const names = (Object.keys(passenger) as (keyof PassengerDraft)[]).filter((name) => passenger[name] !== before[name]);
+    clearErrors((field) => names.some((name) => field === `Passengers[${index}].${name}`));
+  };
 
   const handleSubmit = () => {
     const drafts = selectedSeats.map((seatNumber) => passengers[seatNumber] ?? emptyPassenger);
@@ -227,9 +253,9 @@ function BookingPage() {
             <PassengerForm
               seats={selectedSeats}
               contactPhone={contactPhone}
-              setContactPhone={setContactPhone}
+              setContactPhone={changePhone}
               passengers={passengers}
-              setPassenger={(seatNumber, passenger) => setPassengers({ ...passengers, [seatNumber]: passenger })}
+              setPassenger={changePassenger}
               savedPhone={saved.phone}
               savedPassengers={saved.passengers}
               fillPassenger={fillPassenger}

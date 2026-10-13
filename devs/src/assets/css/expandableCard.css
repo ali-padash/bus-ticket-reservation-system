@@ -61,3 +61,11 @@
         font-size: 14px;
     }
 }
+
+/* On a phone a question row is at least 44px tall; the whole row opens the answer.
+   (added 2026-10-13) */
+@media (max-width: 600px) {
+    .expandable-card-header {
+        min-height: 44px;
+    }
+}

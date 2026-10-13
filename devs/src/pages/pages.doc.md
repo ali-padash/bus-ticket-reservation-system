@@ -105,6 +105,10 @@ calendar of the page's language (Persian or Gregorian) and sent as Gregorian.
 
 - `201`: the phone is saved for this tab and the page moves to `/<lang>/tickets/<code>`.
 - `validation_failed`: a message under each field the server names.
+- A message under a box first appears when the form is sent, from the browser's own check or
+  from the server. It is taken away as soon as the buyer changes that box (or picks a gender),
+  so a corrected box is not still called wrong; the next send checks everything again.
+  (added 2026-10-13)
 - `seats_unavailable`: back to the seat step, the lost seats dropped from the choice, the seat
   map loaded again, and a message naming them.
 - Any other code: its own sentence above the buttons; a fault without a known code gets the
@@ -152,8 +156,9 @@ must not announce a purchase. The page knows the difference from one piece of pl
   stopped being true, the ticket would simply show its plain look.
 
 The other statuses were left as they are. A ticket still on hold keeps the review with the
-step line, because that purchase really is in progress. A cancelled or expired one still shows
-`TicketFailed` with the step line; its sentences ("the ticket was not issued", "the seats were
+step line, because that purchase really is in progress. A cancelled or expired one shows
+`TicketFailed` without the step line since 2026-10-13 (five lit steps above "the ticket was not
+issued" said two opposite things); its sentences ("the ticket was not issued", "the seats were
 released", "you have not been charged") are true for someone who looks it up later too.
 
 The review has no "edit" button: the seats are already on hold, so changing the details means

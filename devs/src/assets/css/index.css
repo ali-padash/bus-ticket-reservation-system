@@ -97,6 +97,20 @@ p {
     line-height: 2.5;
 }
 
+/* On a phone the wide spacing above reads as a blank line between every two lines of text,
+   so paragraphs are set closer: 1.9 in Persian, whose letters are taller, and 1.6 in English.
+   The English rule is written with the page's direction, which also makes it win over the
+   spacing a single component sets for the desktop. (added 2026-10-13) */
+@media (max-width: 600px) {
+    p {
+        line-height: 1.9;
+    }
+
+    :root[dir="ltr"] p {
+        line-height: 1.6;
+    }
+}
+
 /* This design has one look and no dark theme. `color-scheme: only light` tells the browser
    so, which keeps its own parts (page backdrop, form controls, scrollbars) light and stops
    automatic darkening. The white background and black text are also written out, because

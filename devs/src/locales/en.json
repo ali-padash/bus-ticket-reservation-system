@@ -66,18 +66,18 @@
   "steps": {
     "headingLine1": "Your bus ticket",
     "headingLine2": "is ready in 4 steps!",
-    "smsTitle": "Get your ticket number by text message",
-    "smsText": "That is all: your online purchase is done. A ticket bought here does not need to be printed. Just keep the ticket number that was sent to you by text message.",
+    "codeTitle": "Keep your ticket code",
+    "codeText": "That is all: your online purchase is done. A ticket bought here does not need to be printed. The ticket code is shown on the ticket page after you pay; keep it together with your mobile number.",
     "seatTitle": "Choose your seat",
     "seatText": "Buying online lets you pick your own seat. Look at the seat map of the bus, choose the seat you like and enjoy your trip.",
     "busTitle": "Choose the ticket that suits you",
     "busText": "Tickets from the bus companies are shown with price, departure time, terminal and bus type, so you can choose the one that suits you.",
     "routeTitle": "Enter the origin and destination",
-    "routeText": "Buying a bus ticket on Rahi is simple and needs no sign-up. Enter the origin and destination to see the best, most trusted and cheapest bus tickets."
+    "routeText": "Buying a bus ticket on Rahi is simple and needs no sign-up. Enter the origin and destination to see the bus trips on that route."
   },
   "info": {
     "printTitle": "Print or view your ticket",
-    "printText": "Enter the ticket number that was sent to you by text message to print or view your ticket at any time.",
+    "printText": "Enter your ticket code and the mobile number you gave when buying to view your ticket at any time.",
     "trackTitle": "Recover your ticket number",
     "trackText": "Did your ticket number not arrive, or have you forgotten it? Do not worry. This section is for finding it again.",
     "refundTitle": "Refund a bus ticket",
@@ -100,14 +100,14 @@
     "cancelQuestion": "Can a bus ticket be cancelled online?",
     "cancelAnswer": "If the ticket was bought online on Rahi, it can be cancelled online. Go to the refund section and enter the 12-digit ticket number. A ticket bought at a terminal or on another website cannot be cancelled on Rahi.",
     "printQuestion": "Do I need to print my ticket after buying online?",
-    "printAnswer": "No. The ticket number sent to you by text message is enough for your trip."
+    "printAnswer": "No. The ticket code shown after you pay is enough for your trip."
   },
   "trust": {
     "headingLine1": "Why choose Rahi",
     "headingLine2": "to buy your bus tickets?",
     "text": "Rahi lists a wide range of trips and lets you buy bus tickets from bus companies and cooperatives right away, with no need to sign up. Seeing the bus type and its photos, and choosing the seat you want, lets you plan a trip to anywhere in the country with confidence.",
     "supportTitle": "Friendly support",
-    "supportText": "Do not worry about any problem. Whether it is the departure time, a text message that did not arrive or anything else, our support team is ready to help you by phone or online.",
+    "supportText": "Do not worry about any problem. Whether it is the departure time, a ticket you cannot find or anything else, our support team is ready to help you by phone or online.",
     "companiesTitle": "Trusted companies and Iran's terminals in one place",
     "companiesText": "From Volvo to Scania and MAN; from VIP and reclining seats to single and regular seats: all of them are here for you to book and buy online.",
     "discountsTitle": "Discounts and special prices",

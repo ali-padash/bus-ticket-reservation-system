@@ -12,8 +12,8 @@ const BlueHeader = () => {
       </h1>
       <div className="separator-line-bold"></div>
       <div className="texts-container">
-        <Card iconClass="smile" title={t("steps.smsTitle")}>
-          {t("steps.smsText")}
+        <Card iconClass="smile" title={t("steps.codeTitle")}>
+          {t("steps.codeText")}
         </Card>
         <Card iconClass="sit" title={t("steps.seatTitle")}>
           {t("steps.seatText")}

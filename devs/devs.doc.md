@@ -78,6 +78,7 @@ the remembered passengers were added.
 | "Find a ticket" page (2026-10-13) | 359.54 kB | 116.73 kB |
 | Phone layout, and a plain look for a ticket opened again (2026-10-13) | 360.65 kB | 117.01 kB |
 | Phone layout (2026-10-13) | 359.97 kB | 116.84 kB |
+| Phone layout, second round after review (2026-10-13) | 361.01 kB | 117.17 kB |
 
 The last row was measured together with the other changes of that day (phone layout, seat map),
 so not all of its 10.6 kB belongs to the new page; most of the page's share is its texts,

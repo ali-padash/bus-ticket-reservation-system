@@ -95,9 +95,15 @@ const { t } = useLocale();
   article that does not exist here) and `steps.busText` ("we work with all bus companies").
   The new sentences claim nothing that the site does not do. `nav.logoAlt` was removed and
   `meta.name` added (the name shown beside the logo), so the count is still 245.
-- Still describing things the site does not do, left as they were: the texts that say a
-  ticket number arrives by text message (`steps.smsTitle`, `steps.smsText`, `info.printText`,
-  `faq.printAnswer`) and `trust.supportText` (a support team reachable by phone or online).
+- **The text-message claims were removed on 2026-10-13.** Rahi sends no text message, so the
+  four texts that said a ticket number arrives by one now say what is true: the code is shown
+  on the ticket page after paying and is kept with the mobile number. `steps.smsTitle` and
+  `steps.smsText` were renamed `steps.codeTitle` and `steps.codeText`; `info.printText` and
+  `faq.printAnswer` were reworded; `steps.routeText` no longer promises "the best, most
+  trusted and cheapest" tickets; and `trust.supportText` lost its mention of a text message in
+  English. The count is unchanged.
+- Still describing something the site does not have: `trust.supportText` (a support team
+  reachable by phone or online).
 - `home.dateTooltip` is the English word "date" in the Persian file too. It was like that
   before and was left alone.
 - The count is still 245 after the second round of 2026-10-12: `refund.sampleEarly` and

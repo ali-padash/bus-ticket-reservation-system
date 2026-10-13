@@ -105,3 +105,12 @@
         width: 24px;
     }
 }
+
+/* On a phone the two month arrows answer a finger over 40px. The extra padding is taken
+   back by a negative margin, so nothing around them moves. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .calendar .fas {
+        padding: 14px;
+        margin: -6.5px;
+    }
+}

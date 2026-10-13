@@ -139,3 +139,13 @@
         display: block;
     }
 }
+
+/* On a phone the closing cross of the menu answers a finger over 40px; it is moved by the
+   padding it gained, so the cross itself stays where it was. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .sidebar-blueheader i {
+        padding: 8px 14px;
+        top: 22px;
+        inset-inline-end: 26px;
+    }
+}

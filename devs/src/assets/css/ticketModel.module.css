@@ -109,7 +109,9 @@
 }
 
 /* The origin is at the start of the line and the destination at the end, in both languages.
-   The picture gives way first when the names are long. */
+   A name is never broken inside a word: a name is never narrower than its longest word, and the
+   picture between them gives way instead, down to nothing. A name of several words may wrap at its
+   spaces. (updated 2026-10-13) */
 .theBody .odimg {
   display: flex;
   justify-content: center;
@@ -125,11 +127,10 @@
 
 .theBody .odimg span {
   flex: 1 1 0;
-  min-width: 0;
+  min-width: min-content;
   font-size: 13px;
   font-weight: bold;
   text-align: center;
-  overflow-wrap: anywhere;
 }
 
 .theBody .inform {

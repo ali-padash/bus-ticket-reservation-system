@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import s from "../assets/css/booking.module.css";
-import BookingSteps from "./BookingSteps";
 import { useLocale } from "../util/useLocale";
 import Icon from "./Icon";
 
@@ -10,14 +9,16 @@ interface Props {
   resultsLink: string;
 }
 
-// Step 5 when there is no ticket. No money moves on this site, so the page says what really
-// happened: the seats were released. The two reasons use the same sentences as the API's
-// error codes of the same meaning.
+// Where step 5 would be when there is no ticket. It carries no step line: five lit steps and
+// "Step 5 of 5: Ticket" above "the ticket was not issued" said two opposite things.
+// (updated 2026-10-13)
+// No money moves on this site, so the page says what really happened: the seats were
+// released. The two reasons use the same sentences as the API's error codes of the same
+// meaning.
 const TicketFailed = ({ reason, resultsLink }: Props) => {
   const { t, path } = useLocale();
   return (
     <div className={`${s.card} ${s.centred} ${s.failed}`}>
-      <BookingSteps current={5} />
       <Icon name="exclamation-circle" className={s.bigIcon} />
       <h2>{t("failed.title")}</h2>
       <p>{t(reason === "cancelled" ? "errors.codes.ticket_cancelled" : "errors.codes.hold_expired")}</p>

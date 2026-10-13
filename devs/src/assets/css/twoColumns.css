@@ -82,3 +82,17 @@
         margin-inline-end: 0;
     }
 }
+
+/* On a phone the "more" button answers a finger over 40px. Its border is drawn by the text
+   inside, so the padding that makes it taller cannot be seen. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .bus-common-questions .more {
+        position: relative;
+    }
+
+    .bus-common-questions .more::after {
+        content: "";
+        position: absolute;
+        inset: -9px -4px;
+    }
+}

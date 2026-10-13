@@ -38,3 +38,18 @@
     width: 95%;
   }
 }
+
+/* On a phone the "no trips" sentences keep away from the edges of the screen and their lines
+   sit at an ordinary distance; the 55px above is for the desktop. (added 2026-10-13) */
+@media (max-width: 600px) {
+  .no-service-alert {
+    margin: 36px 0 70px;
+    padding-inline: 20px;
+    font-size: 16px;
+    line-height: 1.9;
+  }
+
+  :root[dir="ltr"] .no-service-alert {
+    line-height: 1.6;
+  }
+}

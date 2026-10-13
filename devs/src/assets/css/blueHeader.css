@@ -80,8 +80,10 @@
 }
 
 @media (max-width: 768px) {
+    /* The steps are written last step first (see above), so a plain column listed them
+       backwards: the stack is turned over to put step one on top. (updated 2026-10-13) */
     .texts-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
     }
 
     .texts-container .block p {
