@@ -45,7 +45,7 @@ the router's `Link`, so the page is not reloaded. Every other link still goes to
 | --- | --- |
 | `HomeHeader` | The big search form on the landing page. Holds the two cities and the date, and submits by navigating to `/<lang>/services?from=&to=&date=`. |
 | `SearchPanel` | The compact search bar on the results page. Holds the two city boxes as a draft and tells the page when to search. It makes no API call itself; `ServicePage` does. |
-| `CustomAutocomplete` | City text box with a suggestion list. A controlled component, see below. |
+| `CustomAutocomplete` | City text box with a suggestion list. A controlled component, see below. In the list the province follows the city in a smaller, greyer text that still passes the usual 4.5 to 1 contrast for small text: 7.0 to 1 on a white row and 4.8 to 1 on the highlighted row, whose blue (#2471a3) is darker than the site's so that white text on it reaches 5.3 to 1. The colours are in `autocomplete.css`. (updated 2026-10-13) |
 | `CustomInput` | Wraps `CustomAutocomplete` with the landing-page styling and the "missing" message. |
 
 ### `CustomAutocomplete` is a controlled component

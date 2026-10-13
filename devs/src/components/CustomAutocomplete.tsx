@@ -157,7 +157,7 @@ const CustomAutocomplete = ({
               }}>
               {cityName(suggestion)}
               {" - "}
-              <span style={{ fontSize: "12px", color: "#777" }}>{provinceName(suggestion)}</span>
+              <span className="province">{provinceName(suggestion)}</span>
             </li>
           ))}
         </ul>

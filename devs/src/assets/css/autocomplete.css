@@ -41,14 +41,29 @@
     background-color: white;
 }
 
+/* The highlighted row is a darker blue than the site's #3498db: white text on that blue has
+   a contrast of only 3.1 to 1, and on this one 5.3 to 1. (updated 2026-10-13) */
 .suggestions .selected {
-    background-color: #3498db;
+    background-color: #2471a3;
     color: white;
 }
 
 .suggestions .selected:hover {
-    background-color: #207dbb;
+    background-color: #1f6391;
     color: white;
+}
+
+/* The province after the city name: smaller and greyer than the city, but still easy to
+   read. #595959 is 7.0 to 1 on the white row and 6.3 to 1 on the grey row under the mouse;
+   on the highlighted row it turns a pale blue that is 4.8 to 1 on the blue (6.0 under the
+   mouse). 4.5 to 1 is the usual least for small text. (added 2026-10-13) */
+.suggestions .province {
+    font-size: 13px;
+    color: #595959;
+}
+
+.suggestions .selected .province {
+    color: #eaf5fd;
 }
 
 .suggestions::-webkit-scrollbar {
