@@ -1,5 +1,7 @@
 # Rahi — Bus Ticket Reservation System
 
+**English** | [فارسی](README.fa.md)
+
 [![CI](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml/badge.svg)](https://github.com/ali-padash/bus-ticket-reservation-system/actions/workflows/ci.yml)
 
 Rahi (راهی, "on one's way") is a bus ticket website with a Go API behind it: search for trips,
@@ -25,11 +27,9 @@ https://github.com/user-attachments/assets/b115a519-47fb-41ca-9d22-f8701104ace7
 | --- | --- |
 | ![The page that shows the issued ticket and its code](screenshots/ticket-en.png) | ![Search results in Persian](screenshots/results-fa.png) |
 
-On a phone, in English and in Persian:
+On a phone:
 
-![Home, results, seat choice and ticket at phone width, in English](screenshots/phone-en.png)
-
-![Home, results, seat choice and ticket at phone width, in Persian](screenshots/phone-fa.png)
+![Home, results, seat choice and ticket at phone width](screenshots/phone-en.png)
 
 ## What it does
 

@@ -13,11 +13,12 @@ October 2026 from a full read of the code, and last updated on 2026-10-12.
 | --- | --- | --- |
 | `backend/` | Go API in three layers (web, rules, SQL). Gin, GORM, PostgreSQL in Docker. | [backend.doc.md](backend/backend.doc.md) |
 | `devs/` | The website. React 18, TypeScript, Vite, React Router. | [devs.doc.md](devs/devs.doc.md) |
-| `screenshots/` | Six pictures of the running site for the README (added 2026-10-13). | [screenshots.doc.md](screenshots/screenshots.doc.md) |
+| `screenshots/` | Nine pictures of the running site for the two READMEs (added 2026-10-13). | [screenshots.doc.md](screenshots/screenshots.doc.md) |
 
 Other root files:
 
 - `README.md` — the public description: what the project does, how to run it, and its limits.
+- `README.fa.md` — the same description in Persian, for Persian-speaking readers (added 2026-10-13). It is the one document not in English. It is updated only when the owner asks, so it can be behind `README.md`.
   Rewritten on 2026-10-12 so it only claims what exists.
 - `Safar724.drawio.png` — the **old** database diagram. The schema has since changed; see
   [migrations.doc.md](backend/migrations/migrations.doc.md).
