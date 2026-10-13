@@ -11,6 +11,10 @@ It is not affiliated with Safar724, sells nothing, and the payment page is a dem
 and pictures are the project's own, and the fonts and icons are free ones. It was first written
 in 2024 and reworked in 2026; the original version is kept under the git tag `v1-original`.
 
+## Demo
+
+https://github.com/user-attachments/assets/b115a519-47fb-41ca-9d22-f8701104ace7
+
 ## Screenshots
 
 | Results, with one trip opened | Choosing seats |
