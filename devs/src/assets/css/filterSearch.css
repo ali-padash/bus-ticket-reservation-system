@@ -106,20 +106,64 @@
     font-size: 14px;
 }
 
-/* On a phone the three menus share the width of the screen and may wrap. (added 2026-10-12) */
+/* On a phone the three menus are three equal blocks in one row; a long title takes two
+   lines inside its block. An open menu is as wide as the row, not as its own block, so the
+   last one cannot run off the edge of the screen. (updated 2026-10-13) */
 @media (max-width: 600px) {
     .filter-search {
         margin-inline-start: 0;
+        padding-inline: 2.5%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .filter-search .expandable-card2 {
+        position: static;
         display: flex;
-        flex-wrap: wrap;
+    }
+
+    .filter-search .expandable-card2-header {
+        box-sizing: border-box;
+        min-height: 44px;
         justify-content: center;
+        padding-inline: 6px 24px;
     }
 
-    .expandable-card2-header {
-        padding-inline: 10px 30px;
+    .filter-search .expandable-card2 p {
+        text-wrap: wrap;
+        text-align: center;
+        font-size: 13px;
+        line-height: 1.3;
     }
 
-    .expandable-card2 i {
-        inset-inline-end: 10px;
+    .filter-search .expandable-card2 i {
+        inset-inline-end: 8px;
+        font-size: 12px;
+    }
+
+    .filter-search .expandable-card2-content {
+        inset-inline: 2.5%;
+        min-width: 0;
+        max-height: 60vh;
+        overflow-y: auto;
+        flex-wrap: wrap;
+    }
+
+    .filter-search .end-start-point {
+        padding: 30px 6px 4px;
+    }
+
+    .filter-search .end-start-point p {
+        top: 0;
+        inset-inline-start: 6px;
+    }
+
+    .filter-search .input-box {
+        min-height: 36px;
+        margin-top: 0;
+    }
+
+    .filter-search .input-box label {
+        text-wrap: wrap;
     }
 }

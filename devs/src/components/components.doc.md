@@ -88,7 +88,7 @@ none of them stores the date.
 | `DateDiv` | Landing page: shows the chosen date; clicking opens `DateBox`. |
 | `DateBox` | Landing page: popup holding a `Calendar`. |
 | `CalendarInput` | Results page: date field plus dropdown `Calendar`. |
-| `DaysTab` | Results page: a strip of 3, 5 or 7 days (by screen width) to jump between dates. |
+| `DaysTab` | Results page: a strip of 3, 5 or 7 days (by screen width) to jump between dates. On a phone each tab is one block, the weekday above the date. (updated 2026-10-13) |
 
 The arrows of the calendar and of the day strip point the way the text runs: their icon comes
 from `useLocale().icons`, where "back" and "forward" swap between the two directions
@@ -108,7 +108,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | `ServicesDisplayTitle` | The "N services found from A to B…" line. |
 | `Panel` | One trip card: company, bus type, time, price, free seats. |
 | `DummyPanel` | Grey placeholder card shown while loading. |
-| `TicketModel` | "We are arranging service on this route" notice. Hard-coded content. |
+| `TicketModel` | The "being arranged" card under the results, drawn as a ticket. It is given the two cities and the day of the search and shows them, the day in the page's calendar; before 2026-10-13 it showed a fixed sample route and an old sample date. Both parts of the card take the height of their text, so it holds at any width. (updated 2026-10-13) |
 
 ## Seat map (opens inside a `Panel`, and on the booking page)
 
@@ -118,9 +118,9 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | --- | --- |
 | `BusDetails` | Shows loading / error / map inside a trip card. The card (`Panel`) loads the data from `GET /trips/{id}/seat-map`. |
 | `BusDetailsDisplay` | Lays out the map, legend, refund box and buy buttons. Both buy buttons open the booking page. |
-| `BusSchema` | Draws the bus from the API's `Layout` (rows of seat numbers, `null` = empty floor). It knows no bus model. With `onToggleSeat` the free seats can be clicked. The bus is drawn the same way in both languages, front on the left: it is a picture of a real thing, not text. |
-| `Seat` | One square. Blue = man, pink = woman, grey = not for sale, white = free, green = chosen by this visitor. Clickable ones work with Enter and Space too. |
-| `Legend` | Explains the seat colours; the booking page adds the green one. |
+| `BusSchema` | Draws the bus from the API's `Layout` (rows of seat numbers, `null` = empty floor). It knows no bus model. With `onToggleSeat` the free seats can be chosen. Each seat is given its place on the floor as two CSS variables (`--r` across the bus, `--c` along it) and the stylesheet decides where that is on screen: the bus lies along the page on a wide screen and stands nose up below 600px, because 12 lines of square seats need 370px and a phone has less. Nothing is measured in JavaScript, so there is no resize listener and no flash on load. A line across the bus with no seat is the aisle and is drawn narrow on a phone. (updated 2026-10-13) |
+| `Seat` | One square. Blue = man, pink = woman, grey = not for sale, white = free, green = chosen by this visitor. Clickable ones work with Enter and Space. Its size comes from the `size` prop unless a parent sets the `--seat` variable, which is how the seat map makes seats 44px on a phone. (updated 2026-10-13) |
+| `Legend` | Explains the seat colours; the booking page adds the green one. On a phone it is a grid of two columns. (updated 2026-10-13) |
 | `BusLoading` | Spinner. |
 | `BusDisplayError` | Error state with a retry button. (The file exports `BusSchemaError`.) |
 | `RefundBox` | The refund terms of the trip whose card is open, loaded from the API through `useRefundRules` (the same lines the review step shows). A popup up to 1024 px wide, inline above that. Draws nothing until the terms have arrived. (updated 2026-10-12) |
@@ -134,7 +134,7 @@ from `useLocale().icons`, where "back" and "forward" swap between the two direct
 | Component | Job |
 | --- | --- |
 | `BookingFrame` | Navbar above, footer below, grey page between. Used by both booking pages. |
-| `BookingSteps` | The five-step line; steps up to the current one are blue. |
+| `BookingSteps` | The five-step line; steps up to the current one are blue. On a phone it shows the five numbers only, with one sentence under them ("Step 2 of 5: Choose seats"); the stylesheet shows the names or the sentence, never both. (updated 2026-10-13) |
 | `TripSummary` | The "trip details" box. Takes plain values, because a trip fills it on one page and a ticket on the other. Names and bus type arrive in the page's language; it formats the date, time and price itself. |
 | `SeatPicker` | Step 2: the bus, the legend, the chosen seats as removable chips, the 4-seat notice, the "just taken" notice. |
 | `PassengerForm` | Step 3: one mobile number, then name, family name, national code, birth date and gender for each seat, with a message under each wrong field. The birth date is typed in the calendar of the page: Persian (`1374/01/21`) or Gregorian (`1995-03-21`). It receives the names of the messages and looks the sentences up itself. Every box has a `name` and an `autoComplete` word so the browser can offer what it knows (phone, given name, family name), with one section per seat. Every box also has a `<datalist>` of the entries remembered from earlier purchases, so they appear under the box as the visitor types; a remembered national ID fills the rest of that passenger. Above each seat it lists the remembered passengers as buttons that fill the seat, and at the bottom it has the "remember these passengers" box, which starts ticked. (updated 2026-10-13) |
@@ -162,7 +162,6 @@ API calls; see [pages.doc.md](../pages/pages.doc.md).
 
 *Updated 2026-10-12.*
 
-- `TicketModel` shows a made-up route and date (Tehran, Rasht), now as texts in `locales/`.
 - "Left out from earlier passengers", login and "my tickets" do not exist.
 
 ### Decisions made in the 2026-10-12 cleanup

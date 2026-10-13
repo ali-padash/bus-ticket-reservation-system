@@ -183,8 +183,8 @@ from `booking.module.css`.
 
 *Updated 2026-10-13.*
 
-- `TicketModel` (a "no service on this route" notice) is always shown on the results page, with
-  Tehran, Rasht and a date typed in by hand.
+- `TicketModel` (the "being arranged" card) is always shown on the results page, also when
+  trips were found. It shows the searched route and day; its "sign up" button does nothing.
 - There is no "not found" page. An unknown address under a language goes to that language's
   home page, and anything else to `/en/`.
 - A refresh on the passenger form keeps the seats but loses what was typed.

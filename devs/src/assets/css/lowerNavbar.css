@@ -218,3 +218,9 @@
         height: 50px !important;
     }
 }
+/* On a phone the logo link is tall enough for a finger. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .lower-top-bar .actual-logo {
+        min-height: 40px;
+    }
+}

@@ -33,19 +33,22 @@ const Seat = ({ seatNumber, status, size = "27px", onClick }: Props) => {
       style={{
         backgroundColor: backgroundColors[look],
         color: textColors[look],
-        margin: "4px auto",
+        margin: "var(--seat-margin, 4px auto)",
         borderRadius: "5px",
         fontWeight: "bold",
-        lineHeight: "29px",
-        // Never wider than its column: a bus with 12 rows of seats is wider than a phone, so
-        // there the seats give up a few pixels and the whole bus stays in view. (updated 2026-10-13)
-        width: `min(${size}, 100%)`,
+        // A seat is always a square. The seat map may ask for another size through the
+        // `--seat` variable (it draws bigger seats on a phone, see busSchema.module.css);
+        // without it the size given here is used. The number is centred with flex, so it
+        // stays in the middle at any size. (updated 2026-10-13)
+        width: `var(--seat, ${size})`,
+        height: `var(--seat, ${size})`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         // In the legend the seat sits in a row beside its label and has no number inside, so
         // without this the row squeezes it down to a line. (added 2026-10-13)
         flexShrink: 0,
-        height: size,
-        fontSize: "11px",
-        textAlign: "center",
+        fontSize: "var(--seat-text, 11px)",
         boxSizing: "border-box",
         border: status == null ? "1px solid silver" : "none",
         cursor: onClick ? "pointer" : undefined,

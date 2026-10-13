@@ -27,7 +27,7 @@ interface Props {
 function ServicePage({ cities, citiesStatus }: Props) {
   // The search is the address: /<language>/services?from=<cityId>&to=<cityId>&date=YYYY-MM-DD.
   // Nothing else remembers it, so a refresh or a shared link repeats the same search.
-  const { t, name } = useLocale();
+  const { t, name, cityName } = useLocale();
   const [searchParams, setSearchParams] = useSearchParams();
   const originID = parseCityID(searchParams.get("from"));
   const destinationID = parseCityID(searchParams.get("to"));
@@ -76,6 +76,10 @@ function ServicePage({ cities, citiesStatus }: Props) {
     setSearchParams(newParams);
   };
 
+  // The two cities of the address, for the card under the results.
+  const originCity = cities.find((city) => city.ID === originID);
+  const destinationCity = cities.find((city) => city.ID === destinationID);
+
   return (
     <>
       <div className="space" style={{ height: "135px", backgroundColor: "#f0f0f0", zIndex: -1000 }}></div>
@@ -123,7 +127,11 @@ function ServicePage({ cities, citiesStatus }: Props) {
         destinationState={destinationState}
         errorFetching={errorFetching || !originID || !destinationID}
       />
-      <TicketModel />
+      <TicketModel
+        origin={originCity && cityName(originCity)}
+        destination={destinationCity && cityName(destinationCity)}
+        date={date}
+      />
       <BottomNavbar />
     </>
   );

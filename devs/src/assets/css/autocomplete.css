@@ -87,3 +87,9 @@
     border-radius: 3px;
     cursor: pointer;
 }
+/* On a phone each suggested city is tall enough for a finger. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .suggestions li {
+        padding-block: 7px;
+    }
+}

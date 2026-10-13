@@ -132,3 +132,21 @@
         display: flex;
     }
 }
+/* On a phone the language link and the menu button are tall and wide enough for a finger.
+   (added 2026-10-13) */
+@media (max-width: 600px) {
+    .upper-top-bar .two .language {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+        margin-inline-end: 4px;
+        font-size: 13px;
+    }
+
+    .upper-top-bar .two .menu-div {
+        min-height: 40px;
+        margin-inline-end: 8px;
+    }
+}

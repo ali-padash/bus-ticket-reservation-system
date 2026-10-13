@@ -186,4 +186,29 @@ h1 {
         inset-inline: 0 auto;
         max-width: 95vw;
     }
+
+    /* The boxes are tall enough for a finger, and the swap arrows get a place of their own
+       between the two city boxes; they used to be enlarged over the edges of the boxes.
+       (added 2026-10-13) */
+    .search-panel .in,
+    .search-panel .calendar-div,
+    .search-panel .search {
+        height: 40px;
+    }
+
+    .search-panel .in {
+        /* Two boxes and the 40px of the arrows fill the first line, so the date goes to the next. */
+        flex: 1 1 calc(50% - 24px);
+        min-width: 0;
+    }
+
+    .search-panel .fas.fa-exchange-alt {
+        flex: 0 0 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        transform: none;
+    }
 }

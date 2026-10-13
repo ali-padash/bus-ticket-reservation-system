@@ -24,3 +24,11 @@
     font-style: normal;
     cursor: pointer;
 }
+
+/* On a phone the long date ("Tuesday, 13 October 2026") stays on one line. (added 2026-10-13) */
+@media (max-width: 480px) {
+    .date-div,
+    .date {
+        font-size: 16px;
+    }
+}

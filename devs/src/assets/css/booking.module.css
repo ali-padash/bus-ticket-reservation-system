@@ -126,6 +126,10 @@
   display: none;
 }
 
+.stepCaption {
+  display: none;
+}
+
 .stepNumber {
   display: inline-block;
   width: 24px;
@@ -183,6 +187,7 @@
   justify-content: space-between;
   font-size: 12px;
   color: #777;
+  --seat-margin: 4px 0;
 }
 
 .legend div {
@@ -457,6 +462,13 @@
 
 .priceRow span:first-child {
   color: #777;
+  /* A label keeps its line and its distance; a long value beside it wraps. (updated 2026-10-13) */
+  flex-shrink: 0;
+  margin-inline-end: 12px;
+}
+
+.priceRow span:last-child {
+  text-align: end;
 }
 
 .priceRow.total {
@@ -551,5 +563,157 @@
 
   .reviewGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ---- phone ----
+   Tighter cards, the step line as numbers with one sentence under it, the legend as a tidy
+   grid, full-width buttons and ordinary line spacing. Text lines are set wide apart on the
+   desktop design; on a narrow screen that reads as gaps, so they are closer here, a little
+   more so in English than in Persian, whose letters are taller. (added 2026-10-13) */
+@media (max-width: 600px) {
+  .page {
+    padding: 14px 0 40px;
+  }
+
+  .container {
+    gap: 12px;
+  }
+
+  .summary {
+    padding: 14px 16px;
+  }
+
+  .main {
+    padding: 16px 14px 20px;
+  }
+
+  .steps {
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .steps li {
+    flex: 1 1 0;
+    gap: 6px;
+  }
+
+  .steps li:last-child {
+    flex: 0 0 auto;
+  }
+
+  .steps li::after {
+    flex: 1 1 0;
+    width: auto;
+    margin: 0;
+  }
+
+  .stepNumber {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+  }
+
+  .stepName {
+    display: none;
+  }
+
+  .stepCaption {
+    display: block;
+    margin: 0 0 18px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2980b9;
+  }
+
+  .intro,
+  .notice,
+  .hint,
+  .box p,
+  .centred p {
+    line-height: 1.9;
+  }
+
+  :root[dir="ltr"] .intro,
+  :root[dir="ltr"] .notice,
+  :root[dir="ltr"] .hint,
+  :root[dir="ltr"] .box p,
+  :root[dir="ltr"] .centred p {
+    line-height: 1.6;
+  }
+
+  .legend {
+    width: 100%;
+    max-width: 340px;
+    margin: 14px auto 4px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+    font-size: 13px;
+  }
+
+  .chip {
+    min-height: 40px;
+  }
+
+  /* The two names share a line; the longer boxes under them get a line each, so the
+     example date in the birth date box is not cut off. */
+  .fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fields > :nth-child(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .primary,
+  .pay {
+    padding-inline: 16px;
+  }
+
+  .savedPassengers button {
+    min-height: 36px;
+    padding-inline: 14px;
+  }
+
+  .remember {
+    min-height: 40px;
+  }
+
+  .box {
+    padding: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 4px;
+    overflow-wrap: anywhere;
+  }
+
+  .centred {
+    padding: 22px 16px 24px;
+  }
+
+  .code {
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding: 8px 12px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .centredActions .primary,
+  .centredActions .pay {
+    width: 100%;
+    box-sizing: border-box;
   }
 }

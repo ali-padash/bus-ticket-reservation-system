@@ -242,4 +242,10 @@
   .panel .info .inner .buy {
     flex: 0 0 100%;
   }
+
+  /* Tall enough for a finger. (added 2026-10-13) */
+  .panel .info .inner .buy button {
+    min-height: 40px;
+    font-size: 15px;
+  }
 }

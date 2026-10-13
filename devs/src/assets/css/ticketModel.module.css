@@ -1,10 +1,12 @@
-:root {
-  --size: clamp(0px, 90vw, 450px);
-}
-
+/* The "being arranged" card, drawn as a ticket: a blue stub on top and a white body under it,
+   with a notch cut at each side where they meet. It is 450px wide and follows the screen
+   when the screen is narrower. Both parts take the height of their text, so nothing is cut
+   off when a sentence wraps, and the blue is the site's own (#3498db). (rewritten 2026-10-13) */
 .ticketModel {
+  /* 90vw, not more: the two notches reach 17px past the card's sides. */
+  --size: min(450px, 90vw);
+  --blue: #3498db;
   background-color: white;
-  height: 350px;
   margin: 50px 0;
   width: 100%;
 }
@@ -12,30 +14,32 @@
 .blueHeader {
   position: relative;
   display: flex;
-  padding: 5px;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
   box-sizing: border-box;
-  background-color: blue;
-  border: 1px solid blue;
+  background-color: var(--blue);
+  border: 1px solid var(--blue);
   border-radius: 11px;
   width: var(--size);
-  height: 80px;
+  min-height: 80px;
   margin: auto;
   flex-direction: row-reverse;
 }
 
 .blueHeader .headIcon {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-inline: 10px 30px;
-  font-size: 50px;
+  font-size: 46px;
   font-style: normal;
   color: white;
 }
 
 .blueHeader .title {
-  flex: 4;
+  flex: 1;
+  min-width: 0;
   color: white;
   text-align: start;
 }
@@ -46,8 +50,9 @@
 }
 
 .blueHeader .title p {
-  margin: 10px 0;
+  margin: 6px 0 0;
   font-size: 14px;
+  line-height: 1.6;
 }
 
 .blueHeader .right,
@@ -57,8 +62,8 @@
   height: 22px;
   right: -13px;
   bottom: -13px;
-  border-top: 1px solid blue;
-  border-left: 1px solid blue;
+  border-top: 1px solid var(--blue);
+  border-left: 1px solid var(--blue);
   border-right: 1px solid white;
   border-bottom: 1px solid white;
   transform: rotateZ(-46.5deg);
@@ -76,19 +81,20 @@
   position: absolute;
   width: 100%;
   height: 0px;
-  background-color: blue;
   bottom: -1px;
   left: 0;
-  border-bottom: 1px dashed black;
+  border-bottom: 1px dashed white;
 }
 
 .theBody {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
   background-color: white;
-  border: 1px solid blue;
+  border: 1px solid var(--blue);
   width: var(--size);
-  height: 260px;
+  padding: 18px 18px 20px;
   border-radius: 11px;
   margin: auto;
 }
@@ -96,44 +102,47 @@
 .theBody h5 {
   text-align: center;
   font-size: 14px;
-  line-height: 30px;
+  line-height: 1.8;
   color: #555;
-  margin-bottom: 0;
+  margin: 0;
   font-weight: 100;
 }
 
+/* The origin is at the start of the line and the destination at the end, in both languages.
+   The picture gives way first when the names are long. */
 .theBody .odimg {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  flex-direction: row-reverse;
+  gap: 10px;
 }
 
 .theBody .odimg img {
-  margin-inline: 40px;
-  flex: 1;
+  flex: 0 1 200px;
+  min-width: 0;
+  height: auto;
 }
 
 .theBody .odimg span {
+  flex: 1 1 0;
+  min-width: 0;
   font-size: 13px;
   font-weight: bold;
-  flex: 1;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .theBody .inform {
-  width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
   align-items: center;
-  justify-items: center;
+  gap: 10px 18px;
 }
 
 .theBody .inform .accessory {
   font-size: 14px;
-  margin: auto;
   display: flex;
-  justify-items: center;
   align-items: center;
 }
 
@@ -144,11 +153,13 @@
 }
 
 .theBody button {
-  width: 90%;
-  margin-inline: auto;
-  height: 50px;
-  margin-top: 20px;
-  background-color: blue;
+  width: 100%;
+  min-height: 48px;
+  background-color: var(--blue);
   font-size: 14px;
   border-radius: 11px;
+}
+
+.theBody button:hover {
+  background-color: #2980b9;
 }

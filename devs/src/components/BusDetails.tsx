@@ -23,7 +23,9 @@ const BusDetails = ({ tripID, showDetails, setShowDetails, seatMap, errorFetchin
       {seatMap ? (
         <BusDetailsDisplay tripID={tripID} seatMap={seatMap} setShowDetails={setShowDetails} onBuy={onBuy} />
       ) : !errorFetching ? (
-        <BusLoading />
+        <div className={s.loadingArea}>
+          <BusLoading />
+        </div>
       ) : (
         <BusSchemaError tripID={tripID} retry={retry} />
       )}

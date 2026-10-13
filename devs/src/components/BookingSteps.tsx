@@ -12,18 +12,26 @@ const steps = ["stepTrip", "stepSeats", "stepPassengers", "stepReview", "stepTic
 const BookingSteps = ({ current }: Props) => {
   const { t, num } = useLocale();
   return (
-    <ol className={s.steps}>
+    <>
+      <ol className={s.steps}>
       {steps.map((name, index) => {
         const step = index + 1;
         const classes = [step <= current ? s.stepReached : "", step < current ? s.stepPassed : ""].join(" ");
         return (
           <li key={name} className={classes}>
             <span className={s.stepNumber}>{num(step)}</span>
-            {t(`booking.${name}`)}
+            <span className={s.stepName}>{t(`booking.${name}`)}</span>
           </li>
         );
       })}
-    </ol>
+      </ol>
+      {/* A phone has no room for five names in a row, so there the line shows the numbers only
+          and this sentence names the current step. The stylesheet shows one or the other.
+          (added 2026-10-13) */}
+      <p className={s.stepCaption}>
+        {t("booking.progress", { current: num(current), total: num(steps.length), name: t(`booking.${steps[current - 1]}`) })}
+      </p>
+    </>
   );
 };
 

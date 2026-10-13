@@ -8,6 +8,10 @@
   direction: rtl;
 }
 
+.busSchema picture {
+  display: flex;
+}
+
 .busSchema img {
   height: 100%;
   background-color: #f5f5f5;
@@ -22,22 +26,72 @@
   background-color: #f5f5f5;
   border-radius: 0 10px 10px 0;
 }
-  
+
+/* Every seat carries its place on the floor: `--r` is its line across the bus and `--c` its
+   line along the bus. Here, on a wide screen, the bus lies along the page, so `--c` is the
+   column and `--r` the row. (updated 2026-10-13) */
 .busInner .grid {
   direction: ltr;
   width: 85%;
   margin-inline: auto;
   margin-top: 5px;
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
 }
 
-/* On a phone the seats use nearly the whole width of the bus, and a column may become
-   narrower than a seat's usual 27px. (added 2026-10-13) */
-@media (max-width: 560px) {
+.cell {
+  grid-row: var(--r);
+  grid-column: var(--c);
+}
+
+/* A phone is too narrow for a bus lying down: 12 lines of seats would need 370px, and
+   squeezing them made the seats thin slivers that touched. So below 600px the same bus is
+   drawn nose up, the way a seat map is drawn in a phone app: the lines along the bus become
+   rows down the page, the lines across it become columns, and the aisle is a narrow column.
+   A seat is then 44px, big enough for a finger, and the page scrolls down as usual.
+   The first line across the bus (seat 1) goes to the right, as it is when the lying bus is
+   turned a quarter. (added 2026-10-13) */
+@media (max-width: 600px) {
+  .busSchema {
+    --seat: 44px;
+    --seat-text: 14px;
+    --aisle: 12px;
+    height: auto;
+    width: fit-content;
+    margin-inline: auto;
+    flex-direction: column-reverse;
+    direction: ltr;
+  }
+
+  /* The drawing is as wide as the seats under it, and does not widen the bus itself. */
+  .busSchema img {
+    width: 0;
+    min-width: 100%;
+    height: auto;
+    border-radius: 40px 40px 0 0;
+    transform: translateY(1px);
+  }
+
+  .busInner {
+    height: auto;
+    width: auto;
+    padding: 2px 12px 10px;
+    border-radius: 0 0 10px 10px;
+  }
+
   .busInner .grid {
-    width: 96%;
-    column-gap: 2px;
+    width: auto;
+    margin: 0;
+    grid-template-columns: var(--across);
+    grid-template-rows: none;
+    /* A line along the bus with no seat (a door) keeps its height. */
+    grid-auto-rows: calc(var(--seat) + 8px);
+    column-gap: 6px;
+  }
+
+  .cell {
+    grid-row: var(--c);
+    grid-column: calc(var(--rows) + 1 - var(--r));
   }
 }

@@ -57,3 +57,20 @@
         font-size: 12px;
     }
 }
+/* On a phone each link is tall enough for a finger: the padding is part of the link, so the
+   whole 40px can be tapped. (added 2026-10-13) */
+@media (max-width: 600px) {
+    .bottom-navbar li {
+        margin-block: 0;
+    }
+
+    /* The dividing lines are dropped: when the links wrap, a line began with one. */
+    .bottom-navbar li:not(:first-child)::after {
+        display: none;
+    }
+
+    .bottom-navbar a {
+        display: block;
+        padding-block: 12px;
+    }
+}

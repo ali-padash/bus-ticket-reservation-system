@@ -99,6 +99,29 @@ parts themselves:
 
 Nothing above 1000px was touched, so the desktop pages look as before.
 
+## Phone layout
+
+*Written 2026-10-13.*
+
+Below 600px wide the stylesheets rearrange the pages instead of shrinking them. The rules are
+at the end of each file, in a `@media (max-width: 600px)` block with a comment that says why.
+
+| Part | On a phone | Why |
+| --- | --- | --- |
+| Seat map (`busSchema.module.css`) | The bus stands nose up: 3 columns of seats and a narrow aisle, 44px seats, the page scrolls down. | 12 lines of 27px seats with gaps need 370px. Squeezing them made thin seats that touched. A sideways scroll inside the box was the other choice; it hides half the bus and fights the page's own scroll. |
+| Seat legend | A grid of two columns. | The labels ran into each other and wrapped unevenly. |
+| Step line (`booking.module.css`) | Five numbers and one sentence naming the current step. | Five names wrapped onto three uneven lines. |
+| Text lines | 1.6 in English, 1.9 in Persian, in place of 2 to 2.1. | Wide line spacing reads as gaps on a narrow screen. Persian letters are taller, so it keeps more. |
+| Day tabs (`daysTab.css`) | Three equal blocks, weekday above date. | The date used to break in the middle. |
+| Sort and filter menus (`filterSearch.css`) | Three equal blocks in a row; an open menu is as wide as the row. | They wrapped unevenly, and the last menu could open past the edge of the screen. |
+| Search bar on the results page (`searchPanel.css`) | 40px boxes; the swap arrows have their own 40px between the two cities. | The arrows were enlarged over the edges of the boxes. |
+| Opened trip card (`busDetails.module.css`) | Takes the height of the bus; "refund terms" and "Buy" share a row at the same height; no hover cover. | The box had a fixed 350px and two buttons placed by fixed distances. A finger cannot hover. |
+| "Being arranged" card (`ticketModel.module.css`) | Same card at every width; it is 90% of the screen at most. | Its parts had fixed heights, so text was cut and the button squeezed. |
+| Passenger form | Two names on one line, then one box per line. | The example in the birth date box was cut off. |
+| Buttons and links | About 40px tall: seats, day arrows, menus, form buttons, footer links, language link. | A finger needs more room than a mouse. |
+
+Above 600px nothing here applies, and the desktop pages are as before.
+
 ## Fonts
 
 *Updated 2026-10-13.*
@@ -158,6 +181,7 @@ came from the Safar724 site.
 | --- | --- | --- | --- |
 | `header.svg` | 2.6 kB | landing page background (from CSS) | A flat landscape: sky, hills, trees, a road and a blue bus. It replaced a 112 kB PNG. English pages show it mirrored, so the bus stays clear of the search form. |
 | `busFront.svg` | 0.5 kB | `BusSchema` | The front end of the bus in the seat map, seen from above: the curved nose and a steering wheel. |
+| `busFrontTop.svg` | 0.6 kB | `BusSchema` | The same drawing turned a quarter, for the phone seat map where the bus stands nose up. Added 2026-10-13. |
 | `companyDefault.svg` | 0.4 kB | `Panel` | A grey outline of a bus, shown when a bus company has no logo. |
 | `routeBus.svg` | 0.5 kB | `TicketModel` | A small bus on a dashed line, between the two city names. |
 
@@ -185,7 +209,7 @@ or to anyone who has not allowed its use.
 | What | Where it lives | Source | Licence |
 | --- | --- | --- | --- |
 | Logo mark and tab icon | `components/Logo.tsx`, `public/favicon.svg` | Drawn for this project | Ours |
-| `header.svg`, `busFront.svg`, `companyDefault.svg`, `routeBus.svg` | `assets/images/` | Drawn for this project | Ours |
+| `header.svg`, `busFront.svg`, `busFrontTop.svg`, `companyDefault.svg`, `routeBus.svg` | `assets/images/` | Drawn for this project | Ours |
 | Stylesheets | `assets/css/` | Written for this project; the layout imitates Safar724's site on purpose | Ours |
 | Persian font, Vazirmatn | npm `@fontsource-variable/vazirmatn` | Saber Rastikerdar and contributors | SIL Open Font License 1.1 |
 | English font, Inter | npm `@fontsource-variable/inter` | Rasmus Andersson and contributors | SIL Open Font License 1.1 |

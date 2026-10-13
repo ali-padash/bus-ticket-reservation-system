@@ -104,6 +104,11 @@
   float: inline-end;
 }
 
+.loadingArea {
+  position: relative;
+  height: 350px;
+}
+
 .legend div {
   display: flex;
   align-items: center;
@@ -119,6 +124,7 @@
   font-size: 12px;
   color: #AAA;
   justify-content: space-between;
+  --seat-margin: 4px 0;
 }
 
 
@@ -142,4 +148,61 @@
     width: 700px;
     max-width: 97%;
   } 
+}
+
+/* On a phone the bus is drawn nose up and is taller than the fixed box above, so the box
+   takes the height of what is in it. The dark cover that appears under a mouse is dropped
+   (a finger cannot hover; "View and buy" on the card closes the box again), and the two
+   buttons sit side by side under the legend, the same height. (added 2026-10-13) */
+@media (max-width: 600px) {
+  .busDetails {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .busDetails.show {
+    max-height: 1400px;
+    padding-bottom: 16px;
+  }
+
+  .busDetails > * {
+    flex: 0 0 100%;
+  }
+
+  .busDetails .cover {
+    display: none;
+  }
+
+  .busDetails .errorCover {
+    display: flex;
+    height: 100%;
+  }
+
+  .busInformation {
+    margin: 22px 0 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .legend {
+    width: 100%;
+    max-width: 340px;
+    margin: 14px auto 4px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+    font-size: 13px;
+    color: #777;
+  }
+
+  .busDetails .greenBuy {
+    position: static;
+    flex: 1 1 0;
+    min-height: 44px;
+    padding: 0 10px;
+    font-size: 17px;
+  }
 }

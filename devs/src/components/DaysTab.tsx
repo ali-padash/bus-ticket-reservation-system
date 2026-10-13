@@ -63,7 +63,7 @@ const DaysTab = ({ selectedDate, onSelectDate }: Props) => {
               handleChange(date);
             }}>
             <span className="weekday">{weekdayName(lang, date)}</span>
-            <span className="date-after-weekday" style={{ margin: "5px" }}>
+            <span className="date-after-weekday">
               {num(dayAndMonth(lang, date))}
             </span>
           </div>
