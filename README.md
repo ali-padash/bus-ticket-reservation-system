@@ -154,4 +154,3 @@ GitHub Actions runs all of these on every push, against a real PostgreSQL
 - It is not deployed.
 - Of the menu links, only "Bus tickets" and "Find a ticket" lead somewhere.
 - `Safar724.drawio.png` shows the 2024 database design, not the current one.
-- Old commits contain passwords for two hosted databases. Both databases have been deleted.
